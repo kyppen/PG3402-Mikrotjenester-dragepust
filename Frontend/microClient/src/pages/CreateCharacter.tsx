@@ -1,92 +1,60 @@
-import React, {useState} from "react";
-import "../assets/css/CreateCharacter.css";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const CreateCharacter: React.FC = function(){
+const CreateCharacter: React.FC = () => {
+    const navigate = useNavigate();
+    const [name, setName] = useState('');
+    const [species, setSpecies] = useState('');
+    const [profession, setProfession] = useState('');
 
-     interface FormData {
-        name: string;
-        species: string;
-        profession: string;
-    }
-
-    const [formData, setFormData] = useState<FormData>({
-        name: "",
-        species: "",
-        profession: "",
-    });
-
-    const handleChange = (
-        e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-    ): void => {
-        const { name, value } = e.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: name === "" ? Number(value) : value,
-        }));
-    };
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        const newCharacter = {
+            id: Date.now().toString(),
+            name,
+            species,
+            profession,
+        };
 
-        // Clear form
-        setFormData({
-            name: "",
-            species: "",
-            profession: "",
+        const savedCharacters = localStorage.getItem('characters');
+        const characters = savedCharacters ? JSON.parse(savedCharacters) : [];
+        characters.push(newCharacter);
+        localStorage.setItem('characters', JSON.stringify(characters));
 
-        });
-        alert(`Data saved successfully to the ${formData.species} species!`);
+        navigate('/character-menu');
     };
 
     return (
-        <>
-        <div>
-            <h2>Character creator</h2>
+        <div className="character-form">
+            <h2>Create New Character</h2>
             <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Navn:</label>
-                    <input
-                        type="text"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div>
-                    <label>Choose species:</label>
-                    <select
-                        name="species"
-                        value={formData.species}
-                        onChange={handleChange}
-                        required
-                    >
-                        <option value="">Velg Art</option>
-                        <option value="Menneske">Menneske</option>
-                        <option value="Alv">Alv</option>
-                        <option value="Dverg">Dverg</option>
+                <input
+                    type="text"
+                    placeholder="Name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                />
 
-                    </select>
-                </div>
-                <div>
-                    <label>Choose profession:</label>
-                    <select
-                        name="profession"
-                        value={formData.profession}
-                        onChange={handleChange}
-                        required
-                    >
-                        <option value="">Velg Yrke</option>
-                        <option value="Jeger">Jeger</option>
-                        <option value="Shaman">Shaman</option>
-                        <option value="Trubadur">Trubadur</option>
-                    </select>
-                </div>
-                <button className="CreateCharacterButton" type="submit">
-                    Save
-                </button>
+                <select value={species} onChange={(e) => setSpecies(e.target.value)} required>
+                    <option value="">Please choose a species</option>
+                    <option value="Menneske">Menneske</option>
+                    <option value="Alv">Alv</option>
+                    <option value="Dverg">Dverg</option>
+                </select>
+
+                <select value={profession} onChange={(e) => setProfession(e.target.value)} required>
+                    <option value="">Please choose a profession</option>
+                    <option value="Jeger">Jeger</option>
+                    <option value="Shaman">Shaman</option>
+                    <option value="Trubadur">Trubadur</option>
+                </select>
+
+                <button type="submit">Save Character</button>
             </form>
         </div>
-        </>
-    )
-}
-export default CreateCharacter
+    );
+};
+
+
+export default CreateCharacter;
