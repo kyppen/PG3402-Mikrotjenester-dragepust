@@ -11,7 +11,7 @@ public class PlayerCharacterDTO {
 
     private String userId;
     private String characterName;
-    private String race;
-    private String job;
+    private String profession;
+    private String species;
 
 }

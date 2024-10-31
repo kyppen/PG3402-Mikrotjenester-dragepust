@@ -1,13 +1,11 @@
 package sofa.microservice.playerCharacter;
 
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sofa.microservice.playerCharacter.DTO.PlayerCharacterDTO;
-import sofa.microservice.playerCharacter.DTO.UserIDDTO;
 import sofa.microservice.playerCharacter.entity.PlayerCharacter;
 
 import java.util.List;
@@ -25,8 +23,8 @@ public class PlayerCharacterController {
         System.out.println(playerCharacterDTO.getUserId() + " playercharacterDTO");
         playerCharacter.setUserId(playerCharacterDTO.getUserId());
         playerCharacter.setCharacterName(playerCharacterDTO.getCharacterName());
-        playerCharacter.setJob(playerCharacterDTO.getJob());
-        playerCharacter.setRace(playerCharacterDTO.getRace());
+        playerCharacter.setProfession(playerCharacterDTO.getProfession());
+        playerCharacter.setSpecies(playerCharacterDTO.getSpecies());
         System.out.println(playerCharacter.getId() + " playercharacter");
         playerCharacterService.createPlayerCharacter(playerCharacter);
 
@@ -48,5 +46,12 @@ public class PlayerCharacterController {
         UserCharacters = playerCharacterService.getByUserId(userId);
 
         return ResponseEntity.ok(UserCharacters);
+    }
+    @GetMapping("/get/{id}")
+    public ResponseEntity<PlayerCharacter> getCharacterById(@PathVariable String id){
+        System.out.println("/get " + id);
+        PlayerCharacter playerCharacter;
+        playerCharacter = playerCharacterService.getById(id);
+        return ResponseEntity.ok(playerCharacter);
     }
 }

@@ -23,4 +23,7 @@ public class PlayerCharacterService {
     public List<PlayerCharacter> getByUserId(String userId) {
         return playerCharacterRepository.findAllByUserId(userId);
     }
+    public PlayerCharacter getById(String id) {
+        return playerCharacterRepository.findPlayerCharacterById(Long.parseLong(id));
+    }
 }
