@@ -28,7 +28,6 @@ public class PlayerCharacterController {
         System.out.println(playerCharacter.getId() + " playercharacter");
         playerCharacterService.createPlayerCharacter(playerCharacter);
 
-
         return new ResponseEntity<>(true, HttpStatus.CREATED);
     }
     @GetMapping("/getall")
