@@ -30,7 +30,7 @@ public class PlayerCharacterController {
 
         return new ResponseEntity<>(true, HttpStatus.CREATED);
     }
-    @GetMapping("/getall")
+    @GetMapping("/all")
     public ResponseEntity<List<PlayerCharacter>> getCharacters(){
         System.out.println("Get Controller");
         List<PlayerCharacter> AllCharacters;
@@ -38,7 +38,7 @@ public class PlayerCharacterController {
         AllCharacters = playerCharacterService.getAllCharacters();
         return ResponseEntity.ok(AllCharacters);
     }
-    @GetMapping("/getall/{userId}")
+    @GetMapping("/all/{userId}")
     public ResponseEntity<List<PlayerCharacter>> getCharactersByUserId(@PathVariable String userId){
         System.out.println("/getall " + userId);
         List<PlayerCharacter> UserCharacters;
@@ -46,7 +46,7 @@ public class PlayerCharacterController {
 
         return ResponseEntity.ok(UserCharacters);
     }
-    @GetMapping("/get/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<PlayerCharacter> getCharacterById(@PathVariable String id){
         System.out.println("/get " + id);
         PlayerCharacter playerCharacter;
