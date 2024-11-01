@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Container, Card, CardContent, Typography, Button, Grid, CardMedia } from '@mui/material';
 
 interface Character {
     id: string;
@@ -28,23 +29,48 @@ const CharacterMenu: React.FC = () => {
     };
 
     return (
-        <div className="character-menu">
-            <h2>Your Characters</h2>
-            <button onClick={handleNewCharacter}>Create New Character</button>
-            <div className="character-list">
+        <Container maxWidth="md">
+            <Typography variant="h5" align="center" gutterBottom>
+                Your Characters
+            </Typography>
+            <Button variant="contained" color="primary" fullWidth onClick={handleNewCharacter} sx={{ mb: 3 }}>
+                Create New Character
+            </Button>
+            <Grid container spacing={2}>
                 {characters.map((character) => (
-                    <div
-                        key={character.id}
-                        className="character-card"
-                        onClick={() => handleCharacterClick(character.id)}
-                    >
-                        <h3>{character.name}</h3>
-                        <p><strong>Species:</strong> {character.species}</p>
-                        <p><strong>Profession:</strong> {character.profession}</p>
-                    </div>
+                    <Grid item xs={12} sm={6} md={4} lg={3} key={character.id}>
+                        <Card
+                            sx={{
+                                cursor: 'pointer',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                padding: 2
+                            }}
+                            onClick={() => handleCharacterClick(character.id)}
+                        >
+                            <CardMedia
+                                component="img"
+                                image="https://via.placeholder.com/150"  // Placeholder image URL
+                                alt="Character Image"
+                                sx={{ width: '100%', height: 150, borderRadius: 1 }}
+                            />
+                            <CardContent sx={{ textAlign: 'center' }}>
+                                <Typography variant="h6" gutterBottom>
+                                    {character.name}
+                                </Typography>
+                                <Typography color="textSecondary">
+                                    {character.profession}
+                                </Typography>
+                                <Typography color="textSecondary">
+                                    {character.species}
+                                </Typography>
+                            </CardContent>
+                        </Card>
+                    </Grid>
                 ))}
-            </div>
-        </div>
+            </Grid>
+        </Container>
     );
 };
 

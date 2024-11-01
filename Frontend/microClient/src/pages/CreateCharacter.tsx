@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Container, TextField, MenuItem, Select, Button, Typography, Box } from '@mui/material';
 
 const CreateCharacter: React.FC = () => {
     const navigate = useNavigate();
     const [name, setName] = useState('');
-    const [species, setSpecies] = useState('');
-    const [profession, setProfession] = useState('');
+    const [species, setSpecies] = useState('Human');
+    const [profession, setProfession] = useState('Warrior');
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -25,36 +26,49 @@ const CreateCharacter: React.FC = () => {
     };
 
     return (
-        <div className="character-form">
-            <h2>Create New Character</h2>
-            <form onSubmit={handleSubmit}>
-                <input
-                    type="text"
-                    placeholder="Name"
+        <Container maxWidth="sm" sx={{ mt: 4 }}>
+            <Typography variant="h5" align="center" gutterBottom>
+                Create New Character
+            </Typography>
+            <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                <TextField
+                    label="Name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     required
                 />
 
-                <select value={species} onChange={(e) => setSpecies(e.target.value)} required>
-                    <option value="">Please choose a species</option>
-                    <option value="Menneske">Menneske</option>
-                    <option value="Alv">Alv</option>
-                    <option value="Dverg">Dverg</option>
-                </select>
+                <Select
+                    value={species}
+                    onChange={(e) => setSpecies(e.target.value)}
+                    displayEmpty
+                    required
+                >
+                    <MenuItem value="Menneske">Menneske</MenuItem>
+                    <MenuItem value="Alv">Alv</MenuItem>
+                    <MenuItem value="Dverg">Dverg</MenuItem>
 
-                <select value={profession} onChange={(e) => setProfession(e.target.value)} required>
-                    <option value="">Please choose a profession</option>
-                    <option value="Jeger">Jeger</option>
-                    <option value="Shaman">Shaman</option>
-                    <option value="Trubadur">Trubadur</option>
-                </select>
+                </Select>
 
-                <button type="submit">Save Character</button>
-            </form>
-        </div>
+                <Select
+                    value={profession}
+                    onChange={(e) => setProfession(e.target.value)}
+                    displayEmpty
+                    required
+                >
+                    <MenuItem value="Jeger">Jeger</MenuItem>
+                    <MenuItem value="Shaman">Shaman</MenuItem>
+                    <MenuItem value="Trubadur">Trubadur</MenuItem>
+
+                </Select>
+
+                <Button variant="contained" color="primary" type="submit">
+                    Save Character
+                </Button>
+            </Box>
+        </Container>
     );
 };
 
-
 export default CreateCharacter;
+

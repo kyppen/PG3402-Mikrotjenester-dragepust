@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Container, Typography, Button } from '@mui/material';
 
 const LoginPage: React.FC = () => {
     const navigate = useNavigate();
@@ -8,12 +9,17 @@ const LoginPage: React.FC = () => {
         navigate('/character-menu');
     };
 
+
     return (
-        <div className="login-page">
-            <h1>Welcome to the Dragon Creator</h1>
-            <button onClick={handleLogin}>Log In</button>
-        </div>
+        <Container maxWidth="sm" sx={{ textAlign: 'center', mt: 10 }}>
+            <Typography variant="h4" gutterBottom>
+                Welcome to Dragepust
+            </Typography>
+            <Button variant="contained" color="primary" onClick={handleLogin}>
+                Log In
+            </Button>
+        </Container>
     );
 };
-
+ //tog er moro
 export default LoginPage;
