@@ -14,6 +14,11 @@ public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    private String characterId;
     private String itemName;
     private String itemDescription;
+
+    public void printString(){
+        System.out.println(characterId + "\t" + itemName + "\t" + itemDescription);
+    }
 }
