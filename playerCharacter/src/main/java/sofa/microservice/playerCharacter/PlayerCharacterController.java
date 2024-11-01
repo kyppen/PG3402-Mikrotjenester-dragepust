@@ -19,6 +19,7 @@ public class PlayerCharacterController {
     @PostMapping("/create")
     public ResponseEntity<Boolean> createCharacter(@RequestBody PlayerCharacterDTO playerCharacterDTO){
         System.out.println("Post Controller");
+        System.out.println(playerCharacterDTO.toString());
         PlayerCharacter playerCharacter = new PlayerCharacter();
         System.out.println(playerCharacterDTO.getUserId() + " playercharacterDTO");
         playerCharacter.setUserId(playerCharacterDTO.getUserId());

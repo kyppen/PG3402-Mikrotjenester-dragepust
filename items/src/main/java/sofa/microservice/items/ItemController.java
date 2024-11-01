@@ -36,6 +36,19 @@ public class ItemController {
         System.out.println("Get items");
         return new ResponseEntity<>(itemService.getAllItems(), HttpStatus.OK);
     }
+    @PostMapping("/set/{characterId}/{setId}")
+    public ResponseEntity<Boolean> updateItem(@PathVariable String setId, @PathVariable String characterId) {
+        System.out.println("AddItemSet");
+        System.out.println(setId);
+        System.out.println(characterId);
+        itemService.addSet(setId, characterId);
+        return new ResponseEntity<>(true, HttpStatus.CREATED);
+    }
+    @PutMapping("/set/{characterId}/{setId}")
+    public ResponseEntity<Boolean> updateItemSet(@PathVariable String setId, @PathVariable String characterId) {
+        System.out.println("AddItemSet");
+
+    }
 
 
 
