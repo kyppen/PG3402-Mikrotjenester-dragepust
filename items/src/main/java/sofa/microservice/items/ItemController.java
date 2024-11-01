@@ -44,11 +44,6 @@ public class ItemController {
         itemService.addSet(setId, characterId);
         return new ResponseEntity<>(true, HttpStatus.CREATED);
     }
-    @PutMapping("/set/{characterId}/{setId}")
-    public ResponseEntity<Boolean> updateItemSet(@PathVariable String setId, @PathVariable String characterId) {
-        System.out.println("AddItemSet");
-
-    }
 
 
 
