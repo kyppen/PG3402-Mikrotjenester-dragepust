@@ -4,7 +4,7 @@ import { Container, Card, CardContent, Typography, Button, Grid, CardMedia } fro
 
 interface Character {
     id: string;
-    name: string;
+    characterName: string;
     species: string;
     profession: string;
 }
@@ -12,12 +12,25 @@ interface Character {
 const CharacterMenu: React.FC = () => {
     const navigate = useNavigate();
     const [characters, setCharacters] = useState<Character[]>([]);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        const savedCharacters = localStorage.getItem('characters');
-        if (savedCharacters) {
-            setCharacters(JSON.parse(savedCharacters));
-        }
+        // Fetch characters from the backend API
+        fetch('http://localhost:8080/character/all')
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Failed to fetch characters');
+                }
+                return response.json();
+            })
+            .then((data) => {
+                setCharacters(data);
+                localStorage.setItem('characters', JSON.stringify(data)); // Cache data in localStorage
+            })
+            .catch((err) => {
+                setError(err.message);
+                console.error('Error fetching characters:', err);
+            });
     }, []);
 
     const handleNewCharacter = () => {
@@ -33,6 +46,11 @@ const CharacterMenu: React.FC = () => {
             <Typography variant="h5" align="center" gutterBottom>
                 Your Characters
             </Typography>
+            {error && (
+                <Typography color="error" align="center">
+                    {error}
+                </Typography>
+            )}
             <Button variant="contained" color="primary" fullWidth onClick={handleNewCharacter} sx={{ mb: 3 }}>
                 Create New Character
             </Button>
@@ -57,7 +75,7 @@ const CharacterMenu: React.FC = () => {
                             />
                             <CardContent sx={{ textAlign: 'center' }}>
                                 <Typography variant="h6" gutterBottom>
-                                    {character.name}
+                                    {character.characterName}
                                 </Typography>
                                 <Typography color="textSecondary">
                                     {character.profession}

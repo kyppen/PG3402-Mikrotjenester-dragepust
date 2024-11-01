@@ -1,28 +1,39 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Container, TextField, MenuItem, Select, Button, Typography, Box } from '@mui/material';
+import { Container, TextField, MenuItem, Select, Button, Typography, Box, FormControl, InputLabel } from '@mui/material';
+
 
 const CreateCharacter: React.FC = () => {
     const navigate = useNavigate();
     const [name, setName] = useState('');
-    const [species, setSpecies] = useState('Human');
-    const [profession, setProfession] = useState('Warrior');
+    const [species, setSpecies] = useState('');
+    const [profession, setProfession] = useState('');
+    const [error, setError] = useState<string | null>(null);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         const newCharacter = {
-            id: Date.now().toString(),
             name,
             species,
             profession,
         };
 
-        const savedCharacters = localStorage.getItem('characters');
-        const characters = savedCharacters ? JSON.parse(savedCharacters) : [];
-        characters.push(newCharacter);
-        localStorage.setItem('characters', JSON.stringify(characters));
-
-        navigate('/character-menu');
+        try {
+            const response = await fetch('http://localhost:8080/character/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newCharacter),
+            });
+            if (!response.ok) {
+                throw new Error('Failed to create character');
+            }
+            navigate('/character-menu');
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'An unknown error occurred');
+            console.error('Error creating character:', err);
+        }
     };
 
     return (
@@ -30,6 +41,11 @@ const CreateCharacter: React.FC = () => {
             <Typography variant="h5" align="center" gutterBottom>
                 Create New Character
             </Typography>
+            {error && (
+                <Typography color="error" align="center">
+                    {error}
+                </Typography>
+            )}
             <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                 <TextField
                     label="Name"
@@ -38,29 +54,30 @@ const CreateCharacter: React.FC = () => {
                     required
                 />
 
-                <Select
-                    value={species}
-                    onChange={(e) => setSpecies(e.target.value)}
-                    displayEmpty
-                    required
-                >
-                    <MenuItem value="Menneske">Menneske</MenuItem>
-                    <MenuItem value="Alv">Alv</MenuItem>
-                    <MenuItem value="Dverg">Dverg</MenuItem>
+                <FormControl fullWidth required>
+                    <InputLabel>Species</InputLabel>
+                    <Select
+                        value={species}
+                        onChange={(e) => setSpecies(e.target.value)}
 
-                </Select>
+                    >
+                        <MenuItem value="Menneske">Menneske</MenuItem>
+                        <MenuItem value="Alv">Alv</MenuItem>
+                        <MenuItem value="Dverg">Dverg</MenuItem>
+                    </Select>
+                </FormControl>
 
-                <Select
-                    value={profession}
-                    onChange={(e) => setProfession(e.target.value)}
-                    displayEmpty
-                    required
-                >
-                    <MenuItem value="Jeger">Jeger</MenuItem>
-                    <MenuItem value="Shaman">Shaman</MenuItem>
-                    <MenuItem value="Trubadur">Trubadur</MenuItem>
-
-                </Select>
+                <FormControl fullWidth required>
+                    <InputLabel>Profession</InputLabel>
+                    <Select
+                        value={profession}
+                        onChange={(e) => setProfession(e.target.value)}
+                    >
+                        <MenuItem value="Jeger">Jeger</MenuItem>
+                        <MenuItem value="Shaman">Shaman</MenuItem>
+                        <MenuItem value="Trubadur">Trubadur</MenuItem>
+                    </Select>
+                </FormControl>
 
                 <Button variant="contained" color="primary" type="submit">
                     Save Character
