@@ -69,7 +69,7 @@ const CharacterMenu: React.FC = () => {
                         >
                             <CardMedia
                                 component="img"
-                                image="https://via.placeholder.com/150"  // Placeholder image URL
+                                image="./src/assets/elf.png"
                                 alt="Character Image"
                                 sx={{ width: '100%', height: 150, borderRadius: 1 }}
                             />

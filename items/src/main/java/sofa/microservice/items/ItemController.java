@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import sofa.microservice.items.entity.Item;
 
 import java.util.List;
-
+@CrossOrigin (origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/items")
 @RequiredArgsConstructor
