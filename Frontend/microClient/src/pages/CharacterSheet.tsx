@@ -4,33 +4,65 @@ import { Container, Typography, Card, CardContent, Grid, Box, Button, Divider } 
 
 interface Character {
     id: string;
-    name: string;
+    characterName: string;
     species: string;
     profession: string;
     age?: string;
     health?: string;
     willpower?: string;
     skills?: string[];
-    equipment?: string[];
     achievements?: string[];
 }
 
 const CharacterSheet: React.FC = () => {
     const { characterId } = useParams<{ characterId: string }>();
     const [character, setCharacter] = useState<Character | null>(null);
+    const [equipment, setEquipment] = useState<string[]>([]);
+    const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
 
+    // Fetch character details
     useEffect(() => {
-        const savedCharacters = localStorage.getItem('characters');
-        if (savedCharacters) {
-            const characters = JSON.parse(savedCharacters);
-            const foundCharacter = characters.find((c: Character) => c.id === characterId);
-            setCharacter(foundCharacter || null);
-        }
+        const fetchCharacter = async () => {
+            try {
+                const response = await fetch(`http://localhost:8080/character/${characterId}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch character details');
+                }
+                const data = await response.json();
+                setCharacter(data);
+            } catch (err) {
+                setError(err instanceof Error ? err.message : 'An unknown error occurred');
+            }
+        };
+
+        fetchCharacter();
     }, [characterId]);
 
+    // Fetch character equipment from items service
+    useEffect(() => {
+        const fetchEquipment = async () => {
+            try {
+                const response = await fetch(`http://localhost:8080/items/${characterId}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch character equipment');
+                }
+                const data = await response.json();
+                setEquipment(data);
+            } catch (err) {
+                setError(err instanceof Error ? err.message : 'An unknown error occurred');
+            }
+        };
+
+        fetchEquipment();
+    }, [characterId]);
+
+    if (error) {
+        return <Typography variant="body1" align="center" color="error">{error}</Typography>;
+    }
+
     if (!character) {
-        return <Typography variant="body1" align="center">Character not found</Typography>;
+        return <Typography variant="body1" align="center">Loading character...</Typography>;
     }
 
     return (
@@ -45,7 +77,7 @@ const CharacterSheet: React.FC = () => {
                     <Grid container spacing={2} sx={{ mb: 3 }}>
                         <Grid item xs={12} md={4}>
                             <Typography variant="subtitle1">Name</Typography>
-                            <Typography variant="body1">{character.name}</Typography>
+                            <Typography variant="body1">{character.characterName}</Typography>
                         </Grid>
                         <Grid item xs={12} md={4}>
                             <Typography variant="subtitle1">Species</Typography>
@@ -95,9 +127,9 @@ const CharacterSheet: React.FC = () => {
                     {/* Equipment Section */}
                     <Box sx={{ mb: 3 }}>
                         <Typography variant="h6" gutterBottom>Equipment</Typography>
-                        {character.equipment && character.equipment.length > 0 ? (
+                        {equipment.length > 0 ? (
                             <ul>
-                                {character.equipment.map((item, index) => (
+                                {equipment.map((item, index) => (
                                     <li key={index}>{item}</li>
                                 ))}
                             </ul>

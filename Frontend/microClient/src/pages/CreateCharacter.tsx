@@ -5,17 +5,19 @@ import { Container, TextField, MenuItem, Select, Button, Typography, Box, FormCo
 
 const CreateCharacter: React.FC = () => {
     const navigate = useNavigate();
-    const [name, setName] = useState('');
+    const [characterName, setCharacterName] = useState('');
     const [species, setSpecies] = useState('');
     const [profession, setProfession] = useState('');
+    const [equipment, setEquipment] = useState('');
     const [error, setError] = useState<string | null>(null);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         const newCharacter = {
-            name,
+            characterName,
             species,
             profession,
+            equipment,
         };
 
         try {
@@ -49,8 +51,8 @@ const CreateCharacter: React.FC = () => {
             <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                 <TextField
                     label="Name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    value={characterName}
+                    onChange={(e) => setCharacterName(e.target.value)}
                     required
                 />
 
@@ -75,7 +77,19 @@ const CreateCharacter: React.FC = () => {
                     >
                         <MenuItem value="Jeger">Jeger</MenuItem>
                         <MenuItem value="Shaman">Shaman</MenuItem>
-                        <MenuItem value="Trubadur">Trubadur</MenuItem>
+                        <MenuItem value="Skald">Skald</MenuItem>
+                    </Select>
+                </FormControl>
+
+                <FormControl fullWidth required>
+                    <InputLabel>Equipment</InputLabel>
+                    <Select
+                        value={equipment}
+                        onChange={(e) => setEquipment(e.target.value)}
+                    >
+                        <MenuItem value="1">Jegerpakke</MenuItem>
+                        <MenuItem value="2">Trolldomspakke</MenuItem>
+                        <MenuItem value="3">Skaldepakke</MenuItem>
                     </Select>
                 </FormControl>
 
