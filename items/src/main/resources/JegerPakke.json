@@ -1,0 +1,37 @@
+{
+  "setName": "warrior",
+  "items": [
+    {
+      "itemName": "Bue (dødelighet 6)",
+      "itemDescription": "Bue"
+    },
+    {
+      "itemName": "Piler",
+      "itemDescription": "A potion that restores a small amount of mana."
+    },
+    {
+      "itemName": "ferdaklær (kvalitet 2)",
+      "itemDescription": "An enchanted ring that enhances magical abilities."
+    },
+    {
+      "itemName": "kniv (dødelighet 4)",
+      "itemDescription": "Bue"
+    },
+    {
+      "itemName": "fiskeutstyr",
+      "itemDescription": "A potion that restores a small amount of mana."
+    },
+    {
+      "itemName": "flint og stål",
+      "itemDescription": "An enchanted ring that enhances magical abilities."
+    },
+    {
+      "itemName": "Ullteppe",
+      "itemDescription": "Bue"
+    },
+    {
+      "itemName": "drikkeskinn",
+      "itemDescription": "A potion that restores a small amount of mana."
+    }
+  ]
+}

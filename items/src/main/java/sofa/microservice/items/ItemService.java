@@ -1,10 +1,14 @@
 package sofa.microservice.items;
 
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import sofa.microservice.items.ItemSetDTO.ItemSet;
 import sofa.microservice.items.entity.Item;
+import sofa.microservice.items.util.JsonToItemSet;
 
+import java.beans.Transient;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,25 +28,22 @@ public class ItemService {
     public List<Item> getAllItems(){
         return itemRepository.findAll();
     }
-    public void addSet(String setId, String characterId){
-        System.out.println("addSet()");
-        List<Item> itemitemsplaceholderList = new ArrayList<>();
-        for(int i = 0; i < 10; i++){
-            Item item = new Item();
-            item.setItemDescription("something");
-            item.setItemName("item name");
-            item.setCharacterId(characterId);
-            itemitemsplaceholderList.add(item);
-        }
-        itemRepository.saveAll(itemitemsplaceholderList);
+    @Transactional
+    public void RemoveItem(String ID){
+        System.out.println("Delete2");
+        itemRepository.removeItemById(Long.parseLong(ID));
+        System.out.println("Delete3");
     }
-    public void setItems(String setId, String characterId){
-        itemRepository.deleteItemsBycharacterId(characterId);
+    public void addSet(String setId, String characterId){
+        System.out.println("addSet");
         List<Item> itemitemsplaceholderList = new ArrayList<>();
-        for(int i = 0; i < 10; i++){
+        JsonToItemSet jsonToItemSet = new JsonToItemSet();
+        ItemSet itemSet = jsonToItemSet.getItemSet(1);
+        System.out.println("Itemset length" + itemSet.getItems().size());
+        for(Item setitem : itemSet.getItems()){
             Item item = new Item();
-            item.setItemDescription("something");
-            item.setItemName("item name");
+            item.setItemName(setitem.getItemName());
+            item.setItemDescription(setitem.getItemDescription());
             item.setCharacterId(characterId);
             itemitemsplaceholderList.add(item);
         }
