@@ -1,37 +1,41 @@
 {
-  "setName": "JegerPakke",
+  "setName": "TrolldomsPakke",
   "items": [
     {
-      "itemName": "Bue (dødelighet 6)",
+      "itemName": "Stav (dødelighet 4)",
       "itemDescription": "Bue"
     },
     {
-      "itemName": "Piler",
+      "itemName": "Ferdaklær (kvaliet 2)",
       "itemDescription": "A potion that restores a small amount of mana."
     },
     {
-      "itemName": "ferdaklær (kvalitet 2)",
+      "itemName": "Blank book 50 sider",
       "itemDescription": "An enchanted ring that enhances magical abilities."
     },
     {
-      "itemName": "kniv (dødelighet 4)",
+      "itemName": "Pergament 10 sider",
       "itemDescription": "Bue"
     },
     {
-      "itemName": "fiskeutstyr",
+      "itemName": "sett med skriveredskap",
       "itemDescription": "A potion that restores a small amount of mana."
-    },
-    {
-      "itemName": "flint og stål",
-      "itemDescription": "An enchanted ring that enhances magical abilities."
     },
     {
       "itemName": "Ullteppe",
+      "itemDescription": "An enchanted ring that enhances magical abilities."
+    },
+    {
+      "itemName": "Vokslys",
       "itemDescription": "Bue"
     },
     {
-      "itemName": "drikkeskinn",
+      "itemName": "Flint og Stål",
       "itemDescription": "A potion that restores a small amount of mana."
+    },
+    {
+      "itemName": "Drikkeskin",
+      "itemDescription": "Bue"
     }
   ]
 }

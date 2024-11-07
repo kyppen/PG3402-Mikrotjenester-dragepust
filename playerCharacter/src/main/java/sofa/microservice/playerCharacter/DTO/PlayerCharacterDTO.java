@@ -15,5 +15,6 @@ public class PlayerCharacterDTO {
     private String characterName;
     private String profession;
     private String species;
+    private String itemSetId;
 
 }

@@ -17,7 +17,6 @@ public class ItemSet {
     private String setName;
     private List<Item> items;
 
-
     @Override
     public String toString() {
         return "ItemSet{setName='" + setName + "', items=" + items + "}";

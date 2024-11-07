@@ -1,2 +1,2 @@
 server:
-  post: 8082
+  port: 8082

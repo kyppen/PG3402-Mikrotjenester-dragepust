@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Long> {
-    List<Item> findItemsBycharacterId(String characterId);
+    List<Item> findItemsByCharacterId(String characterId);
     void deleteItemsBycharacterId(String characterId);
     //boolean existsItemsbyID (String characterId);
     //boolean existsById(Long id);

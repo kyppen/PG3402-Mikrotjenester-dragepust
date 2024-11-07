@@ -2,7 +2,11 @@ package sofa.microservice.playerCharacter;
 
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import sofa.microservice.playerCharacter.entity.PlayerCharacter;
 
 import java.util.List;
@@ -11,11 +15,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PlayerCharacterService {
     private final PlayerCharacterRepository playerCharacterRepository;
+    private final RestTemplate restTemplate = new RestTemplate();
 
-    public void createPlayerCharacter(PlayerCharacter character) {
+
+    //Creates a character and returns the character ID to add itemset
+    public Long createPlayerCharacter(PlayerCharacter character) {
         System.out.println("Service");
-        System.out.println(character.getId()+ "Service");
         playerCharacterRepository.save(character);
+        Long id = character.getId();
+        System.out.println("CHARACTER ID MAYBE? " + id);
+        return id;
     }
     public List<PlayerCharacter> getAllCharacters() {
         return playerCharacterRepository.findAll();
@@ -25,5 +34,14 @@ public class PlayerCharacterService {
     }
     public PlayerCharacter getById(String id) {
         return playerCharacterRepository.findPlayerCharacterById(Long.parseLong(id));
+    }
+    public void sendPostRequest(String characterId, String itemSetId){
+        String url = "http://localhost:8082/items/set/" + characterId + "/" + itemSetId;
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/json");
+        HttpEntity<String> request = new HttpEntity<>(headers);
+        ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
+        System.out.println(response.getBody());
+        System.out.println("Added Items to character " + characterId + "itemSet" + itemSetId);
     }
 }

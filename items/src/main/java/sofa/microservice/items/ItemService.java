@@ -3,6 +3,7 @@ package sofa.microservice.items;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import sofa.microservice.items.ItemSetDTO.ItemSet;
 import sofa.microservice.items.entity.Item;
@@ -14,32 +15,30 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ItemService {
     private final ItemRepository itemRepository;
     public void addItem(Item item){
         item.printString();
         itemRepository.save(item);
-        System.out.println("saved");
+        log.info("New item added to characterid: " + item.getCharacterId());
     }
     public List<Item> findItemsByCharacterId(String id){
-        System.out.println("service");
-        return itemRepository.findItemsBycharacterId(id);
+        log.info("Return items by characterid: " + id);
+        return itemRepository.findItemsByCharacterId(id);
     }
     public List<Item> getAllItems(){
         return itemRepository.findAll();
     }
     @Transactional
     public void RemoveItem(String ID){
-        System.out.println("Delete2");
         itemRepository.removeItemById(Long.parseLong(ID));
-        System.out.println("Delete3");
+        log.info("Item with id: " + ID + " removed");
     }
     public void addSet(String setId, String characterId){
-        System.out.println("addSet");
         List<Item> itemitemsplaceholderList = new ArrayList<>();
         JsonToItemSet jsonToItemSet = new JsonToItemSet();
-        ItemSet itemSet = jsonToItemSet.getItemSet(1);
-        System.out.println("Itemset length" + itemSet.getItems().size());
+        ItemSet itemSet = jsonToItemSet.getItemSet(Integer.parseInt(setId));
         for(Item setitem : itemSet.getItems()){
             Item item = new Item();
             item.setItemName(setitem.getItemName());
@@ -48,6 +47,7 @@ public class ItemService {
             itemitemsplaceholderList.add(item);
         }
         itemRepository.saveAll(itemitemsplaceholderList);
+        log.info("Items saved");
     }
 
 
