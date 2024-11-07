@@ -8,7 +8,7 @@ const CreateCharacter: React.FC = () => {
     const [characterName, setCharacterName] = useState('');
     const [species, setSpecies] = useState('');
     const [profession, setProfession] = useState('');
-    const [equipment, setEquipment] = useState('');
+    const [itemSetId, setItemSetId] = useState('');
     const [error, setError] = useState<string | null>(null);
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -17,11 +17,11 @@ const CreateCharacter: React.FC = () => {
             characterName,
             species,
             profession,
-            equipment,
+            itemSetId,
         };
 
         try {
-            const response = await fetch('http://localhost:8080/character/create', {
+            const response = await fetch('http://localhost:8081/character/create', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -84,8 +84,8 @@ const CreateCharacter: React.FC = () => {
                 <FormControl fullWidth required>
                     <InputLabel>Equipment</InputLabel>
                     <Select
-                        value={equipment}
-                        onChange={(e) => setEquipment(e.target.value)}
+                        value={itemSetId}
+                        onChange={(e) => setItemSetId(e.target.value)}
                     >
                         <MenuItem value="1">Jegerpakke</MenuItem>
                         <MenuItem value="2">Trolldomspakke</MenuItem>

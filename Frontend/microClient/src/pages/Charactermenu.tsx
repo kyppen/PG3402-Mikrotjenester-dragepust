@@ -16,7 +16,7 @@ const CharacterMenu: React.FC = () => {
 
     useEffect(() => {
         // Fetch characters from the backend API
-        fetch('http://localhost:8080/character/all')
+        fetch('http://localhost:8081/character/all')
             .then((response) => {
                 if (!response.ok) {
                     throw new Error('Failed to fetch characters');

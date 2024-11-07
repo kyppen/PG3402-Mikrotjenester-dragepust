@@ -1,0 +1,24 @@
+{
+  "Shaman": {
+    "baseHP": 10,
+    "baseWillpower": 4,
+    "baseMagic": 10,
+    "skills": ["Healing", "Soothsaying"],
+    "magic": ["Healing magic"]
+
+  },
+  "Jeger": {
+    "baseHP": 14,
+    "baseWillpower": 4,
+    "skills": ["Hunting", "Knowledge(forest)"]
+
+  },
+  "Skald": {
+    "baseHP": 10,
+    "baseWillpower": 5,
+    "baseMagic": 8,
+    "skills": ["Instrument", "Persuasion"],
+    "magic": ["Melodic magic"]
+
+  }
+}
