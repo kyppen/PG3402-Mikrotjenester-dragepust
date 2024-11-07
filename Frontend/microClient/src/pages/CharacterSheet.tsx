@@ -1,6 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Container, Typography, Card, CardContent, Grid, Box, Button, Divider } from '@mui/material';
+import {
+    Container,
+    Typography,
+    Card,
+    CardContent,
+    Grid,
+    Box,
+    Button,
+    Divider,
+    TableContainer,
+    Table,
+    TableHead,
+    TableRow,
+    TableCell,
+    TableBody,
+    Paper,
+    Select,
+    MenuItem
+} from '@mui/material';
 
 interface Character {
     id: string;
@@ -14,18 +32,52 @@ interface Character {
     achievements?: string[];
 }
 
+// Sample function to create table rows with dynamic data
+function createData(
+    attribute: string,
+    veldigLett: number,
+    lett: number,
+    normal: number,
+    vanskelig: number,
+    veldigVanskelig: number
+) {
+    return { attribute, veldigLett, lett, normal, vanskelig, veldigVanskelig };
+}
+interface Item {
+    id: string;
+    itemName: string;
+    itemDescription: string;
+
+}
+const initialRows = [
+    createData('Smidighet', 3, 4, 6, 8, 9),
+    createData('Kløkt', 4, 5, 7, 9, 10),
+    createData('Styrke', 4, 5, 7, 9, 10),
+    createData('Gunst', 4, 5, 7, 9, 10),
+    createData('Intuisjon', 5, 6, 8, 10, 11),
+];
+
+const attributeOptions = [
+    "Smidighet",
+    "Kløkt",
+    "Styrke",
+    "Gunst",
+    "Intuisjon",
+];
+
 const CharacterSheet: React.FC = () => {
     const { characterId } = useParams<{ characterId: string }>();
     const [character, setCharacter] = useState<Character | null>(null);
-    const [equipment, setEquipment] = useState<string[]>([]);
     const [error, setError] = useState<string | null>(null);
+    const [rows, setRows] = useState(initialRows);  // Manage rows with local state
+    const [items, setItems] = useState<Item[]>([]);
     const navigate = useNavigate();
 
     // Fetch character details
     useEffect(() => {
         const fetchCharacter = async () => {
             try {
-                const response = await fetch(`http://localhost:8080/character/${characterId}`);
+                const response = await fetch(`http://localhost:8081/character/${characterId}`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch character details');
                 }
@@ -39,23 +91,25 @@ const CharacterSheet: React.FC = () => {
         fetchCharacter();
     }, [characterId]);
 
-    // Fetch character equipment from items service
     useEffect(() => {
-        const fetchEquipment = async () => {
-            try {
-                const response = await fetch(`http://localhost:8080/items/${characterId}`);
+        // Fetch data from API
+        fetch(`http://localhost:8082/items/${characterId}`)
+            .then((response) => {
                 if (!response.ok) {
-                    throw new Error('Failed to fetch character equipment');
+                    throw new Error("Network response was not ok");
                 }
-                const data = await response.json();
-                setEquipment(data);
-            } catch (err) {
-                setError(err instanceof Error ? err.message : 'An unknown error occurred');
-            }
-        };
+                return response.json();
+            })
+            .then((data: Item[]) => setItems(data)) // Type data as Item[]
+            .catch((error) => console.error("Error fetching data:", error));
+    }, []);
 
-        fetchEquipment();
-    }, [characterId]);
+    const handleAttributeChange = (index: number, newAttribute: string) => {
+        const updatedRows = rows.map((row, i) =>
+            i === index ? { ...row, attribute: newAttribute } : row
+        );
+        setRows(updatedRows);
+    };
 
     if (error) {
         return <Typography variant="body1" align="center" color="error">{error}</Typography>;
@@ -91,35 +145,46 @@ const CharacterSheet: React.FC = () => {
 
                     <Divider sx={{ my: 2 }} />
 
-                    {/* Attributes Section */}
+                    {/* Attributes Table with Dropdown in Attribute Column */}
                     <Box sx={{ mb: 3 }}>
-                        <Typography variant="h6" gutterBottom>Attributes</Typography>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12} sm={6} md={4}>
-                                <Typography variant="subtitle1">Health</Typography>
-                                <Typography variant="body1">{character.health || 'Not Set'}</Typography>
-                            </Grid>
-                            <Grid item xs={12} sm={6} md={4}>
-                                <Typography variant="subtitle1">Willpower</Typography>
-                                <Typography variant="body1">{character.willpower || 'Not Set'}</Typography>
-                            </Grid>
-                        </Grid>
-                    </Box>
-
-                    <Divider sx={{ my: 2 }} />
-
-                    {/* Skills Section */}
-                    <Box sx={{ mb: 3 }}>
-                        <Typography variant="h6" gutterBottom>Skills</Typography>
-                        {character.skills && character.skills.length > 0 ? (
-                            <ul>
-                                {character.skills.map((skill, index) => (
-                                    <li key={index}>{skill}</li>
-                                ))}
-                            </ul>
-                        ) : (
-                            <Typography variant="body2">No skills listed.</Typography>
-                        )}
+                        <TableContainer component={Paper}>
+                            <Table sx={{ minWidth: 650 }} aria-label="attribute table">
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>Attribute</TableCell>
+                                        <TableCell align="right">Veldig Lett</TableCell>
+                                        <TableCell align="right">Lett</TableCell>
+                                        <TableCell align="right">Normal</TableCell>
+                                        <TableCell align="right">Vanskelig</TableCell>
+                                        <TableCell align="right">Veldig Vanskelig</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {rows.map((row, index) => (
+                                        <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                                            <TableCell component="th" scope="row">
+                                                <Select
+                                                    value={row.attribute}
+                                                    onChange={(e) => handleAttributeChange(index, e.target.value as string)}
+                                                    fullWidth
+                                                >
+                                                    {attributeOptions.map((option) => (
+                                                        <MenuItem key={option} value={option}>
+                                                            {option}
+                                                        </MenuItem>
+                                                    ))}
+                                                </Select>
+                                            </TableCell>
+                                            <TableCell align="right">{row.veldigLett}</TableCell>
+                                            <TableCell align="right">{row.lett}</TableCell>
+                                            <TableCell align="right">{row.normal}</TableCell>
+                                            <TableCell align="right">{row.vanskelig}</TableCell>
+                                            <TableCell align="right">{row.veldigVanskelig}</TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
                     </Box>
 
                     <Divider sx={{ my: 2 }} />
@@ -127,10 +192,13 @@ const CharacterSheet: React.FC = () => {
                     {/* Equipment Section */}
                     <Box sx={{ mb: 3 }}>
                         <Typography variant="h6" gutterBottom>Equipment</Typography>
-                        {equipment.length > 0 ? (
+                        {items.length > 0 ? (
                             <ul>
-                                {equipment.map((item, index) => (
-                                    <li key={index}>{item}</li>
+                                {items.map((item) => (
+                                    <li key={item.id}>
+                                        <h2>{item.itemName}</h2>
+                                        <p>{item.itemDescription}</p>
+                                    </li>
                                 ))}
                             </ul>
                         ) : (
@@ -140,17 +208,17 @@ const CharacterSheet: React.FC = () => {
 
                     <Divider sx={{ my: 2 }} />
 
-                    {/* Achievements Section */}
+                    {/* Additional Sections */}
                     <Box>
-                        <Typography variant="h6" gutterBottom>Achievements</Typography>
-                        {character.achievements && character.achievements.length > 0 ? (
+                        <Typography variant="h6" gutterBottom>Skills</Typography>
+                        {character.skills && character.skills.length > 0 ? (
                             <ul>
-                                {character.achievements.map((achievement, index) => (
-                                    <li key={index}>{achievement}</li>
+                                {character.skills.map((skill, index) => (
+                                    <li key={index}>{skill}</li>
                                 ))}
                             </ul>
                         ) : (
-                            <Typography variant="body2">No achievements listed.</Typography>
+                            <Typography variant="body2">No skills  listed.</Typography>
                         )}
                     </Box>
 
