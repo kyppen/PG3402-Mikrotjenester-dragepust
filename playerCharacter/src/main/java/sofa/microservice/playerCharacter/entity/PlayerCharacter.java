@@ -21,6 +21,4 @@ public class PlayerCharacter {
     private String profession;
     private String species;
     private String itemSetId;
-
-
 }

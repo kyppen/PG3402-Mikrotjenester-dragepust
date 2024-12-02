@@ -14,7 +14,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ItemController {
 
-
     private final ItemService itemService;
 
     // Må ta in character id også ut

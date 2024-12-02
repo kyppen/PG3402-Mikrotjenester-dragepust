@@ -8,9 +8,7 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-
 public class PlayerCharacterDTO {
-
     private String userId;
     private String characterName;
     private String profession;

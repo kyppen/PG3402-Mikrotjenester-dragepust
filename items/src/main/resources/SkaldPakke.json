@@ -1,0 +1,29 @@
+{
+  "setName": "Skaldepakke",
+  "items": [
+    {
+      "itemName": "Jernklubbe (dødelighet 4)",
+      "itemDescription": "jernklubbe"
+    },
+    {
+      "itemName": "Ferdaklær (kvalitet 2)",
+      "itemDescription": "ferdaklær (kvalitet 2)"
+    },
+    {
+      "itemName": "Fløyte",
+      "itemDescription": "fløyte"
+    },
+    {
+      "itemName": "Pipe med tilbehøy",
+      "itemDescription": "pipe med tilbehøy"
+    },
+    {
+      "itemName": "En flaske vin",
+      "itemDescription": "en flaske vin"
+    },
+    {
+      "itemName": "Drikkeskinn",
+      "itemDescription": "Drikkeskinn"
+    }
+  ]
+}

@@ -15,13 +15,13 @@ public class JsonToItemSet {
         System.out.println("Itemset id " + i);
         try{
             if(i == 1){
-                ItemSet itemSet = mapper.readValue(new File("src/main/resources/JegerPakke.json"), ItemSet.class);
-                System.out.println("Jeger");
-                return itemSet;
+                return mapper.readValue(new File("src/main/resources/JegerPakke.json"), ItemSet.class);
             }else if (i == 2){
                 System.out.println("Trollman");
-                ItemSet itemSet = mapper.readValue(new File("src/main/resources/TrolldomsPakke.json"), ItemSet.class);
-                return itemSet;
+                return mapper.readValue(new File("src/main/resources/TrolldomsPakke.json"), ItemSet.class);
+            }else if (i == 3) {
+                System.out.println("Skald");
+                return mapper.readValue(new File("src/main/resources/SkaldPakke.json"), ItemSet.class);
             }
 
         }catch (Exception e){
