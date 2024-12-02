@@ -17,7 +17,7 @@ import {
     TableBody,
     Paper,
     Select,
-    MenuItem
+    MenuItem,
 } from '@mui/material';
 
 interface Character {
@@ -32,7 +32,6 @@ interface Character {
     achievements?: string[];
 }
 
-// Sample function to create table rows with dynamic data
 function createData(
     attribute: string,
     veldigLett: number,
@@ -43,12 +42,13 @@ function createData(
 ) {
     return { attribute, veldigLett, lett, normal, vanskelig, veldigVanskelig };
 }
+
 interface Item {
     id: string;
     itemName: string;
     itemDescription: string;
-
 }
+
 const initialRows = [
     createData('Smidighet', 3, 4, 6, 8, 9),
     createData('Kløkt', 4, 5, 7, 9, 10),
@@ -69,61 +69,47 @@ const CharacterSheet: React.FC = () => {
     const { characterId } = useParams<{ characterId: string }>();
     const [character, setCharacter] = useState<Character | null>(null);
     const [error, setError] = useState<string | null>(null);
-    const [rows, setRows] = useState(initialRows);  // Manage rows with local state
+    const [rows, setRows] = useState(initialRows);
     const [items, setItems] = useState<Item[]>([]);
     const navigate = useNavigate();
 
-    // Fetch character details
     useEffect(() => {
         const fetchCharacter = async () => {
             try {
                 const response = await fetch(`http://localhost:8081/character/${characterId}`);
-                if (!response.ok) {
-                    throw new Error('Failed to fetch character details');
-                }
+                if (!response.ok) throw new Error('Failed to fetch character details');
                 const data = await response.json();
                 setCharacter(data);
             } catch (err) {
                 setError(err instanceof Error ? err.message : 'An unknown error occurred');
             }
         };
-
         fetchCharacter();
     }, [characterId]);
 
     useEffect(() => {
-        // Fetch data from API
         fetch(`http://localhost:8082/items/${characterId}`)
             .then((response) => {
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                }
+                if (!response.ok) throw new Error("Network response was not ok");
                 return response.json();
             })
-            .then((data: Item[]) => setItems(data)) // Type data as Item[]
+            .then((data: Item[]) => setItems(data))
             .catch((error) => console.error("Error fetching data:", error));
-    }, []);
+    }, [characterId]);
 
     const handleAttributeChange = (index: number, newAttribute: string) => {
-        const updatedRows = rows.map((row, i) =>
-            i === index ? { ...row, attribute: newAttribute } : row
-        );
+        const updatedRows = rows.map((row, i) => i === index ? { ...row, attribute: newAttribute } : row);
         setRows(updatedRows);
     };
 
-    if (error) {
-        return <Typography variant="body1" align="center" color="error">{error}</Typography>;
-    }
-
-    if (!character) {
-        return <Typography variant="body1" align="center">Loading character...</Typography>;
-    }
+    if (error) return <Typography variant="body1" align="center" color="error">{error}</Typography>;
+    if (!character) return <Typography variant="body1" align="center">Loading character...</Typography>;
 
     return (
-        <Container maxWidth="md" sx={{ mt: 4 }}>
-            <Card>
+        <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
+            <Card sx={{ backgroundColor: '#fffaf0', padding: 3, boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)' }}>
                 <CardContent>
-                    <Typography variant="h4" align="center" gutterBottom>
+                    <Typography variant="h4" align="center" sx={{ fontFamily: 'MedievalSharp, cursive', color: '#8b6c42' }}>
                         Character Sheet
                     </Typography>
 
@@ -143,15 +129,15 @@ const CharacterSheet: React.FC = () => {
                         </Grid>
                     </Grid>
 
-                    <Divider sx={{ my: 2 }} />
+                    <Divider sx={{ my: 2, borderBottomWidth: '2px', borderColor: '#d2b48c' }} />
 
                     {/* Attributes Table with Dropdown in Attribute Column */}
-                    <Box sx={{ mb: 3 }}>
-                        <TableContainer component={Paper}>
-                            <Table sx={{ minWidth: 650 }} aria-label="attribute table">
+                    <Box sx={{ mb: 3, maxHeight: '300px', overflow: 'auto' }}>
+                        <TableContainer component={Paper} sx={{ backgroundColor: '#fffaf0' }}>
+                            <Table aria-label="attribute table">
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell>Attribute</TableCell>
+                                        <TableCell sx={{ fontWeight: 'bold' }}>Attribute</TableCell>
                                         <TableCell align="right">Veldig Lett</TableCell>
                                         <TableCell align="right">Lett</TableCell>
                                         <TableCell align="right">Normal</TableCell>
@@ -167,11 +153,10 @@ const CharacterSheet: React.FC = () => {
                                                     value={row.attribute}
                                                     onChange={(e) => handleAttributeChange(index, e.target.value as string)}
                                                     fullWidth
+                                                    sx={{ fontFamily: 'Cinzel, serif' }}
                                                 >
                                                     {attributeOptions.map((option) => (
-                                                        <MenuItem key={option} value={option}>
-                                                            {option}
-                                                        </MenuItem>
+                                                        <MenuItem key={option} value={option}>{option}</MenuItem>
                                                     ))}
                                                 </Select>
                                             </TableCell>
@@ -187,17 +172,17 @@ const CharacterSheet: React.FC = () => {
                         </TableContainer>
                     </Box>
 
-                    <Divider sx={{ my: 2 }} />
+                    <Divider sx={{ my: 2, borderBottomWidth: '2px', borderColor: '#d2b48c' }} />
 
                     {/* Equipment Section */}
                     <Box sx={{ mb: 3 }}>
-                        <Typography variant="h6" gutterBottom>Equipment</Typography>
+                        <Typography variant="h6" sx={{ fontFamily: 'Cinzel, serif' }}>Equipment</Typography>
                         {items.length > 0 ? (
-                            <ul>
+                            <ul style={{ paddingLeft: '20px', listStyle: 'square', color: '#8b6c42' }}>
                                 {items.map((item) => (
-                                    <li key={item.id}>
-                                        <h2>{item.itemName}</h2>
-                                        <p>{item.itemDescription}</p>
+                                    <li key={item.id} style={{ marginBottom: '8px' }}>
+                                        <Typography variant="body1" sx={{ fontWeight: 'bold' }}>{item.itemName}</Typography>
+                                        <Typography variant="body2">{item.itemDescription}</Typography>
                                     </li>
                                 ))}
                             </ul>
@@ -206,27 +191,13 @@ const CharacterSheet: React.FC = () => {
                         )}
                     </Box>
 
-                    <Divider sx={{ my: 2 }} />
-
-                    {/* Additional Sections */}
-                    <Box>
-                        <Typography variant="h6" gutterBottom>Skills</Typography>
-                        {character.skills && character.skills.length > 0 ? (
-                            <ul>
-                                {character.skills.map((skill, index) => (
-                                    <li key={index}>{skill}</li>
-                                ))}
-                            </ul>
-                        ) : (
-                            <Typography variant="body2">No skills  listed.</Typography>
-                        )}
-                    </Box>
+                    <Divider sx={{ my: 2, borderBottomWidth: '2px', borderColor: '#d2b48c' }} />
 
                     <Button
                         variant="contained"
                         color="primary"
                         fullWidth
-                        sx={{ mt: 3 }}
+                        sx={{ mt: 3, fontWeight: 'bold' }}
                         onClick={() => navigate('/character-menu')}
                     >
                         Back to Menu
