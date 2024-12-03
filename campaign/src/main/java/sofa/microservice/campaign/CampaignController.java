@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import sofa.microservice.campaign.DTO.AddCharacterToCampaignDTO;
 import sofa.microservice.campaign.DTO.CampaignDTO;
 import sofa.microservice.campaign.DTO.CampaignIdDTO;
+import sofa.microservice.campaign.DTO.MessageDTO;
 import sofa.microservice.campaign.entity.Campaign;
+import sofa.microservice.campaign.entity.Message;
 import sofa.microservice.campaign.entity.PlayerCharacter;
 
 import java.util.List;
@@ -51,6 +53,19 @@ public class CampaignController {
     @GetMapping("/characters")
     public List<PlayerCharacter> CharacterInACampaign(@RequestBody CampaignIdDTO campaignIdDTO){
         return campaignService.GetAllCharactersInCampaign(campaignIdDTO.getCampaignId());
+    }
+
+    //NEED TO ADD CHECK IF CAMPAIGN EXISTS BEFORE ADDING, FINE FOR TESTING
+    //THIS SHOULD READ FROM RABBITMQ QUEUE FROM DICEROLLER SERVICE
+    //FRONTEND -> DICEROLLER -> CAMPAIGN.
+    @PostMapping("/message")
+    public void addMessage(@RequestBody MessageDTO messageDTO){
+        log.info("message {}", messageDTO);
+        Message message = new Message();
+        message.setMessage(message.getMessage());
+        message.setCampaignId(message.getCampaignId());
+        message.setPlayerCharacterId(message.getPlayerCharacterId());
+        campaignService.addMessage(message);
     }
 
 }

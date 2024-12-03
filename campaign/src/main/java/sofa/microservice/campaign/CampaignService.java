@@ -2,19 +2,23 @@ package sofa.microservice.campaign;
 
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sofa.microservice.campaign.entity.Campaign;
+import sofa.microservice.campaign.entity.Message;
 import sofa.microservice.campaign.entity.PlayerCharacter;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class CampaignService {
     @Autowired
     private final CampaignRepo campaignRepo;
     private final PlayerCharacterRepo playerCharacterRepo;
+    private final MessageRepo messageRepo;
 
     public void createCampaign(Campaign campaign){
         campaignRepo.save(campaign);
@@ -24,6 +28,10 @@ public class CampaignService {
     }
     public void addCharacter(PlayerCharacter playerCharacter){
         playerCharacterRepo.save(playerCharacter);
+    }
+    public void addMessage(Message message){
+        log.info("saved message");
+        messageRepo.save(message);
     }
     public List<PlayerCharacter> GetAllCharacters(){
         return playerCharacterRepo.findAll();
