@@ -1,0 +1,8 @@
+{
+  "setName": "Skald",
+  "baseHP": 10,
+  "baseWillpower": 5,
+  "baseMagic": 8,
+  "skills": ["Instrument", "Persuasion"],
+  "magic": ["Melodic magic"]
+}
