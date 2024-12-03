@@ -18,6 +18,7 @@ public class DiceController {
 
     @GetMapping
     public ResponseEntity<Integer> roll() {
+        diceService.sendMessage("wtf");
         return new ResponseEntity<>(5, HttpStatus.CREATED);
     }
 
