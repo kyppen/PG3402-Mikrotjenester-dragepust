@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import sofa.example.diceroller.DTO.MessageDTO;
 
 
 @RequiredArgsConstructor
@@ -18,7 +19,10 @@ public class DiceController {
 
     @GetMapping
     public ResponseEntity<Integer> roll() {
-        diceService.sendMessage("wtf");
+        MessageDTO messageDTO = new MessageDTO();
+        messageDTO.setMessage("THIS IS THE MESSAGE IM SENDING");
+        messageDTO.setCampaignId("1");
+        diceService.sendMessage(messageDTO);
         return new ResponseEntity<>(5, HttpStatus.CREATED);
     }
 
