@@ -7,6 +7,8 @@ import LoginPage from './pages/Login';
 import CharacterMenu from './pages/Charactermenu';
 import CharacterForm from './pages/CreateCharacter';
 import CharacterSheet from './pages/CharacterSheet';
+import Campaign from './pages/Campaign.tsx';
+import CampaignForm from './pages/CreateCampaign'
 
 const App: React.FC = () => {
     return (
@@ -17,6 +19,8 @@ const App: React.FC = () => {
                 <Route path="/character-menu" element={<CharacterMenu />} />
                 <Route path="/new-character" element={<CharacterForm />} />
                 <Route path="/character/:characterId" element={<CharacterSheet />} />
+                <Route path="/campaign" element={<Campaign/>}/>
+                <Route path="/new-campaign" element={<CampaignForm/>} />
             </Routes>
         </Router>
         </ThemeProvider>
