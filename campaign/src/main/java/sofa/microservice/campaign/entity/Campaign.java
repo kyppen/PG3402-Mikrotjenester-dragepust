@@ -13,7 +13,7 @@ public class Campaign {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private Long creatorId;
+    private String userId;
     private String name;
     private String description;
 }

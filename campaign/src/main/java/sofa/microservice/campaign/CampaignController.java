@@ -7,10 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sofa.microservice.campaign.DTO.AddCharacterToCampaignDTO;
-import sofa.microservice.campaign.DTO.CampaignDTO;
-import sofa.microservice.campaign.DTO.CampaignIdDTO;
-import sofa.microservice.campaign.DTO.MessageDTO;
+import sofa.microservice.campaign.DTO.*;
 import sofa.microservice.campaign.entity.Campaign;
 import sofa.microservice.campaign.entity.Message;
 import sofa.microservice.campaign.entity.PlayerCharacter;
@@ -23,12 +20,11 @@ import java.util.List;
 @Slf4j
 public class CampaignController {
     private final CampaignService campaignService;
-
     @PostMapping("/create")
     public ResponseEntity<Campaign> createCampaign(@RequestBody CampaignDTO campaignDTO) {
         log.info("Create campaign: {}", campaignDTO);
         Campaign campaign = new Campaign();
-        campaign.setCreatorId(campaignDTO.getCreatorId());
+        campaign.setUserId(campaignDTO.getUserId());
         campaign.setDescription(campaignDTO.getDescription());
         campaign.setName(campaignDTO.getName());
         campaignService.createCampaign(campaign);
@@ -37,6 +33,10 @@ public class CampaignController {
     @GetMapping("/all")
     public List<Campaign> allCampaigns(){
         return campaignService.getAllCampaigns();
+    }
+    @GetMapping("/campaign")
+    public List<Campaign> getCampaign(@RequestBody UserIdDTO userIdDTO){
+        return campaignService.getCampaignByUserId(userIdDTO.getUserId());
     }
     @PutMapping("/playercharacter/add")
     public void addCharacter(@RequestBody AddCharacterToCampaignDTO addCharacterToCampaignDTO){
@@ -54,17 +54,19 @@ public class CampaignController {
     public List<PlayerCharacter> CharacterInACampaign(@RequestBody CampaignIdDTO campaignIdDTO){
         return campaignService.GetAllCharactersInCampaign(campaignIdDTO.getCampaignId());
     }
+    @GetMapping("/messagelog")
+    public List<Message> CampaignMessageLog(@RequestBody CampaignIdDTO campaignIdDTO){
+        return campaignService.GetAllMessages(campaignIdDTO.getCampaignId());
+    }
 
     //NEED TO ADD CHECK IF CAMPAIGN EXISTS BEFORE ADDING, FINE FOR TESTING
     //THIS SHOULD READ FROM RABBITMQ QUEUE FROM DICEROLLER SERVICE
     //FRONTEND -> DICEROLLER -> CAMPAIGN.
+    //this will be depricated once rabbitMQ queue is up
     @PostMapping("/message")
     public void addMessage(@RequestBody MessageDTO messageDTO){
         log.info("message {}", messageDTO);
-        Message message = new Message();
-        message.setMessage(message.getMessage());
-        message.setCampaignId(message.getCampaignId());
-        message.setPlayerCharacterId(message.getPlayerCharacterId());
+        Message message = new Message(messageDTO.getCampaignId(),messageDTO.getPlayerCharacterId(),messageDTO.getMessage());
         campaignService.addMessage(message);
     }
 

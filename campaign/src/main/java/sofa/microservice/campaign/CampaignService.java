@@ -29,6 +29,10 @@ public class CampaignService {
     public List<Campaign> getAllCampaigns(){
         return campaignRepo.findAll();
     }
+    public List<Campaign> getCampaignByUserId(String userId){
+
+        return campaignRepo.findCampaignByUserId(userId);
+    }
     public void addCharacter(PlayerCharacter playerCharacter){
         playerCharacterRepo.save(playerCharacter);
     }
@@ -43,13 +47,19 @@ public class CampaignService {
         //return playerCharacterRepo.findAllBycampaignId();
         return playerCharacterRepo.findAllByCampaignId(campaignId);
     }
+    public List<Message> GetAllMessages(String campaignId){
+        return messageRepo.findAllByCampaignId(campaignId);
+    }
     @RabbitListener(queues = "campaign_messages")
-    public void receiveMessage(String message){
+    public void receiveMessage(String stringMessage){
         try{
-            System.out.println(message);
+            System.out.println("String message: "+ stringMessage);
             //SOMETING FUCKY HERE
-            MessageDTO messageDTO = new ObjectMapper().readValue(message, MessageDTO.class);
+            MessageDTO messageDTO = new ObjectMapper().readValue(stringMessage, MessageDTO.class);
             System.out.println(messageDTO);
+            Message message = new Message(messageDTO.getCampaignId(), messageDTO.getPlayerCharacterId(), messageDTO.getMessage());
+            messageRepo.save(message);
+            log.info("Message saved to repository");
         }catch (Exception e){
             log.error("FAILED CONVERTING STRINGDTO TO MESSAGEDTO");
         }

@@ -5,8 +5,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CampaignDTO {
+public class UserIdDTO {
     private String userId;
-    private String name;
-    private String description;
 }

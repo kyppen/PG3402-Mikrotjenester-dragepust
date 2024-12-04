@@ -9,6 +9,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,4 +17,9 @@ public class Message {
     private String campaignId;
     private String playerCharacterId;
     private String message;
+    public Message(String campaignId, String playerCharacterId, String message) {
+        this.campaignId = campaignId;
+        this.playerCharacterId = playerCharacterId;
+        this.message = message;
+    }
 }
