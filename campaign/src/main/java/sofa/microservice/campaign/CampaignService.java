@@ -32,7 +32,6 @@ public class CampaignService {
     public List<Campaign> getCampaignByUserId(String userId){
         return campaignRepo.findCampaignByUserId(userId);
     }
-
     public void addCharacter(PlayerCharacter playerCharacter){
         playerCharacterRepo.save(playerCharacter);
     }
@@ -41,6 +40,7 @@ public class CampaignService {
         messageRepo.save(message);
     }
     public List<PlayerCharacter> GetAllCharacters(){
+        log.info("GetAllCharacters");
         return playerCharacterRepo.findAll();
     }
     public List<PlayerCharacter> GetAllCharactersInCampaign(String campaignId){
@@ -57,7 +57,7 @@ public class CampaignService {
             //SOMETING FUCKY HERE
             MessageDTO messageDTO = new ObjectMapper().readValue(stringMessage, MessageDTO.class);
             System.out.println(messageDTO);
-            Message message = new Message(messageDTO.getCampaignId(), messageDTO.getPlayerCharacterId(), messageDTO.getMessage());
+            Message message = new Message(messageDTO.getCampaignId(), messageDTO.getCharacterId(), messageDTO.getMessage());
             messageRepo.save(message);
             log.info("Message saved to repository");
         }catch (Exception e){

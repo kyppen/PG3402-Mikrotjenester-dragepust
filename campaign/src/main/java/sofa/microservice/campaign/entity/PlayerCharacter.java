@@ -16,7 +16,6 @@ public class PlayerCharacter {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String campaignId;
-    @Column(unique = true)
     private String characterId;
     public PlayerCharacter(AddCharacterToCampaignDTO playerCharacter){
         this.campaignId = playerCharacter.getCampaignId();

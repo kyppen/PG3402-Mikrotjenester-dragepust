@@ -36,14 +36,14 @@ public class CampaignController {
     public ResponseEntity<List<Campaign>> getCampaign(@RequestBody UserIdDTO userIdDTO){
         return new ResponseEntity<>(campaignService.getCampaignByUserId(userIdDTO.getUserId()), HttpStatus.OK);
     }
-    @PutMapping("/playercharacter/add")
+    @PutMapping("/character/add")
     public ResponseEntity<HttpStatus> addCharacter(@RequestBody AddCharacterToCampaignDTO addCharacterToCampaignDTO){
         log.info("Add Character: {}", addCharacterToCampaignDTO);
         PlayerCharacter playerCharacter = new PlayerCharacter(addCharacterToCampaignDTO);
         campaignService.addCharacter(playerCharacter);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    @GetMapping("/playercharacter/all")
+    @GetMapping("/character/all")
     public ResponseEntity<List<PlayerCharacter>> AllCharacters(){
         return new ResponseEntity<>(campaignService.GetAllCharacters(), HttpStatus.OK);
     }
@@ -63,7 +63,7 @@ public class CampaignController {
     @PostMapping("/message")
     public void addMessage(@RequestBody MessageDTO messageDTO){
         log.info("message {}", messageDTO);
-        Message message = new Message(messageDTO.getCampaignId(),messageDTO.getPlayerCharacterId(),messageDTO.getMessage());
+        Message message = new Message(messageDTO.getCampaignId(),messageDTO.getCharacterId(),messageDTO.getMessage());
         campaignService.addMessage(message);
     }
 

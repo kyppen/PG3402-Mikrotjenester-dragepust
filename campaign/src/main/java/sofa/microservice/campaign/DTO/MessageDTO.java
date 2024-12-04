@@ -9,6 +9,6 @@ import lombok.ToString;
 @ToString
 public class MessageDTO {
     private String campaignId;
-    private String playerCharacterId;
+    private String characterId;
     private String message;
 }
