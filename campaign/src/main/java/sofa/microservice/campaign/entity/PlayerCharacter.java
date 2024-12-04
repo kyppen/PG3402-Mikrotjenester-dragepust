@@ -4,11 +4,13 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import sofa.microservice.campaign.DTO.AddCharacterToCampaignDTO;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
+@Table(name = "PLAYERCHARACTER")
 public class PlayerCharacter {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,6 +18,8 @@ public class PlayerCharacter {
     private String campaignId;
     @Column(unique = true)
     private String characterId;
-    private String name;
-    private String description;
+    public PlayerCharacter(AddCharacterToCampaignDTO playerCharacter){
+        this.campaignId = playerCharacter.getCampaignId();
+        this.characterId = playerCharacter.getCharacterId();
+    }
 }

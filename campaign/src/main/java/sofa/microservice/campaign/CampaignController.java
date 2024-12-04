@@ -23,40 +23,37 @@ public class CampaignController {
     @PostMapping("/create")
     public ResponseEntity<Campaign> createCampaign(@RequestBody CampaignDTO campaignDTO) {
         log.info("Create campaign: {}", campaignDTO);
-        Campaign campaign = new Campaign();
-        campaign.setUserId(campaignDTO.getUserId());
-        campaign.setDescription(campaignDTO.getDescription());
-        campaign.setName(campaignDTO.getName());
+        Campaign campaign = new Campaign(campaignDTO);
         campaignService.createCampaign(campaign);
         return new ResponseEntity<>(campaign, HttpStatus.CREATED);
     }
     @GetMapping("/all")
-    public List<Campaign> allCampaigns(){
-        return campaignService.getAllCampaigns();
+    public ResponseEntity<List<Campaign>> allCampaigns(){
+        return new ResponseEntity<>(campaignService.getAllCampaigns(), HttpStatus.OK);
     }
+
     @GetMapping("/campaign")
-    public List<Campaign> getCampaign(@RequestBody UserIdDTO userIdDTO){
-        return campaignService.getCampaignByUserId(userIdDTO.getUserId());
+    public ResponseEntity<List<Campaign>> getCampaign(@RequestBody UserIdDTO userIdDTO){
+        return new ResponseEntity<>(campaignService.getCampaignByUserId(userIdDTO.getUserId()), HttpStatus.OK);
     }
     @PutMapping("/playercharacter/add")
-    public void addCharacter(@RequestBody AddCharacterToCampaignDTO addCharacterToCampaignDTO){
+    public ResponseEntity<HttpStatus> addCharacter(@RequestBody AddCharacterToCampaignDTO addCharacterToCampaignDTO){
         log.info("Add Character: {}", addCharacterToCampaignDTO);
-        PlayerCharacter playerCharacter = new PlayerCharacter();
-        playerCharacter.setCampaignId(addCharacterToCampaignDTO.getCampaignId());
-        playerCharacter.setCharacterId(addCharacterToCampaignDTO.getCharacterId());
+        PlayerCharacter playerCharacter = new PlayerCharacter(addCharacterToCampaignDTO);
         campaignService.addCharacter(playerCharacter);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
     @GetMapping("/playercharacter/all")
-    public List<PlayerCharacter> AllCharacters(){
-        return campaignService.GetAllCharacters();
+    public ResponseEntity<List<PlayerCharacter>> AllCharacters(){
+        return new ResponseEntity<>(campaignService.GetAllCharacters(), HttpStatus.OK);
     }
     @GetMapping("/characters")
-    public List<PlayerCharacter> CharacterInACampaign(@RequestBody CampaignIdDTO campaignIdDTO){
-        return campaignService.GetAllCharactersInCampaign(campaignIdDTO.getCampaignId());
+    public ResponseEntity<List<PlayerCharacter>> CharacterInACampaign(@RequestBody CampaignIdDTO campaignIdDTO){
+        return new ResponseEntity<>(campaignService.GetAllCharactersInCampaign(campaignIdDTO.getCampaignId()), HttpStatus.OK);
     }
     @GetMapping("/messagelog")
-    public List<Message> CampaignMessageLog(@RequestBody CampaignIdDTO campaignIdDTO){
-        return campaignService.GetAllMessages(campaignIdDTO.getCampaignId());
+    public ResponseEntity<List<Message>> CampaignMessageLog(@RequestBody CampaignIdDTO campaignIdDTO){
+        return new ResponseEntity<>(campaignService.GetAllMessages(campaignIdDTO.getCampaignId()), HttpStatus.OK);
     }
 
     //NEED TO ADD CHECK IF CAMPAIGN EXISTS BEFORE ADDING, FINE FOR TESTING
