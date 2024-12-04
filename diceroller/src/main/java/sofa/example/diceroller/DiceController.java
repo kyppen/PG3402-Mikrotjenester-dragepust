@@ -4,10 +4,7 @@ package sofa.example.diceroller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import sofa.example.diceroller.DTO.MessageDTO;
 
 
@@ -17,18 +14,15 @@ import sofa.example.diceroller.DTO.MessageDTO;
 public class DiceController {
     private final DiceService diceService;
 
-    @GetMapping
-    public ResponseEntity<Integer> roll() {
-        MessageDTO messageDTO = new MessageDTO();
-        messageDTO.setMessage("THIS IS THE MESSAGE IM SENDING");
-        messageDTO.setCampaignId("1");
+    @PostMapping("/message")
+    public ResponseEntity<Integer> sendMessageToQueue(@RequestBody MessageDTO messageDTO) {
         diceService.sendMessage(messageDTO);
         return new ResponseEntity<>(5, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{amount}")
-    public ResponseEntity<Integer> roll(@PathVariable int amount) {
-        Integer result = diceService.rolling(amount);
+    @GetMapping("/roll")
+    public ResponseEntity<Integer> roll(@RequestBody MessageDTO messageDTO) {
+        Integer result = diceService.rolling(2);
         return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
