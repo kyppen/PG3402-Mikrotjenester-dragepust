@@ -30,9 +30,9 @@ public class CampaignService {
         return campaignRepo.findAll();
     }
     public List<Campaign> getCampaignByUserId(String userId){
-
         return campaignRepo.findCampaignByUserId(userId);
     }
+
     public void addCharacter(PlayerCharacter playerCharacter){
         playerCharacterRepo.save(playerCharacter);
     }
