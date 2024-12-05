@@ -6,28 +6,44 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.client.RestTemplate;
+import sofa.microservice.campaign.DTO.CharacterInfoDTO;
 import sofa.microservice.campaign.DTO.MessageDTO;
 import sofa.microservice.campaign.entity.Campaign;
 import sofa.microservice.campaign.entity.Message;
 import sofa.microservice.campaign.entity.PlayerCharacter;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
 @AllArgsConstructor
+@CrossOrigin (origins = "http://localhost:5173")
 public class CampaignService {
     @Autowired
     private final CampaignRepo campaignRepo;
     private final PlayerCharacterRepo playerCharacterRepo;
     private final MessageRepo messageRepo;
+    private final RestTemplate restTemplate;
 
     public void createCampaign(Campaign campaign){
+        log.info("Saving campaign {}", campaign);
         campaignRepo.save(campaign);
     }
     public List<Campaign> getAllCampaigns(){
         return campaignRepo.findAll();
+    }
+    public Campaign getCampaign(String id){
+        log.info("Fetching campaign with id {}", id);
+        return campaignRepo.findById(Long.parseLong(id)).orElse(null);
     }
     public List<Campaign> getCampaignByUserId(String userId){
         return campaignRepo.findCampaignByUserId(userId);
@@ -46,6 +62,22 @@ public class CampaignService {
     public List<PlayerCharacter> GetAllCharactersInCampaign(String campaignId){
         //return playerCharacterRepo.findAllBycampaignId();
         return playerCharacterRepo.findAllByCampaignId(campaignId);
+    }
+    public List<CharacterInfoDTO> GetAllCharactersInCampaignWithInfo(String campaignId){
+        List<PlayerCharacter> ListOfCharacterIds = GetAllCharactersInCampaign(campaignId);
+        List<CharacterInfoDTO> characterInfoList = new ArrayList<>();
+
+        for(PlayerCharacter playerCharacter : ListOfCharacterIds){
+            log.info("Loop {}", playerCharacter.getCharacterId());
+            String url = "http://localhost:8081/character/" + playerCharacter.getCharacterId();
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Content-Type", "application/json");
+            CharacterInfoDTO response = restTemplate.getForObject(url, CharacterInfoDTO.class);
+            characterInfoList.add(response);
+            response.toString();
+        }
+        log.info("Got all chracters returning");
+        return characterInfoList;
     }
     public List<Message> GetAllMessages(String campaignId){
         return messageRepo.findAllByCampaignId(campaignId);
