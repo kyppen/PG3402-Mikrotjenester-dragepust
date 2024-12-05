@@ -36,8 +36,8 @@ const CharacterMenu: React.FC = () => {
     const handleNewCharacter = () => {
         navigate('/new-character');
     };
-    const handleNewCampaign = () => {
-        navigate('/new-campaign');
+    const switchToCampaignMenu = () => {
+        navigate('/campaign-menu');
     }
 
     const handleCharacterClick = (characterId: string) => {
@@ -54,11 +54,11 @@ const CharacterMenu: React.FC = () => {
                     {error}
                 </Typography>
             )}
+            <Button variant="contained" color="primary" fullWidth onClick={switchToCampaignMenu} sx={{ mb: 3 }}>
+                Campaign Menu
+            </Button>
             <Button variant="contained" color="primary" fullWidth onClick={handleNewCharacter} sx={{ mb: 3 }}>
                 Create New Character
-            </Button>
-            <Button onClick={handleNewCampaign}>
-                Create New Campaign
             </Button>
             <Grid container spacing={2}>
                 {characters.map((character) => (

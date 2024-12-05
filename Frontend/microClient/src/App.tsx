@@ -4,11 +4,12 @@ import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme';
 import LoginPage from './pages/Login';
-import CharacterMenu from './pages/Charactermenu';
+import CharacterMenu from './pages/CharacterMenu.tsx';
 import CharacterForm from './pages/CreateCharacter';
 import CharacterSheet from './pages/CharacterSheet';
 import Campaign from './pages/Campaign.tsx';
 import CampaignForm from './pages/CreateCampaign'
+import CampaignMenu from "./pages/CampaignMenu.tsx";
 
 const App: React.FC = () => {
     return (
@@ -17,6 +18,7 @@ const App: React.FC = () => {
             <Routes>
                 <Route path="/" element={<LoginPage />} />
                 <Route path="/character-menu" element={<CharacterMenu />} />
+                <Route path="/campaign-menu" element={<CampaignMenu/>} />
                 <Route path="/new-character" element={<CharacterForm />} />
                 <Route path="/character/:characterId" element={<CharacterSheet />} />
                 <Route path="/campaign" element={<Campaign/>}/>
