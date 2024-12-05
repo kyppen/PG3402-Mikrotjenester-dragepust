@@ -5,11 +5,11 @@ import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme';
 import LoginPage from './pages/Login';
 import CharacterMenu from './pages/CharacterMenu.tsx';
-import CharacterForm from './pages/CreateCharacter';
-import CharacterSheet from './pages/CharacterSheet';
-import Campaign from './pages/Campaign.tsx';
-import CampaignForm from './pages/CreateCampaign'
 import CampaignMenu from "./pages/CampaignMenu.tsx";
+import CharacterSheet from './pages/CharacterSheet';
+import CampaignSheet from "./pages/CampaignSheet.tsx";
+import CampaignForm from './pages/CreateCampaign'
+import CharacterForm from './pages/CreateCharacter';
 
 const App: React.FC = () => {
     return (
@@ -21,7 +21,7 @@ const App: React.FC = () => {
                 <Route path="/campaign-menu" element={<CampaignMenu/>} />
                 <Route path="/new-character" element={<CharacterForm />} />
                 <Route path="/character/:characterId" element={<CharacterSheet />} />
-                <Route path="/campaign" element={<Campaign/>}/>
+                <Route path="/campaign/:campaignId" element={<CampaignSheet/>} />
                 <Route path="/new-campaign" element={<CampaignForm/>} />
             </Routes>
         </Router>

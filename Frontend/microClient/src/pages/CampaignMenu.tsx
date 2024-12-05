@@ -39,9 +39,8 @@ const CampaignMenu: React.FC = () => {
     const switchToCharacterMenu = () => {
         navigate('/character-menu');
     }
-
-    const handleCharacterClick = (characterId: string) => {
-        navigate(`/character/${characterId}`);
+    const handleCampaignClick = (campaignId: string) => {
+        navigate(`/campaign/${campaignId}`);
     };
 
     return (
@@ -71,7 +70,7 @@ const CampaignMenu: React.FC = () => {
                                 alignItems: 'center',
                                 padding: 2
                             }}
-                            onClick={() => handleCharacterClick(campaign.id)}
+                            onClick={() => handleCampaignClick(campaign.id)}
                         >
                             <CardMedia
                                 component="img"
