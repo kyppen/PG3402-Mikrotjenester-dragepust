@@ -7,7 +7,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import sofa.microservice.playerCharacter.DTO.ClassDTO;
 import sofa.microservice.playerCharacter.entity.PlayerCharacter;
+import sofa.microservice.playerCharacter.util.ClassInfo;
 
 import java.util.List;
 
@@ -43,5 +45,18 @@ public class PlayerCharacterService {
         ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
         System.out.println(response.getBody());
         System.out.println("Added Items to character " + characterId + "itemSet" + itemSetId);
+    }
+    public void addStats(PlayerCharacter playerCharacter) {
+        ClassInfo classInfoService = new ClassInfo();
+        ClassDTO classDTO = classInfoService.getClassInfo(playerCharacter.getProfession());
+        if (classDTO != null) {
+            playerCharacter.setMagic(classDTO.getMagic());
+        }
+        playerCharacter.setSkills(classDTO.getSkills());
+        playerCharacter.setBaseMagic(classDTO.getBaseMagic());
+        playerCharacter.setBaseWillpower(classDTO.getBaseWillpower());
+        playerCharacter.setBaseHP(classDTO.getBaseHP());
+        playerCharacterRepository.save(playerCharacter);
+
     }
 }

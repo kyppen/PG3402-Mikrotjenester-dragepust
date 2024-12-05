@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @NoArgsConstructor
 @Entity
 @Getter
@@ -21,4 +23,13 @@ public class PlayerCharacter {
     private String profession;
     private String species;
     private String itemSetId;
+    private int baseWillpower;
+    private int baseHP;
+    private int baseMagic;
+
+    @ElementCollection
+    private List<String> skills;
+
+    @ElementCollection
+    private List<String> magic;
 }

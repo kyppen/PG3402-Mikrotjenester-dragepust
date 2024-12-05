@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sofa.microservice.playerCharacter.DTO.PlayerCharacterDTO;
 import sofa.microservice.playerCharacter.entity.PlayerCharacter;
+import sofa.microservice.playerCharacter.util.ClassInfo;
 
 import java.util.List;
 
@@ -18,6 +19,13 @@ import java.util.List;
 @RequestMapping("/character")
 public class PlayerCharacterController {
     private final PlayerCharacterService playerCharacterService;
+
+
+    @GetMapping("/class/{profession}")
+    public void getClassInfo(@PathVariable String profession) {
+        ClassInfo.getClassInfo(profession);
+
+    }
 
     @PostMapping("/create")
     public ResponseEntity<Boolean> createCharacter(@RequestBody PlayerCharacterDTO playerCharacterDTO){
@@ -30,6 +38,7 @@ public class PlayerCharacterController {
         playerCharacter.setItemSetId(playerCharacterDTO.getItemSetId());
         Long id = playerCharacterService.createPlayerCharacter(playerCharacter);
         playerCharacterService.sendPostRequest(Long.toString(id), playerCharacter.getItemSetId());
+        playerCharacterService.addStats(playerCharacter);
         log.info("Character created and itemset added");
         return new ResponseEntity<>(true, HttpStatus.CREATED);
     }
