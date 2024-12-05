@@ -1,6 +1,5 @@
 package sofa.microservice.playerCharacter.DTO;
 
-
 import jakarta.persistence.ElementCollection;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,24 +7,16 @@ import lombok.ToString;
 
 import java.util.List;
 
-@Setter
 @Getter
+@Setter
 @ToString
-public class PlayerCharacterDTO {
-    private String userId;
-    private String characterName;
+public class ClassDTO {
     private String profession;
-    private String species;
-    private String itemSetId;
-
     private int baseHP;
     private int baseMagic;
-    private int willpower;
-
+    private int baseWillpower;
     @ElementCollection
     private List<String> skills;
-
     @ElementCollection
     private List<String> magic;
-
 }

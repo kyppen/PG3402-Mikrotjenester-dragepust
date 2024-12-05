@@ -1,5 +1,5 @@
 {
-  "setName": "Jeger",
+  "profession": "Jeger",
   "baseHP": 14,
   "baseWillpower": 4,
   "skills": ["Hunting", "Knowledge(forest)"]

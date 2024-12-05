@@ -25,11 +25,11 @@ interface Character {
     characterName: string;
     species: string;
     profession: string;
-    age?: string;
-    health?: string;
-    willpower?: string;
+    baseMagic: string;
+    baseHP: string;
+    baseWillpower: string;
+    magic?: string[];
     skills?: string[];
-    achievements?: string[];
 }
 
 function createData(
@@ -71,6 +71,8 @@ const CharacterSheet: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [rows, setRows] = useState(initialRows);
     const [items, setItems] = useState<Item[]>([]);
+    const [skills, setSkills] = useState<string[]>([]);
+    const [spells, setSpells] = useState<string[]>([]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -80,6 +82,8 @@ const CharacterSheet: React.FC = () => {
                 if (!response.ok) throw new Error('Failed to fetch character details');
                 const data = await response.json();
                 setCharacter(data);
+                setSpells(data.magic || []); // Assuming "magic" is the key for spells
+                setSkills(data.skills || []);
             } catch (err) {
                 setError(err instanceof Error ? err.message : 'An unknown error occurred');
             }
@@ -106,14 +110,36 @@ const CharacterSheet: React.FC = () => {
     if (!character) return <Typography variant="body1" align="center">Loading character...</Typography>;
 
     return (
-        <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
-            <Card sx={{ backgroundColor: '#fffaf0', padding: 3, boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)' }}>
+        <Container
+            maxWidth="xl"
+            sx={{
+                height: '100vh',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                overflow: 'hidden',
+                padding: 2,
+            }}
+        >
+            <Card
+                sx={{
+                    width: '100%',
+                    maxHeight: '100%', // Contain the card within the viewport
+                    overflow: 'auto', // Enable scrolling for overflow content
+                    backgroundColor: '#fffaf0',
+                    boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)',
+                }}
+            >
                 <CardContent>
-                    <Typography variant="h4" align="center" sx={{ fontFamily: 'MedievalSharp, cursive', color: '#8b6c42' }}>
+                    <Typography
+                        variant="h4"
+                        align="center"
+                        sx={{ fontFamily: 'MedievalSharp, cursive', color: '#8b6c42' }}
+                    >
                         Character Sheet
                     </Typography>
 
-                    {/* Header Fields */}
                     <Grid container spacing={2} sx={{ mb: 3 }}>
                         <Grid item xs={12} md={4}>
                             <Typography variant="subtitle1">Name</Typography>
@@ -127,13 +153,35 @@ const CharacterSheet: React.FC = () => {
                             <Typography variant="subtitle1">Profession</Typography>
                             <Typography variant="body1">{character.profession || 'Unknown'}</Typography>
                         </Grid>
+
                     </Grid>
 
                     <Divider sx={{ my: 2, borderBottomWidth: '2px', borderColor: '#d2b48c' }} />
+                    <Grid container spacing={2} sx={{ mb: 3 }}>
+                        <Grid item xs={12} md={4}>
+                            <Typography variant="subtitle1">Health:</Typography>
+                            <Typography variant="body1">{character.baseHP || 'Unknown'}</Typography>
+                        </Grid>
+                        <Grid item xs={12} md={4}>
+                            <Typography variant="subtitle1">Willpower:</Typography>
+                            <Typography variant="body1">{character.baseWillpower || 'Unknown'}</Typography>
+                        </Grid>
+                        <Grid item xs={12} md={4}>
+                            <Typography variant="subtitle1">Mana:</Typography>
+                            <Typography variant="body1">{character.baseMagic || 'Unknown'}</Typography>
+                        </Grid>
+                    </Grid>
 
-                    {/* Attributes Table with Dropdown in Attribute Column */}
-                    <Box sx={{ mb: 3, maxHeight: '300px', overflow: 'auto' }}>
-                        <TableContainer component={Paper} sx={{ backgroundColor: '#fffaf0' }}>
+                    {/* Attributes Table */}
+                    <Box sx={{ mb: 3 }}>
+                        <TableContainer
+                            component={Paper}
+                            sx={{
+                                maxHeight: '300px', // Limit height for scrollable table
+                                overflow: 'auto',
+                                backgroundColor: '#fffaf0',
+                            }}
+                        >
                             <Table aria-label="attribute table">
                                 <TableHead>
                                     <TableRow>
@@ -147,16 +195,18 @@ const CharacterSheet: React.FC = () => {
                                 </TableHead>
                                 <TableBody>
                                     {rows.map((row, index) => (
-                                        <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                                            <TableCell component="th" scope="row">
+                                        <TableRow key={index}>
+                                            <TableCell>
                                                 <Select
                                                     value={row.attribute}
-                                                    onChange={(e) => handleAttributeChange(index, e.target.value as string)}
+                                                    onChange={(e) => handleAttributeChange(index, e.target.value)}
                                                     fullWidth
                                                     sx={{ fontFamily: 'Cinzel, serif' }}
                                                 >
                                                     {attributeOptions.map((option) => (
-                                                        <MenuItem key={option} value={option}>{option}</MenuItem>
+                                                        <MenuItem key={option} value={option}>
+                                                            {option}
+                                                        </MenuItem>
                                                     ))}
                                                 </Select>
                                             </TableCell>
@@ -171,9 +221,37 @@ const CharacterSheet: React.FC = () => {
                             </Table>
                         </TableContainer>
                     </Box>
+                    {/* Spells Section */}
+                    <Box sx={{ mb: 3 }}>
+                        <Typography variant="h6" sx={{ fontFamily: 'Cinzel, serif' }}>Spells</Typography>
+                        {spells.length > 0 ? (
+                            <ul style={{ paddingLeft: '20px', listStyle: 'circle', color: '#8b6c42' }}>
+                                {spells.map((spell, index) => (
+                                    <li key={index} style={{ marginBottom: '8px' }}>
+                                        <Typography variant="body1">{spell}</Typography>
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <Typography variant="body2">No spells listed.</Typography>
+                        )}
+                    </Box>
 
-                    <Divider sx={{ my: 2, borderBottomWidth: '2px', borderColor: '#d2b48c' }} />
-
+                    {/* Skills Section */}
+                    <Box sx={{ mb: 3 }}>
+                        <Typography variant="h6" sx={{ fontFamily: 'Cinzel, serif' }}>Skills</Typography>
+                        {skills.length > 0 ? (
+                            <ul style={{ paddingLeft: '20px', listStyle: 'disc', color: '#8b6c42' }}>
+                                {skills.map((skill, index) => (
+                                    <li key={index} style={{ marginBottom: '8px' }}>
+                                        <Typography variant="body1">{skill}</Typography>
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <Typography variant="body2">No skills listed.</Typography>
+                        )}
+                    </Box>
                     {/* Equipment Section */}
                     <Box sx={{ mb: 3 }}>
                         <Typography variant="h6" sx={{ fontFamily: 'Cinzel, serif' }}>Equipment</Typography>
@@ -192,12 +270,11 @@ const CharacterSheet: React.FC = () => {
                     </Box>
 
                     <Divider sx={{ my: 2, borderBottomWidth: '2px', borderColor: '#d2b48c' }} />
-
                     <Button
                         variant="contained"
                         color="primary"
                         fullWidth
-                        sx={{ mt: 3, fontWeight: 'bold' }}
+                        sx={{ mt: 3 }}
                         onClick={() => navigate('/character-menu')}
                     >
                         Back to Menu
