@@ -48,8 +48,20 @@ public class CampaignService {
     public List<Campaign> getCampaignByUserId(String userId){
         return campaignRepo.findCampaignByUserId(userId);
     }
-    public void addCharacter(PlayerCharacter playerCharacter){
-        playerCharacterRepo.save(playerCharacter);
+
+    //This function either creates a character
+    //or updates which campaign a character belongs too
+    public void addCharacter(PlayerCharacter playerCharacterToAdd){
+        if(playerCharacterRepo.existsByCharacterId(playerCharacterToAdd.getCharacterId())){
+            log.info("Character with id {} already exists, we should update instead", playerCharacterToAdd.getCharacterId());
+            PlayerCharacter playerCharacter = playerCharacterRepo.findAllByCharacterId(playerCharacterToAdd.getCharacterId());
+            playerCharacter.setCharacterId(playerCharacterToAdd.getCharacterId());
+            playerCharacter.setCampaignId(playerCharacterToAdd.getCampaignId());
+            playerCharacterRepo.save(playerCharacter);
+        }else{
+            log.info("Adding character {}", playerCharacterToAdd);
+            playerCharacterRepo.save(playerCharacterToAdd);
+        }
     }
     public void addMessage(Message message){
         log.info("saved message");

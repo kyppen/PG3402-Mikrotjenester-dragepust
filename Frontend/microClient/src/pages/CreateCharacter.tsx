@@ -29,8 +29,6 @@ const CreateCharacter: React.FC = () => {
             species,
             profession,
             itemSetId,
-
-
         };
 
         try {
