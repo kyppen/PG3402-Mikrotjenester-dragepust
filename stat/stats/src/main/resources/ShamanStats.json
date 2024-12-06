@@ -1,8 +1,0 @@
-{
-  "setName": "Shaman",
-  "baseHP": 10,
-  "baseWillpower": 4,
-  "baseMagic": 10,
-  "skills": ["Healing", "Soothsaying"],
-  "magic": ["Healing magic"]
-}

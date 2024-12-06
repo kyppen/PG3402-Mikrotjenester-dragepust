@@ -17,7 +17,7 @@ import {
     TableBody,
     Paper,
     Select,
-    MenuItem,
+    MenuItem, TextField,
 } from '@mui/material';
 
 interface Character {
@@ -73,6 +73,9 @@ const CharacterSheet: React.FC = () => {
     const [items, setItems] = useState<Item[]>([]);
     const [skills, setSkills] = useState<string[]>([]);
     const [spells, setSpells] = useState<string[]>([]);
+    const [hpChange, setHpChange] = useState<number>(0); // New state for HP change
+    const [magicChange, setMagicChange] = useState<number>(0);
+    const [willpowerChange, setWillpowerChange] = useState<number>(0);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -100,6 +103,22 @@ const CharacterSheet: React.FC = () => {
             .then((data: Item[]) => setItems(data))
             .catch((error) => console.error("Error fetching data:", error));
     }, [characterId]);
+
+    const handleStatUpdate = async () => {
+        console.log("handle stat update")
+        console.log(hpChange, magicChange, willpowerChange)
+        try {
+            const response = await fetch(`http://localhost:8080/api/stats/${characterId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ hpChange, magicChange, willpowerChange }),
+            });
+            if (!response.ok) throw new Error('Failed to update stats');
+            alert('Stats updated successfully!');
+        } catch (err) {
+            alert(err instanceof Error ? err.message : 'An unknown error occurred');
+        }
+    };
 
     const handleAttributeChange = (index: number, newAttribute: string) => {
         const updatedRows = rows.map((row, i) => i === index ? { ...row, attribute: newAttribute } : row);
@@ -139,6 +158,47 @@ const CharacterSheet: React.FC = () => {
                     >
                         Character Sheet
                     </Typography>
+                    {/* New Section for Stat Updates */}
+                    <Box sx={{ my: 3 }}>
+                        <Typography variant="h6" sx={{ mb: 1 }}>Update Stats</Typography>
+                        <Grid container spacing={2}>
+                            <Grid item xs={6}>
+                                <TextField
+                                    label="HP Change"
+                                    type="number"
+                                    value={hpChange}
+                                    onChange={(e) => setHpChange(Number(e.target.value))}
+
+                                />
+                            </Grid>
+                            <Grid item xs={6}>
+                                <TextField
+                                    label="Magic Change"
+                                    type="number"
+                                    value={magicChange}
+                                    onChange={(e) => setMagicChange(Number(e.target.value))}
+
+                                />
+                            </Grid>
+                            <Grid item xs={6}>
+                                <TextField
+                                    label="Willpower Change"
+                                    type="number"
+                                    value={willpowerChange}
+                                    onChange={(e) => setWillpowerChange(Number(e.target.value))}
+
+                                />
+                            </Grid>
+                        </Grid>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            sx={{ mt: 2 }}
+                            onClick={handleStatUpdate}
+                        >
+                            Apply Changes
+                        </Button>
+                    </Box>
 
                     <Grid container spacing={2} sx={{ mb: 3 }}>
                         <Grid item xs={12} md={4}>
@@ -170,6 +230,7 @@ const CharacterSheet: React.FC = () => {
                             <Typography variant="subtitle1">Mana:</Typography>
                             <Typography variant="body1">{character.baseMagic || 'Unknown'}</Typography>
                         </Grid>
+                        <Button />
                     </Grid>
 
                     {/* Attributes Table */}

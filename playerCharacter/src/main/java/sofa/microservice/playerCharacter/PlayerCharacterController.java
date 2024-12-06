@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sofa.microservice.playerCharacter.DTO.PlayerCharacterDTO;
+import sofa.microservice.playerCharacter.DTO.StatsDTO;
 import sofa.microservice.playerCharacter.entity.PlayerCharacter;
 import sofa.microservice.playerCharacter.util.ClassInfo;
 
@@ -63,5 +64,9 @@ public class PlayerCharacterController {
         playerCharacter = playerCharacterService.getById(id);
         log.info("Character gotten by ID");
         return ResponseEntity.ok(playerCharacter);
+    }
+    @PostMapping("/{characterId}/stats")
+    public void updateCharacterStats(@PathVariable Long characterId, @RequestBody StatsDTO updatedStats) {
+        playerCharacterService.updateStats(characterId, updatedStats);
     }
 }
