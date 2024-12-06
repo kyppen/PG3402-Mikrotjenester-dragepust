@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import sofa.microservice.playerCharacter.DTO.ClassDTO;
+import sofa.microservice.playerCharacter.DTO.StatsDTO;
 import sofa.microservice.playerCharacter.entity.PlayerCharacter;
 import sofa.microservice.playerCharacter.util.ClassInfo;
 
@@ -58,5 +59,12 @@ public class PlayerCharacterService {
         playerCharacter.setBaseHP(classDTO.getBaseHP());
         playerCharacterRepository.save(playerCharacter);
 
+    }
+    public void updateStats(Long characterId, StatsDTO updatedStats) {
+        PlayerCharacter character = playerCharacterRepository.findById(characterId).orElseThrow(() -> new RuntimeException("Character not found"));
+        character.setBaseHP(updatedStats.getHpChange());
+        character.setBaseWillpower(updatedStats.getWillpowerChange());
+        character.setBaseMagic(updatedStats.getMagicChange());
+        playerCharacterRepository.save(character);
     }
 }
