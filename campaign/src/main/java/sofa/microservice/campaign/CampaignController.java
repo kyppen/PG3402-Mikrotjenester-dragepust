@@ -64,9 +64,10 @@ public class CampaignController {
     public List<CharacterInfoDTO> CharacterInCampaignWithInfo(@PathVariable String campaignId){
         return campaignService.GetAllCharactersInCampaignWithInfo(campaignId);
     }
-    @GetMapping("/messagelog")
-    public ResponseEntity<List<Message>> CampaignMessageLog(@RequestBody CampaignIdDTO campaignIdDTO){
-        return new ResponseEntity<>(campaignService.GetAllMessages(campaignIdDTO.getCampaignId()), HttpStatus.OK);
+    @GetMapping("/chat/{campaignId}")
+    public ResponseEntity<List<Message>> CampaignMessageLog(@PathVariable String campaignId){
+        log.info("SOMETHING ");
+        return new ResponseEntity<>(campaignService.GetAllMessages(campaignId), HttpStatus.OK);
     }
 
     //NEED TO ADD CHECK IF CAMPAIGN EXISTS BEFORE ADDING, FINE FOR TESTING

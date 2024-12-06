@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import sofa.example.diceroller.DTO.ConsoleMessageDTO;
 import sofa.example.diceroller.DTO.MessageDTO;
 
 
@@ -14,16 +15,16 @@ import sofa.example.diceroller.DTO.MessageDTO;
 public class DiceController {
     private final DiceService diceService;
 
-    @PostMapping("/message")
+    @PostMapping("/roll")
     public ResponseEntity<Integer> sendMessageToQueue(@RequestBody MessageDTO messageDTO) {
-        diceService.sendMessage(messageDTO);
+        diceService.sendMessageRoll(messageDTO);
         return new ResponseEntity<>(5, HttpStatus.CREATED);
     }
 
-    @GetMapping("/roll")
-    public ResponseEntity<Integer> roll(@RequestBody MessageDTO messageDTO) {
-        Integer result = diceService.rolling(2);
-        return new ResponseEntity<>(result, HttpStatus.CREATED);
+    @PostMapping("/message")
+    public ResponseEntity<Integer> sendConsoleMessage(@RequestBody ConsoleMessageDTO consoleMessageDTO) {
+        diceService.sendConsoleMessage(consoleMessageDTO);
+        return new ResponseEntity<>(5, HttpStatus.CREATED);
     }
 
 }

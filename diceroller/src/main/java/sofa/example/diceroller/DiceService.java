@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import sofa.example.diceroller.DTO.CharacterNameDTO;
+import sofa.example.diceroller.DTO.ConsoleMessageDTO;
 import sofa.example.diceroller.DTO.MessageDTO;
 
 import java.util.Random;
@@ -31,12 +32,25 @@ public class DiceService {
     //@Value("${spring.rabbitmq.queue}") // Inject the queue name from properties
     private String queueName = "campaign_messages";
 
-    public void sendMessage(MessageDTO messageDTO) {
+    public void sendMessageRoll(MessageDTO messageDTO) {
         try{
             String characterName = GetCharacterInfo("1");
             String Message = String.format("%s has rolled an %d", characterName, rolling(2));
             messageDTO.setMessage(Message);
             String StringDTO = new ObjectMapper().writeValueAsString(messageDTO);
+            rabbitTemplate.convertAndSend(queueName, StringDTO);
+            System.out.println("Message sent: " + StringDTO);
+
+        }catch (Exception e){
+            e.printStackTrace();
+            log.error("Failed to convert DTO to String");
+        }
+    }
+    public void sendConsoleMessage(ConsoleMessageDTO consoleMessageDTO) {
+        try{
+            String Message = String.format("Console: %s", consoleMessageDTO.getMessage());
+            consoleMessageDTO.setMessage(Message);
+            String StringDTO = new ObjectMapper().writeValueAsString(consoleMessageDTO);
             rabbitTemplate.convertAndSend(queueName, StringDTO);
             System.out.println("Message sent: " + StringDTO);
 
