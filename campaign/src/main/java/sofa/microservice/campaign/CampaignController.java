@@ -66,7 +66,7 @@ public class CampaignController {
     }
     @GetMapping("/chat/{campaignId}")
     public ResponseEntity<List<Message>> CampaignMessageLog(@PathVariable String campaignId){
-        log.info("SOMETHING ");
+        //log.info("SOMETHING ");
         return new ResponseEntity<>(campaignService.GetAllMessages(campaignId), HttpStatus.OK);
     }
 

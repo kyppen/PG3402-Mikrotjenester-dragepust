@@ -98,7 +98,6 @@ public class CampaignService {
     public void receiveMessage(String stringMessage){
         try{
             System.out.println("String message: "+ stringMessage);
-            //SOMETING FUCKY HERE
             MessageDTO messageDTO = new ObjectMapper().readValue(stringMessage, MessageDTO.class);
             System.out.println(messageDTO);
             Message message = new Message(messageDTO.getCampaignId(), messageDTO.getCharacterId(), messageDTO.getMessage());

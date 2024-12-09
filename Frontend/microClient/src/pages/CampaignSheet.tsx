@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {Button, Container, Grid, Card, CardContent, Typography,TextField, CardMedia, Divider} from "@mui/material";
-import campaign from "./Campaign.tsx";
+
 
 interface Campaign {
     id: string;
@@ -85,7 +85,9 @@ const CampaignSheet: React.FC = () => {
                 console.error('Error fetching chat messages:', err);
             }
         };
+        const interval = setInterval(fetchChatMessages, 2000);
         fetchChatMessages();
+        return () => clearInterval(interval);
     }, [campaignId]);
 
 
@@ -126,7 +128,7 @@ const CampaignSheet: React.FC = () => {
             };
 
             // Send the POST request to the backend
-            const response = await fetch(`http://localhost:8086/dice/message`, {
+            const response = await fetch(`http://localhost:8083/messages/message`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

@@ -1,45 +1,40 @@
-package sofa.example.diceroller;
-
+package sofa.microservice.messenger;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.core.MessageDeliveryMode;
-import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-import sofa.example.diceroller.DTO.CharacterNameDTO;
-import sofa.example.diceroller.DTO.ConsoleMessageDTO;
-import sofa.example.diceroller.DTO.MessageDTO;
+import sofa.microservice.messenger.DTO.CharacterNameDTO;
+import sofa.microservice.messenger.DTO.ConsoleMessageDTO;
+import sofa.microservice.messenger.DTO.MessageDTO;
 
-import java.util.Random;
+import javax.print.DocFlavor;
 
-@Slf4j
 @Service
-public class DiceService {
+@Slf4j
+public class MessengerService {
 
     private final RabbitTemplate rabbitTemplate;
     private final RestTemplate restTemplate = new RestTemplate();
 
-    public DiceService(RabbitTemplate rabbitTemplate) {
+    public MessengerService(RabbitTemplate rabbitTemplate) {
         this.rabbitTemplate = rabbitTemplate;
     }
-    //@Value("${spring.rabbitmq.queue}") // Inject the queue name from properties
     private String queueName = "campaign_messages";
 
     public void sendMessageRoll(MessageDTO messageDTO) {
         try{
             String characterName = GetCharacterInfo("1");
-            String Message = String.format("%s has rolled an %d", characterName, rolling(2));
+            log.info("ROLLING WITH NEW SERVICE");
+            // 5 should be replaced with a call to dice service
+            String Message = String.format("%s has rolled an %d", characterName, 5);
             messageDTO.setMessage(Message);
             String StringDTO = new ObjectMapper().writeValueAsString(messageDTO);
             rabbitTemplate.convertAndSend(queueName, StringDTO);
-            System.out.println("Message sent: " + StringDTO);
+            log.info("object sent to queue, {}", StringDTO);
         }catch (Exception e){
             e.printStackTrace();
             log.error("Failed to convert DTO to String");
@@ -58,16 +53,6 @@ public class DiceService {
             log.error("Failed to convert DTO to String");
         }
     }
-    public Integer rolling(int amount){
-        Random random = new Random();
-        random.setSeed(System.currentTimeMillis());
-        Integer rolled = 0;
-        for(int i = 0; i < amount; i++){
-            rolled += random.nextInt(6) + 1;
-        }
-        return rolled;
-    }
-
     public String GetCharacterInfo(String characterId){
         String url = "http://localhost:8081/character/" + characterId;
         HttpHeaders headers = new HttpHeaders();

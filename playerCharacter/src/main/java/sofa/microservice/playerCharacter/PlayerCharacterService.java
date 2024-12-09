@@ -58,7 +58,6 @@ public class PlayerCharacterService {
         playerCharacter.setBaseWillpower(classDTO.getBaseWillpower());
         playerCharacter.setBaseHP(classDTO.getBaseHP());
         playerCharacterRepository.save(playerCharacter);
-
     }
     public void updateStats(Long characterId, StatsDTO updatedStats) {
         PlayerCharacter character = playerCharacterRepository.findById(characterId).orElseThrow(() -> new RuntimeException("Character not found"));
