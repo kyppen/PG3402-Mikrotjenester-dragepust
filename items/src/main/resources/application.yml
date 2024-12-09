@@ -1,2 +1,24 @@
 server:
   port: 8082
+
+spring:
+  application:
+    name: ItemsService
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        # Each new instance of the service will have unique uuid
+        instance-id: ${spring.application.name}-${server.port}-${random.uuid}
+        health-check-path: /actuator/health
+        health-check-interval: 10s
+        default-query-tag: http
+        prefer-ip-address: true
+        register: true
+        enabled: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health

@@ -1,9 +1,9 @@
 server:
-  port : 8081
+  port: 8089
 
 spring:
   application:
-    name: playerCharacterService
+    name: StatsService
   cloud:
     consul:
       host: localhost
@@ -17,7 +17,11 @@ spring:
         prefer-ip-address: true
         register: true
         enabled: true
-
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
 management:
   endpoints:
     web:

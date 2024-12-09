@@ -1,8 +1,28 @@
 server.port: 8086
 
 spring:
+  application:
+    name: diceRollerService
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        # Each new instance of the service will have unique uuid
+        instance-id: ${spring.application.name}-${server.port}-${random.uuid}
+        health-check-path: /actuator/health
+        health-check-interval: 10s
+        default-query-tag: http
+        prefer-ip-address: true
+        register: true
+        enabled: true
   rabbitmq:
     host: localhost
     port: 5672
     username: guest
     password: guest
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
