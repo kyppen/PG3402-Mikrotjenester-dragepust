@@ -1,28 +1,55 @@
 package org.api.stats;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.api.stats.DTO.CharacterStatsDTO;
+import org.api.stats.DTO.StatsDTO;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class StatsService {
     @Autowired
     private RestTemplate restTemplate;
+    private final RabbitTemplate rabbitTemplate;
 
-    // Update stats for a character
-    public void updateStats(Long characterId, CharacterStats updatedStats) {
-        // Forward the updated stats to CharacterService
-        saveUpdatedStatsToCharacterService(characterId, updatedStats);
-        log.info("Updated stats for character {}", characterId);
+    public void sendMessage(String message) {
+        rabbitTemplate.convertAndSend("stat-queue", message);
+        System.out.println("Message sent to queue: " + message);
     }
 
-    // Save updated stats to CharacterService
-    private void saveUpdatedStatsToCharacterService(Long characterId, CharacterStats updatedStats) {
-        String characterServiceUrl = "http://localhost:8081/character/" + characterId + "/stats";
-        log.info("Saving updated stats to CharacterService: {}", characterServiceUrl);
-        log.info("Updated stats: {}", updatedStats.toString());
-        restTemplate.postForEntity(characterServiceUrl, updatedStats, Void.class);
+    public void updateStats(Long characterId, CharacterStatsDTO stats) {
+        CharacterStatsMessage message = new CharacterStatsMessage(characterId.toString(), stats);
+        rabbitTemplate.convertAndSend("stats-exchange", "stats-routing-key", message);
+        System.out.println("Stat update message sent to RabbitMQ: " + message);
     }
+
+
+    public void updateHp(Long characterId, int hpChange) {
+        CharacterStatsDTO stats = new CharacterStatsDTO();
+        stats.setHp(hpChange);
+        updateStats(characterId, stats);
+    }
+
+
+    public void updateMagic(Long characterId, int magicChange) {
+        CharacterStatsDTO stats = new CharacterStatsDTO();
+        stats.setMagic(magicChange);
+        updateStats(characterId, stats);
+    }
+
+
+    public void updateWillpower(Long characterId, int willpowerChange) {
+        CharacterStatsDTO stats = new CharacterStatsDTO();
+        stats.setWillpower(willpowerChange);
+        updateStats(characterId, stats);
+    }
+
+
+
+
 }
