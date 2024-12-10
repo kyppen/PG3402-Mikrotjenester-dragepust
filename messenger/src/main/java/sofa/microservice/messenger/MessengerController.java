@@ -23,13 +23,14 @@ public class MessengerController {
 
     @PostMapping("/roll")
     public ResponseEntity<Integer> sendMessageToQueue(@RequestBody MessageDTO messageDTO) {
+        log.info("WTF");
         messengerService.sendMessageRoll(messageDTO);
-        return new ResponseEntity<>(5, HttpStatus.CREATED);
+        return new ResponseEntity<>(2, HttpStatus.CREATED);
     }
     @PostMapping("/message")
     public ResponseEntity<Integer> sendConsoleMessage(@RequestBody ConsoleMessageDTO consoleMessageDTO) {
         log.info(consoleMessageDTO.toString());
         messengerService.sendConsoleMessage(consoleMessageDTO);
-        return new ResponseEntity<>(5, HttpStatus.CREATED);
+        return new ResponseEntity<>(2, HttpStatus.CREATED);
     }
 }

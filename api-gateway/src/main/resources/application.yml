@@ -1,0 +1,51 @@
+server:
+  port: 8087
+
+spring:
+  application:
+    name: Api-gateway
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        # Each new instance of the service will have unique uuid
+        #instance-id: ${spring.application.name}-${server.port}-${random.uuid}
+        health-check-path: /actuator/health
+        health-check-interval: 10s
+        instance-host: 127.0.0.1
+        prefer-ip-address: true
+        register: true
+        enabled: true
+    gateway:
+      routes:
+        - id: messenger_service
+          uri: lb://MessengerService
+          predicates:
+            - Path=/messages/**
+            - Method=POST
+        - id: dice_roller_service_route
+          uri: lb://diceRollerService
+          predicates:
+            - Path=/dice/**
+        - id: player_character_service
+          uri: lb://playerCharacterService
+          predicates:
+            - Path=/character/**
+        - id: campaign_service
+          uri: lb://campaignService
+          predicates:
+            - Path=/campaign/**
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+logging:
+  level:
+    org.springframework.cloud.loadbalancer: DEBUG
+    org.springframework.cloud.gateway: DEBUG

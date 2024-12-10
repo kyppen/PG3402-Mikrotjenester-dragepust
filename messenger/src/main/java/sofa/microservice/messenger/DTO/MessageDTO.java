@@ -11,5 +11,7 @@ import lombok.ToString;
 public class MessageDTO {
     private String campaignId;
     private String characterId;
+    //This string doesn't get saved or displayed
+    // It may later be used to specify what type of roll a character is doing
     private String message;
 }

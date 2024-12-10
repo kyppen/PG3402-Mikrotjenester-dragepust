@@ -1,0 +1,8 @@
+org\api\stats\WillpowerUpdateRequest.class
+org\api\stats\CharacterStatsMessage.class
+org\api\stats\HpUpdateRequest.class
+org\api\stats\DTO\CharacterStatsDTO.class
+org\api\stats\DTO\StatsDTO.class
+org\api\stats\MagicUpdateRequest.class
+org\api\stats\StatChangeRequest.class
+org\api\stats\RabbitMQConfig.class

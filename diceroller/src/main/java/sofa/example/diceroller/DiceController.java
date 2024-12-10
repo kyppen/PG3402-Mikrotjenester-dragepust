@@ -18,17 +18,11 @@ import sofa.example.diceroller.DTO.MessageDTO;
 public class DiceController {
     private final DiceService diceService;
 
-    @PostMapping("/roll")
-    public ResponseEntity<Integer> sendMessageToQueue(@RequestBody MessageDTO messageDTO) {
-        diceService.sendMessageRoll(messageDTO);
-        return new ResponseEntity<>(5, HttpStatus.CREATED);
-    }
-
-    @PostMapping("/message")
-    public ResponseEntity<Integer> sendConsoleMessage(@RequestBody ConsoleMessageDTO consoleMessageDTO) {
-        log.info(consoleMessageDTO.toString());
-        diceService.sendConsoleMessage(consoleMessageDTO);
-        return new ResponseEntity<>(5, HttpStatus.CREATED);
+    @GetMapping("/roll/{DiceAmount}")
+    public ResponseEntity<Integer> sendMessageToQueue(@PathVariable String DiceAmount) {
+        log.info("Requested to roll dice");
+        Integer result = diceService.rollDice(Integer.parseInt(DiceAmount));
+        return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
 }

@@ -23,65 +23,21 @@ import java.util.Random;
 @Service
 public class DiceService {
 
-    private final RabbitTemplate rabbitTemplate;
     private final RestTemplate restTemplate = new RestTemplate();
 
-    public DiceService(RabbitTemplate rabbitTemplate) {
-        this.rabbitTemplate = rabbitTemplate;
-    }
-    //@Value("${spring.rabbitmq.queue}") // Inject the queue name from properties
-    private String queueName = "campaign_messages";
+    //Casts a dice
+    public Integer rollDice(Integer nr){
+        int diceResults = 0;
+        for(int i = 0; i < nr; i++){
+            long seed = System.currentTimeMillis();
+            Random random = new Random(seed);
 
-    public void sendMessageRoll(MessageDTO messageDTO) {
-        try{
-            String characterName = GetCharacterInfo("1");
-            String Message = String.format("%s has rolled an %d", characterName, rolling(2));
-            messageDTO.setMessage(Message);
-            String StringDTO = new ObjectMapper().writeValueAsString(messageDTO);
-            rabbitTemplate.convertAndSend(queueName, StringDTO);
-            System.out.println("Message sent: " + StringDTO);
-        }catch (Exception e){
-            e.printStackTrace();
-            log.error("Failed to convert DTO to String");
+            int roll = random.nextInt(6) + 1;
+            diceResults += roll;
+            log.info("dice rolled an {}" , roll);
         }
-    }
-    public void sendConsoleMessage(ConsoleMessageDTO consoleMessageDTO) {
-        try{
-            String Message = String.format("Console: %s", consoleMessageDTO.getMessage());
-            consoleMessageDTO.setMessage(Message);
-            String StringDTO = new ObjectMapper().writeValueAsString(consoleMessageDTO);
-            rabbitTemplate.convertAndSend(queueName, StringDTO);
-            System.out.println("Message sent: " + StringDTO);
-
-        }catch (Exception e){
-            e.printStackTrace();
-            log.error("Failed to convert DTO to String");
-        }
-    }
-    public Integer rolling(int amount){
-        Random random = new Random();
-        random.setSeed(System.currentTimeMillis());
-        Integer rolled = 0;
-        for(int i = 0; i < amount; i++){
-            rolled += random.nextInt(6) + 1;
-        }
-        return rolled;
+        log.info("Dice cast: {} outcome: {}", nr, diceResults);
+        return diceResults;
     }
 
-    public String GetCharacterInfo(String characterId){
-        String url = "http://localhost:8081/character/" + characterId;
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Content-Type", "application/json");
-        HttpEntity<String> request = new HttpEntity<>(headers);
-        String response = restTemplate.getForObject(url, String.class);
-        try{
-            CharacterNameDTO characterNameDTO = new ObjectMapper().readValue(response, CharacterNameDTO.class);
-            System.out.println("Character name is: " + characterNameDTO.getCharacterName());
-            return characterNameDTO.getCharacterName();
-        }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
-        }
-        return null;
-    }
 }

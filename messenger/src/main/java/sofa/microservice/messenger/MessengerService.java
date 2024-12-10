@@ -30,8 +30,12 @@ public class MessengerService {
             String characterName = GetCharacterInfo("1");
             log.info("ROLLING WITH NEW SERVICE");
             // 5 should be replaced with a call to dice service
-            String Message = String.format("%s has rolled an %d", characterName, 5);
+            log.info("Calling Roll Dice");
+            Integer result = RollDice();
+            log.info("After Calling rolldice {}", result);
+            String Message = String.format("%s has rolled an %d", characterName, result);
             messageDTO.setMessage(Message);
+
             String StringDTO = new ObjectMapper().writeValueAsString(messageDTO);
             rabbitTemplate.convertAndSend(queueName, StringDTO);
             log.info("object sent to queue, {}", StringDTO);
@@ -68,5 +72,23 @@ public class MessengerService {
             e.printStackTrace();
         }
         return null;
+    }
+    public Integer RollDice(){
+        log.info("RollDice()");
+        try{
+            String url = "http://localhost:8086/dice/roll/2";
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Content-Type", "application/json");
+            HttpEntity<String> request = new HttpEntity<>(headers);
+            String response = restTemplate.getForObject(url, String.class);
+            log.info("Response: {}", response);
+            if(response == null){
+                return 0;
+            }
+            return Integer.parseInt(response);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return 0;
     }
 }

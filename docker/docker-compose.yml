@@ -19,7 +19,7 @@ services:
     ports:
       - "8500:8500/udp"
       - "8500:8500"   # Consul HTTP API
-    command: 'agent -dev -node=micro_smth -client=0.0.0.0 -log-level=INFO'
+    command: 'agent -dev -node=microExam -client=0.0.0.0 -log-level=INFO'
     networks:
       - dragepust_network
 
