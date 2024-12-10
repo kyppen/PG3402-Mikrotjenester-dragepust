@@ -104,21 +104,32 @@ const CharacterSheet: React.FC = () => {
             .catch((error) => console.error("Error fetching data:", error));
     }, [characterId]);
 
-    const handleStatUpdate = async () => {
-        console.log("handle stat update")
-        console.log(hpChange, magicChange, willpowerChange)
-        try {
-            const response = await fetch(`http://localhost:8080/api/stats/${characterId}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ hpChange, magicChange, willpowerChange }),
-            });
-            if (!response.ok) throw new Error('Failed to update stats');
-            alert('Stats updated successfully!');
-        } catch (err) {
-            alert(err instanceof Error ? err.message : 'An unknown error occurred');
-        }
+    const updateHp = async (hpChange: number) => {
+        console.log(`Send health on: http://localhost:8089/api/stats/${characterId}/hp`);
+        await fetch(`http://localhost:8089/api/stats/${characterId}/hp/${5}`, {
+            method: 'PUT',
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ value: hpChange }),
+        });
+        console.log(`Health sent: ${hpChange}`)
     };
+
+    const updateMagic = async (magicChange: number) => {
+        await fetch(`http://localhost:8089/api/stats/${characterId}/magic`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ value: magicChange }),
+        });
+    };
+
+    const updateWillpower = async (willpowerChange: number) => {
+        await fetch(`http://localhost:8089/api/stats/${characterId}/willpower`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ value: willpowerChange }),
+        });
+    };
+
 
     const handleAttributeChange = (index: number, newAttribute: string) => {
         const updatedRows = rows.map((row, i) => i === index ? { ...row, attribute: newAttribute } : row);
@@ -194,9 +205,25 @@ const CharacterSheet: React.FC = () => {
                             variant="contained"
                             color="primary"
                             sx={{ mt: 2 }}
-                            onClick={handleStatUpdate}
+                            onClick={() => updateHp(hpChange)}
                         >
-                            Apply Changes
+                            Apply HP
+                        </Button>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            sx={{ mt: 2 }}
+                            onClick={() => updateMagic(magicChange)}
+                        >
+                            Apply Magic
+                        </Button>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            sx={{ mt: 2 }}
+                            onClick={() => updateWillpower(willpowerChange)}
+                        >
+                            Apply Willpower
                         </Button>
                     </Box>
 
