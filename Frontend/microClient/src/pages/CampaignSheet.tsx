@@ -34,7 +34,7 @@ const CampaignSheet: React.FC = () => {
     useEffect(() => {
         // Fetch characters from the backend API
         //fetches characters in a certain
-        fetch(`http://localhost:8085/campaign/characterinfo/${campaignId}`)
+        fetch(`http://localhost:8087/campaign/characterinfo/${campaignId}`)
             .then((response) => {
                 if (!response.ok) {
                     throw new Error('Failed to fetch characters');
@@ -59,8 +59,8 @@ const CampaignSheet: React.FC = () => {
             try{
                 console.log("idk");
                 console.log(campaignId)
-                console.log(`http://localhost:8085/campaign/campaign/${campaignId}`);
-                const response = await fetch(`http://localhost:8085/campaign/campaign/${encodeURIComponent(campaignId)}`);
+                console.log(`http://localhost:8087/campaign/campaign/${campaignId}`);
+                const response = await fetch(`http://localhost:8087/campaign/campaign/${encodeURIComponent(campaignId)}`);
                 console.log("response");
                 if (!response.ok) throw new Error('Failed to fetch campaign details')
                 const data = await response.json();
@@ -77,7 +77,7 @@ const CampaignSheet: React.FC = () => {
         // Fetch chat messages from the backend API
         const fetchChatMessages = async () => {
             try {
-                const response = await fetch(`http://localhost:8085/campaign/chat/${campaignId}`);
+                const response = await fetch(`http://localhost:8087/campaign/chat/${campaignId}`);
                 if (!response.ok) throw new Error('Failed to fetch chat messages');
                 const data = await response.json();
                 setChatMessages(data);
@@ -85,7 +85,7 @@ const CampaignSheet: React.FC = () => {
                 console.error('Error fetching chat messages:', err);
             }
         };
-        const interval = setInterval(fetchChatMessages, 2000);
+        const interval = setInterval(fetchChatMessages, 20000);
         fetchChatMessages();
         return () => clearInterval(interval);
     }, [campaignId]);
@@ -127,8 +127,7 @@ const CampaignSheet: React.FC = () => {
                 message: newMessage.trim(), // Trim the message to remove extra spaces
             };
 
-            // Send the POST request to the backend
-            const response = await fetch(`http://localhost:8083/messages/message`, {
+            const response = await fetch(`http://localhost:8087/messages/message`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -136,7 +135,6 @@ const CampaignSheet: React.FC = () => {
                 body: JSON.stringify(newMessageObj),
             });
 
-            // Check for response status
             if (!response.ok) {
                 throw new Error(`Failed to send message. Status: ${response.status}`);
             }

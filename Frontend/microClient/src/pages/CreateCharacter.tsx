@@ -32,7 +32,7 @@ const CreateCharacter: React.FC = () => {
         };
 
         try {
-            const response = await fetch('http://localhost:8081/character/create', {
+            const response = await fetch('http://localhost:8087/character/create', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -30,7 +30,7 @@ const CreateCampaign: React.FC = () => {
             userId,
         };
         try {
-            const response = await fetch('http://localhost:8085/campaign/create', {
+            const response = await fetch('http://localhost:8087/campaign/create', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

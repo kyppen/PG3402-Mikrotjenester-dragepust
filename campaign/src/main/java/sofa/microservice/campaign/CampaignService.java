@@ -26,7 +26,6 @@ import java.util.Optional;
 @Slf4j
 @Service
 @AllArgsConstructor
-@CrossOrigin (origins = "http://localhost:5173")
 public class CampaignService {
     @Autowired
     private final CampaignRepo campaignRepo;
@@ -100,9 +99,19 @@ public class CampaignService {
             System.out.println("String message: "+ stringMessage);
             MessageDTO messageDTO = new ObjectMapper().readValue(stringMessage, MessageDTO.class);
             System.out.println(messageDTO);
-            Message message = new Message(messageDTO.getCampaignId(), messageDTO.getCharacterId(), messageDTO.getMessage());
-            messageRepo.save(message);
-            log.info("Message saved to repository");
+            if(playerCharacterRepo.existsByCharacterId(messageDTO.getCharacterId())){
+                Message message = new Message(messageDTO.getCampaignId(), messageDTO.getCharacterId(), messageDTO.getMessage());
+                messageRepo.save(message);
+                log.info("Message saved to repository");
+            }else if (messageDTO.getCharacterId().equals("CONSOLE")){
+                Message message = new Message(messageDTO.getCampaignId(), messageDTO.getCharacterId(), messageDTO.getMessage());
+                log.info("MESSAGE CONTAINS CONSOLE");
+                messageRepo.save(message);
+                log.info("CONSOLE MESSAGE SAVED");
+            }
+            else{
+                log.info("Messaged not saved; UserId not in repo characterId: {}" , messageDTO.getCharacterId());
+            }
         }catch (Exception e){
             log.error("FAILED CONVERTING STRINGDTO TO MESSAGEDTO");
         }

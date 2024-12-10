@@ -11,7 +11,6 @@ import sofa.microservice.messenger.DTO.MessageDTO;
 
 @Slf4j
 @RestController
-@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/messages")
 public class MessengerController {
 
@@ -30,7 +29,14 @@ public class MessengerController {
     @PostMapping("/message")
     public ResponseEntity<Integer> sendConsoleMessage(@RequestBody ConsoleMessageDTO consoleMessageDTO) {
         log.info(consoleMessageDTO.toString());
-        messengerService.sendConsoleMessage(consoleMessageDTO);
+        MessageDTO messageDTO = new MessageDTO();
+        messageDTO.setMessage(consoleMessageDTO.getMessage());
+        messageDTO.setCampaignId(consoleMessageDTO.getCampaignId());
+        //very janky solution
+        //This allows console to type in chat
+        messageDTO.setCharacterId("CONSOLE");
+        messageDTO.setType("CONSOLE");
+        messengerService.sendConsoleMessage(messageDTO);
         return new ResponseEntity<>(2, HttpStatus.CREATED);
     }
 }

@@ -17,7 +17,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/campaign")
 @RequiredArgsConstructor
-@CrossOrigin (origins = "http://localhost:5173")
 @Slf4j
 public class CampaignController {
     private final CampaignService campaignService;

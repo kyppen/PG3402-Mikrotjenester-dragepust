@@ -19,7 +19,7 @@ const CharacterMenu: React.FC = () => {
     useEffect(() => {
         // Fetch characters from the backend API
         // THIS NEEDS TO GET BY USERID ONCE IMPLEMENTED
-        fetch('http://localhost:8081/character/all')
+        fetch('http://localhost:8087/character/all')
             .then((response) => {
                 if (!response.ok) {
                     throw new Error('Failed to fetch characters');
@@ -63,7 +63,7 @@ const CharacterMenu: React.FC = () => {
 
         try{
             console.log("WTF")
-            const response = await fetch('http://localhost:8085/campaign/character/add', {
+            const response = await fetch('http://localhost:8087/campaign/character/add', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

@@ -81,7 +81,7 @@ const CharacterSheet: React.FC = () => {
     useEffect(() => {
         const fetchCharacter = async () => {
             try {
-                const response = await fetch(`http://localhost:8081/character/${characterId}`);
+                const response = await fetch(`http://localhost:8087/character/${characterId}`);
                 if (!response.ok) throw new Error('Failed to fetch character details');
                 const data = await response.json();
                 setCharacter(data);
@@ -95,7 +95,7 @@ const CharacterSheet: React.FC = () => {
     }, [characterId]);
 
     useEffect(() => {
-        fetch(`http://localhost:8082/items/${characterId}`)
+        fetch(`http://localhost:8087/items/${characterId}`)
             .then((response) => {
                 if (!response.ok) throw new Error("Network response was not ok");
                 return response.json();

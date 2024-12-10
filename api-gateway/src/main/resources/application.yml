@@ -26,7 +26,6 @@ spring:
           uri: lb://MessengerService
           predicates:
             - Path=/messages/**
-            - Method=POST
         - id: dice_roller_service_route
           uri: lb://diceRollerService
           predicates:
@@ -39,6 +38,21 @@ spring:
           uri: lb://campaignService
           predicates:
             - Path=/campaign/**
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowed-origins:
+              - "http://localhost:5173"
+            allowed-headers:
+              - "*"
+            allowed-methods:
+              - "GET"
+              - "POST"
+              - "PUT"
+              - "OPTIONS"
+            allow-credentials: true
+  ## MULIG VI TRENGER COORS HER Se bogdan
+  ## vi trengte cors
 
 management:
   endpoints:

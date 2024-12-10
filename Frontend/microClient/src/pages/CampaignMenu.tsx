@@ -16,7 +16,7 @@ const CampaignMenu: React.FC = () => {
     useEffect(() => {
         // Fetch characters from the backend API
         // Change "1" to a userId from login
-        fetch('http://localhost:8085/campaign/' + "1")
+        fetch('http://localhost:8087/campaign/' + "1")
             .then((response) => {
                 if (!response.ok) {
                     throw new Error('Failed to fetch characters');
@@ -46,7 +46,7 @@ const CampaignMenu: React.FC = () => {
     return (
         <Container maxWidth="md">
             <Typography variant="h5" align="center" gutterBottom>
-                Your Characters
+                Your Campaigns
             </Typography>
             {error && (
                 <Typography color="error" align="center">

@@ -44,11 +44,11 @@ public class MessengerService {
             log.error("Failed to convert DTO to String");
         }
     }
-    public void sendConsoleMessage(ConsoleMessageDTO consoleMessageDTO) {
+    public void sendConsoleMessage(MessageDTO messageDTO) {
         try{
-            String Message = String.format("Console: %s", consoleMessageDTO.getMessage());
-            consoleMessageDTO.setMessage(Message);
-            String StringDTO = new ObjectMapper().writeValueAsString(consoleMessageDTO);
+            String Message = String.format("Console: %s", messageDTO.getMessage());
+            messageDTO.setMessage(Message);
+            String StringDTO = new ObjectMapper().writeValueAsString(messageDTO);
             rabbitTemplate.convertAndSend(queueName, StringDTO);
             System.out.println("Message sent: " + StringDTO);
 
