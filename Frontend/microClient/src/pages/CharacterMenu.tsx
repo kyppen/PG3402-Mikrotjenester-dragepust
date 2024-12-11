@@ -21,6 +21,8 @@ interface Character {
     profession: string;
 }
 
+
+
 const CharacterMenu: React.FC = () => {
     const navigate = useNavigate();
     const [characters, setCharacters] = useState<Character[]>([]);
@@ -91,6 +93,15 @@ const CharacterMenu: React.FC = () => {
             console.error("Error adding to campaign", err);
         }
     };
+    const getCharacterImage = (species: string): string => {
+        const speciesImages: { [key: string]: string } = {
+            alv: './src/assets/elf1.jpg',
+            menneske: './src/assets/human1.jpg',
+            dverg: './src/assets/dwarf1.jpg',
+
+        };
+        return speciesImages[species.toLowerCase()] || './src/assets/elf.png'; // Default image fallback
+    };
 
 
     return (
@@ -144,8 +155,8 @@ const CharacterMenu: React.FC = () => {
 
                             <CardMedia
                                 component="img"
-                                image="./src/assets/elf.png"
-                                alt="Character Image"
+                                image={getCharacterImage(character.species)}
+                                alt={`${character.species} Character Image`}
                                 sx={{ width: '100%', height: 150, borderRadius: 1 }}
                                 onClick={() => handleCharacterClick(character.id)}
                             />
@@ -183,5 +194,5 @@ const CharacterMenu: React.FC = () => {
         </Container>
     );
 };
-//Båt
+//Båt er
 export default CharacterMenu;
