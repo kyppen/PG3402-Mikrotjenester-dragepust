@@ -1,15 +1,15 @@
-server.port: 8083
+server:
+  port : 8081
 
 servicenames:
-  dicerollerservice: localhost
-  playercharacterservice: localhost
+  itemservice: itemservice
 
 spring:
   application:
-    name: MessengerService
+    name: playerCharacterService
   cloud:
     consul:
-      host: localhost
+      host: consul
       port: 8500
       discovery:
         # Each new instance of the service will have unique uuid
@@ -20,8 +20,9 @@ spring:
         prefer-ip-address: true
         register: true
         enabled: true
-  rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health

@@ -1,6 +1,0 @@
-services:
-  consul:
-    image: hashicorp/consul:1.19.2
-    container_name: consul
-    network_mode: "host"
-    command: 'agent -dev -node=microsmth -client=0.0.0.0 -log-level=INFO'

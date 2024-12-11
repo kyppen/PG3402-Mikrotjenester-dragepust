@@ -38,6 +38,10 @@ spring:
           uri: lb://campaignService
           predicates:
             - Path=/campaign/**
+        - id: item_service
+          uri: lb://ItemsService
+          predicates:
+            - Path=/items/**
       globalcors:
         cors-configurations:
           '[/**]':

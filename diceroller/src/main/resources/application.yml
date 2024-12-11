@@ -5,7 +5,7 @@ spring:
     name: diceRollerService
   cloud:
     consul:
-      host: localhost
+      host: localhost # localhost
       port: 8500
       discovery:
         # Each new instance of the service will have unique uuid
@@ -17,7 +17,7 @@ spring:
         register: true
         enabled: true
   rabbitmq:
-    host: localhost
+    host: localhost # localhost
     port: 5672
     username: guest
     password: guest

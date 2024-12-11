@@ -3,6 +3,8 @@ package sofa.microservice.messenger;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
@@ -15,10 +17,18 @@ import javax.print.DocFlavor;
 
 @Service
 @Slf4j
+@ConfigurationProperties(prefix = "servicenames")
 public class MessengerService {
 
     private final RabbitTemplate rabbitTemplate;
     private final RestTemplate restTemplate = new RestTemplate();
+
+    @Value("${servicenames.dicerollerservice}")
+    String diceRollerServiceName;
+    @Value("${servicenames.playercharacterservice}")
+    String playerCharacterServiceName;
+
+
 
     public MessengerService(RabbitTemplate rabbitTemplate) {
         this.rabbitTemplate = rabbitTemplate;
@@ -26,22 +36,27 @@ public class MessengerService {
     private String queueName = "campaign_messages";
 
     public void sendMessageRoll(MessageDTO messageDTO) {
+        String characterName = "DEFAULT";
+        Integer result = 69;
         try{
-            String characterName = GetCharacterInfo("1");
-            log.info("ROLLING WITH NEW SERVICE");
-            // 5 should be replaced with a call to dice service
-            log.info("Calling Roll Dice");
-            Integer result = RollDice();
-            log.info("After Calling rolldice {}", result);
-            String Message = String.format("%s has rolled an %d", characterName, result);
-            messageDTO.setMessage(Message);
+            characterName = GetCharacterInfo("1");
+        }catch (Exception e){
+            log.error("Failed to get character name for roll");
+        }
+        try{
+            result = RollDice();
+        }catch (Exception e){
+            log.error("Failed to roll dice");
+        }
 
+        messageDTO.setMessage(String.format("%s has rolled an %d", characterName, result));
+        try{
             String StringDTO = new ObjectMapper().writeValueAsString(messageDTO);
             rabbitTemplate.convertAndSend(queueName, StringDTO);
             log.info("object sent to queue, {}", StringDTO);
         }catch (Exception e){
-            e.printStackTrace();
             log.error("Failed to convert DTO to String");
+            log.error("CharacterService Might be down");
         }
     }
     public void sendConsoleMessage(MessageDTO messageDTO) {
@@ -58,14 +73,15 @@ public class MessengerService {
         }
     }
     public String GetCharacterInfo(String characterId){
-        String url = "http://localhost:8081/character/" + characterId;
+        String url = String.format("http://%s:8081/character/%s", playerCharacterServiceName, characterId);
+        log.info("url to PlayercharacterService: {}" , url);
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
         HttpEntity<String> request = new HttpEntity<>(headers);
         String response = restTemplate.getForObject(url, String.class);
         try{
             CharacterNameDTO characterNameDTO = new ObjectMapper().readValue(response, CharacterNameDTO.class);
-            System.out.println("Character name is: " + characterNameDTO.getCharacterName());
+            log.info("CharacterName {}" , characterNameDTO.getCharacterName());
             return characterNameDTO.getCharacterName();
         }catch (Exception e){
             log.error(e.getMessage());
@@ -73,10 +89,13 @@ public class MessengerService {
         }
         return null;
     }
-    public Integer RollDice(){
+    public Integer RollDice() throws Exception {
         log.info("RollDice()");
         try{
-            String url = "http://localhost:8086/dice/roll/2";
+            log.info("LOCALHOST OR dicerollerservice: {}", diceRollerServiceName);
+            //"http://localhost:8086/dice/roll/2"
+            String url = String.format("http://%s:8086/dice/roll/2", diceRollerServiceName);
+            log.info("URL TO CONTACT diceroller : {}", url);
             HttpHeaders headers = new HttpHeaders();
             headers.set("Content-Type", "application/json");
             HttpEntity<String> request = new HttpEntity<>(headers);

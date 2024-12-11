@@ -34,7 +34,7 @@ public class DiceService {
 
             int roll = random.nextInt(6) + 1;
             diceResults += roll;
-            log.info("dice rolled an {}" , roll);
+            //log.info("dice rolled an {}" , roll);
         }
         log.info("Dice cast: {} outcome: {}", nr, diceResults);
         return diceResults;

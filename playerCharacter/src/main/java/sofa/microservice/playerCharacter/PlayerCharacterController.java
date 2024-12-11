@@ -60,6 +60,7 @@ public class PlayerCharacterController {
     }
     @GetMapping("/{id}")
     public ResponseEntity<PlayerCharacter> getCharacterById(@PathVariable String id){
+        log.info("Attempted to get character by id");
         PlayerCharacter playerCharacter;
         playerCharacter = playerCharacterService.getById(id);
         log.info("Character gotten by ID");
