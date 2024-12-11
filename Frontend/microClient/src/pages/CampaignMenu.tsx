@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Container, Card, CardContent, Typography, Button, Grid, CardMedia } from '@mui/material';
+import {Container, Card, CardContent, Typography, Button, Grid, CardMedia, Box, IconButton} from '@mui/material';
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 
 interface Campaign {
     id: string;
@@ -64,14 +65,34 @@ const CampaignMenu: React.FC = () => {
                     <Grid item xs={12} sm={6} md={4} lg={3} key={campaign.id}>
                         <Card
                             sx={{
+                                position: 'relative', // Required for positioning the delete button
                                 cursor: 'pointer',
                                 display: 'flex',
                                 flexDirection: 'column',
                                 alignItems: 'center',
-                                padding: 2
+                                padding: 2,
                             }}
                             onClick={() => handleCampaignClick(campaign.id)}
                         >
+                            {/* Delete Button */}
+                            <Box
+                                sx={{
+                                    position: 'absolute',
+                                    top: 8,
+                                    right: 8,
+                                }}
+                            >
+                                <IconButton
+                                    size="small"
+                                    color="error"
+                                    onClick={() => {
+                                        if (window.confirm("Are you sure you want to delete this character?")) {
+                                            // Handle delete logic here
+                                        }}}
+                                >
+                                    <HighlightOffIcon />
+                                </IconButton>
+                            </Box>
                             <CardMedia
                                 component="img"
                                 image="./src/assets/campaign.png"

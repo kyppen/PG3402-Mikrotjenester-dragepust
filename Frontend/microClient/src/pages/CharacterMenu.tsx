@@ -1,6 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {Container, Card, CardContent, Typography, Button,Box, Grid, CardMedia, TextField} from '@mui/material';
+import {
+    Container,
+    Card,
+    CardContent,
+    Typography,
+    Button,
+    Box,
+    Grid,
+    CardMedia,
+    TextField,
+    IconButton
+} from '@mui/material';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
 interface Character {
     id: string;
@@ -102,14 +114,34 @@ const CharacterMenu: React.FC = () => {
                     <Grid item xs={12} sm={6} md={4} lg={3} key={character.id}>
                         <Card
                             sx={{
+                                position: 'relative', // Required to position the button absolutely
                                 cursor: 'pointer',
                                 display: 'flex',
                                 flexDirection: 'column',
                                 alignItems: 'center',
-                                padding: 2
+                                padding: 2,
                             }}
-                            //onClick={() => handleCharacterClick(character.id)}
                         >
+                            {/* Delete Button */}
+                            <Box
+                                sx={{
+                                    position: 'absolute',
+                                    top: 8,
+                                    right: 8,
+                                }}
+                            >
+                                <IconButton
+                                    size="small"
+                                    color="error"
+                                    onClick={() => {
+                                        if (window.confirm("Are you sure you want to delete this character?")) {
+                                            // Handle delete logic here
+                                        }}} // Function to handle delete
+                                >
+                                    <HighlightOffIcon />
+                                </IconButton>
+                            </Box>
+
                             <CardMedia
                                 component="img"
                                 image="./src/assets/elf.png"
@@ -151,5 +183,5 @@ const CharacterMenu: React.FC = () => {
         </Container>
     );
 };
-
+//Båt
 export default CharacterMenu;
