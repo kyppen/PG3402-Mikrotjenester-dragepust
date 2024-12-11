@@ -1,0 +1,31 @@
+server:
+  port: 8084
+
+servicenames:
+  userservice: localhost
+
+spring:
+  application:
+    name: userService
+  cloud:
+    consul:
+      host: consul
+      port: 8500
+      discovery:
+        # Each new instance of the service will have unique uuid
+        instance-id: ${spring.application.name}-${server.port}-${random.uuid}
+        health-check-path: /actuator/health
+        health-check-interval: 10s
+        prefer-ip-address: true
+        register: true
+        enabled: true
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: guest
+    password: guest
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
