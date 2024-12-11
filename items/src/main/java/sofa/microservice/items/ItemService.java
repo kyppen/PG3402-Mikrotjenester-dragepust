@@ -4,6 +4,7 @@ package sofa.microservice.items;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import sofa.microservice.items.ItemSetDTO.ItemSet;
 import sofa.microservice.items.entity.Item;
@@ -18,6 +19,7 @@ import java.util.List;
 @Slf4j
 public class ItemService {
     private final ItemRepository itemRepository;
+
     public void addItem(Item item){
         item.printString();
         itemRepository.save(item);
@@ -39,6 +41,7 @@ public class ItemService {
         List<Item> itemitemsplaceholderList = new ArrayList<>();
         JsonToItemSet jsonToItemSet = new JsonToItemSet();
         ItemSet itemSet = jsonToItemSet.getItemSet(Integer.parseInt(setId));
+        log.info("Set gotten successfully! {}", itemSet.toString());
         for(Item setitem : itemSet.getItems()){
             Item item = new Item();
             item.setItemName(setitem.getItemName());
@@ -47,7 +50,7 @@ public class ItemService {
             itemitemsplaceholderList.add(item);
         }
         itemRepository.saveAll(itemitemsplaceholderList);
-        log.info("Items saved");
+        log.info("{} number of items saved", itemitemsplaceholderList.size());
     }
 
 

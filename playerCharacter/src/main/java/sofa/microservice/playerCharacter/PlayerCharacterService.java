@@ -48,7 +48,6 @@ public class PlayerCharacterService {
     public void sendPostRequest(String characterId, String itemSetId){
         String url = String.format("http://%s:8082/items/set/%s/%s", itemservice, characterId, itemSetId);
         log.info("ItemService url: {}" , url);
-        String urlold = "http://localhost:8082/items/set/" + characterId + "/" + itemSetId;
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
         HttpEntity<String> request = new HttpEntity<>(headers);

@@ -24,7 +24,8 @@ public class PlayerCharacterController {
 
     @GetMapping("/class/{profession}")
     public void getClassInfo(@PathVariable String profession) {
-        ClassInfo.getClassInfo(profession);
+        ClassInfo classInfo = new ClassInfo();
+        classInfo.getClassInfo(profession);
 
     }
 

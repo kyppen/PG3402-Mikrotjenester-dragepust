@@ -1,9 +1,6 @@
 package sofa.microservice.items.ItemSetDTO;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import sofa.microservice.items.entity.Item;
 
 import java.util.List;
@@ -13,12 +10,9 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class ItemSet {
     private String setName;
     private List<Item> items;
 
-    @Override
-    public String toString() {
-        return "ItemSet{setName='" + setName + "', items=" + items + "}";
-    }
 }

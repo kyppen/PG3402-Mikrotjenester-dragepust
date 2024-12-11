@@ -17,7 +17,7 @@ import javax.print.DocFlavor;
 
 @Service
 @Slf4j
-@ConfigurationProperties(prefix = "servicenames")
+//@ConfigurationProperties(prefix = "servicenames")
 public class MessengerService {
 
     private final RabbitTemplate rabbitTemplate;

@@ -1,12 +1,9 @@
 server:
-  port: 8085
-
-servicenames:
-  playercharacterservice: localhost
+  port: 8089
 
 spring:
   application:
-    name: campaignService
+    name: StatsService
   cloud:
     consul:
       host: consul
@@ -16,6 +13,7 @@ spring:
         instance-id: ${spring.application.name}-${server.port}-${random.uuid}
         health-check-path: /actuator/health
         health-check-interval: 10s
+        default-query-tag: http
         prefer-ip-address: true
         register: true
         enabled: true

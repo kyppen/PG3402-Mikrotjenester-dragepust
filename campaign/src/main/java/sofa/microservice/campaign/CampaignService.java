@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -27,7 +28,7 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class CampaignService {
-    @Autowired
+
     private final CampaignRepo campaignRepo;
     private final PlayerCharacterRepo playerCharacterRepo;
     private final MessageRepo messageRepo;
@@ -79,8 +80,8 @@ public class CampaignService {
         List<CharacterInfoDTO> characterInfoList = new ArrayList<>();
 
         for(PlayerCharacter playerCharacter : ListOfCharacterIds){
-            log.info("Loop {}", playerCharacter.getCharacterId());
-            String url = "http://localhost:8081/character/" + playerCharacter.getCharacterId();
+            log.info("amount of character in campaign {}", ListOfCharacterIds.size());
+            String url = String.format("http://%s:8081/character/%s", "playercharacterservice" , playerCharacter.getCharacterId());
             HttpHeaders headers = new HttpHeaders();
             headers.set("Content-Type", "application/json");
             CharacterInfoDTO response = restTemplate.getForObject(url, CharacterInfoDTO.class);

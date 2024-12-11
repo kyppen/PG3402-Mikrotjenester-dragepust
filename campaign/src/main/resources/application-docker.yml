@@ -2,7 +2,7 @@ server:
   port: 8085
 
 servicenames:
-  playercharacterservice: localhost
+  playercharacterservice: playercharacterservice
 
 spring:
   application:

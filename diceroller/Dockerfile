@@ -7,6 +7,7 @@ COPY pom.xml ./
 COPY src ./src
 
 RUN mvn clean package -DskipTests
+#RUN mvn clean package
 
 FROM amazoncorretto:17-alpine
 

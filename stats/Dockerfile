@@ -1,4 +1,3 @@
-
 FROM maven:3.9.4-amazoncorretto-17 as builder
 
 WORKDIR /app
@@ -15,6 +14,6 @@ WORKDIR /app
 
 COPY --from=builder /app/target/*.jar app.jar
 
-EXPOSE 8083
+EXPOSE 8089
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
