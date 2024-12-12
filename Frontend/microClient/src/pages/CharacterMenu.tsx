@@ -66,6 +66,11 @@ const CharacterMenu: React.FC = () => {
     const handleCharacterClick = (characterId: string) => {
         navigate(`/character/${characterId}`);
     };
+
+    const handleCharacterDelete = async (characterId: string) => {
+        e.preventDefault()
+       };
+
     const handleCampaignSubmit = async (e: React.FormEvent, characterId: string) => {
         e.preventDefault()
         const addCharacterToCampaign = {
@@ -102,6 +107,7 @@ const CharacterMenu: React.FC = () => {
         };
         return speciesImages[species.toLowerCase()] || './src/assets/elf.png'; // Default image fallback
     };
+
 
 
     return (

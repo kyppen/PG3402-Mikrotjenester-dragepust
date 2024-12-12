@@ -36,6 +36,13 @@ public class PlayerCharacterService {
         System.out.println("CHARACTER ID MAYBE? " + id);
         return id;
     }
+    public boolean deletePlayerCharacter(String CharacterId){
+        log.info("Service Delete");
+        if(playerCharacterRepository.existsById(Long.parseLong(CharacterId))){
+            log.info("Character to delete exists");
+        }
+        return true;
+    }
     public List<PlayerCharacter> getAllCharacters() {
         return playerCharacterRepository.findAll();
     }
@@ -54,6 +61,15 @@ public class PlayerCharacterService {
         ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
         System.out.println(response.getBody());
         System.out.println("Added Items to character " + characterId + "itemSet" + itemSetId);
+    }
+    public void sendDeleteItemRequest(String characterId){
+        String url = String.format("http://%s:8082/items/character/delete/%s", itemservice, characterId);
+        log.info("ItemService url: {}" , url);
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/json");
+        HttpEntity<String> request = new HttpEntity<>(headers);
+        //ResponseEntity<String> response = restTemplate.delete(url);
+
     }
     public void addStats(PlayerCharacter playerCharacter) {
         ClassInfo classInfoService = new ClassInfo();

@@ -35,6 +35,11 @@ public class ItemController {
         itemService.RemoveItem(ItemId);
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
+    @DeleteMapping("/character/delete/{characterId}")
+    public ResponseEntity<Boolean> RemoveAllCharacterItems(@PathVariable String characterId){
+        itemService.RemoveAllCharacterItems(characterId);
+        return new ResponseEntity<>(true, HttpStatus.OK);
+    }
     @GetMapping("/All")
     public ResponseEntity<List<Item>> getAllItems() {
         System.out.println("Get items");

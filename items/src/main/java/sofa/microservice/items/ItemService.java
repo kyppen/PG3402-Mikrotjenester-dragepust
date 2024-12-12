@@ -37,6 +37,10 @@ public class ItemService {
         itemRepository.removeItemById(Long.parseLong(ID));
         log.info("Item with id: " + ID + " removed");
     }
+    @Transactional
+    public void RemoveAllCharacterItems(String characterId){
+        itemRepository.deleteItemsByCharacterId(characterId);
+    }
     public void addSet(String setId, String characterId){
         List<Item> itemitemsplaceholderList = new ArrayList<>();
         JsonToItemSet jsonToItemSet = new JsonToItemSet();
