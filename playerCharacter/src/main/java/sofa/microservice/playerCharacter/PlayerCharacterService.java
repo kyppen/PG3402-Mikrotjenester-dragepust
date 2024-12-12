@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -40,6 +41,10 @@ public class PlayerCharacterService {
         log.info("Service Delete");
         if(playerCharacterRepository.existsById(Long.parseLong(CharacterId))){
             log.info("Character to delete exists");
+            log.info("Deleting character Items");
+
+        }else{
+            log.info("Character does not exist");
         }
         return true;
     }
@@ -68,7 +73,13 @@ public class PlayerCharacterService {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
         HttpEntity<String> request = new HttpEntity<>(headers);
-        //ResponseEntity<String> response = restTemplate.delete(url);
+        // hvofor er det ikke noe deleteForEntity her som i alle de andre methodene? restTemplate.delete(url);
+        ResponseEntity<Boolean> response = restTemplate.exchange(url, HttpMethod.DELETE, null, Boolean.class);
+        if (response.getStatusCode().is2xxSuccessful()) {
+            log.info("DELETE ITEMS: Response: " + response.getBody());
+        } else {
+            log.info("DELETE ITEMS FAILED Failed to delete character items. Status: " + response.getStatusCode());
+        }
 
     }
     public void addStats(PlayerCharacter playerCharacter) {

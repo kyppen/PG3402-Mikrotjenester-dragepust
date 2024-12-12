@@ -44,9 +44,10 @@ public class PlayerCharacterController {
         log.info("Character created and itemset added");
         return new ResponseEntity<>(true, HttpStatus.CREATED);
     }
-    @DeleteMapping("/delete")
+    @DeleteMapping("/delete/{characterId}")
     public ResponseEntity<Boolean> deleteCharacter(@PathVariable String characterId){
         log.info("Delete request on characterId: {}", characterId);
+        playerCharacterService.deletePlayerCharacter(characterId);
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
     @GetMapping("/all")

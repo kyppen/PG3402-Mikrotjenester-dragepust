@@ -39,7 +39,9 @@ public class ItemService {
     }
     @Transactional
     public void RemoveAllCharacterItems(String characterId){
+        log.info("DELETE character items: service reached");
         itemRepository.deleteItemsByCharacterId(characterId);
+        log.info("Items should have been deleted");
     }
     public void addSet(String setId, String characterId){
         List<Item> itemitemsplaceholderList = new ArrayList<>();

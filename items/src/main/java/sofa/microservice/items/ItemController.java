@@ -2,6 +2,7 @@ package sofa.microservice.items;
 
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/items")
 @RequiredArgsConstructor
+@Slf4j
 public class ItemController {
 
     private final ItemService itemService;
@@ -37,6 +39,7 @@ public class ItemController {
     }
     @DeleteMapping("/character/delete/{characterId}")
     public ResponseEntity<Boolean> RemoveAllCharacterItems(@PathVariable String characterId){
+        log.info("DELETE CHARACTER INFO: controller Reached");
         itemService.RemoveAllCharacterItems(characterId);
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
