@@ -38,7 +38,7 @@ public class PlayerCharacterService {
         System.out.println("CHARACTER ID MAYBE? " + id);
         return id;
     }
-    public boolean deletePlayerCharacter(String characterId){
+    public void deletePlayerCharacter(String characterId){
         log.info("Service Delete");
         if(playerCharacterRepository.existsById(Long.parseLong(characterId))){
             log.info("Character to delete exists");
@@ -53,11 +53,13 @@ public class PlayerCharacterService {
             }else{
                 log.warn("There was an issue with the response from campaignservice");
             }
-
+            log.warn("Deleting character");
+            PlayerCharacter playerCharacter = playerCharacterRepository.findById(Long.parseLong(characterId)).orElseThrow();
+            playerCharacterRepository.delete(playerCharacter);
+            log.info("Character Deleted");
         }else{
             log.info("Character does not exist");
         }
-        return true;
     }
     public CampaignInfoDTO getCampaignInfoByCharacterId(String characterId){
         return sendCampaignIdRequest(characterId);

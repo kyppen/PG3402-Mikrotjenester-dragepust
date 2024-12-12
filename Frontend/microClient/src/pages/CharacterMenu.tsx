@@ -69,6 +69,7 @@ const CharacterMenu: React.FC = () => {
 
     const handleCharacterDelete = async (characterId: string) => {
         e.preventDefault()
+        console.log("DELETE?");
        };
 
     const handleCampaignSubmit = async (e: React.FormEvent, characterId: string) => {
@@ -152,6 +153,7 @@ const CharacterMenu: React.FC = () => {
                                     color="error"
                                     onClick={() => {
                                         if (window.confirm("Are you sure you want to delete this character?")) {
+                                            handleCharacterDelete(character.id)
                                             // Handle delete logic here
                                         }}} // Function to handle delete
                                 >
