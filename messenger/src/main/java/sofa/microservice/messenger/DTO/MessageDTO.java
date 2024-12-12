@@ -1,6 +1,7 @@
 package sofa.microservice.messenger.DTO;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -8,6 +9,7 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class MessageDTO {
     private String campaignId;
     private String characterId;

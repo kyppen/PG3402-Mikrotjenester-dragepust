@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import sofa.microservice.playerCharacter.DTO.CampaignInfoDTO;
 import sofa.microservice.playerCharacter.DTO.PlayerCharacterDTO;
 import sofa.microservice.playerCharacter.DTO.StatsDTO;
 import sofa.microservice.playerCharacter.entity.PlayerCharacter;
@@ -26,9 +27,7 @@ public class PlayerCharacterController {
     public void getClassInfo(@PathVariable String profession) {
         ClassInfo classInfo = new ClassInfo();
         classInfo.getClassInfo(profession);
-
     }
-
     @PostMapping("/create")
     public ResponseEntity<Boolean> createCharacter(@RequestBody PlayerCharacterDTO playerCharacterDTO){
         System.out.println(playerCharacterDTO.toString());
@@ -64,13 +63,24 @@ public class PlayerCharacterController {
         UserCharacters = playerCharacterService.getByUserId(userId);
         return ResponseEntity.ok(UserCharacters);
     }
-    @GetMapping("/{id}")
-    public ResponseEntity<PlayerCharacter> getCharacterById(@PathVariable String id){
+    @GetMapping("/{characterId}")
+    public ResponseEntity<PlayerCharacter> getCharacterById(@PathVariable String characterId){
         log.info("Attempted to get character by id");
         PlayerCharacter playerCharacter;
-        playerCharacter = playerCharacterService.getById(id);
+        playerCharacter = playerCharacterService.getById(characterId);
         log.info("Character gotten by ID");
         return ResponseEntity.ok(playerCharacter);
+    }
+    @GetMapping("/campaigninfo/{characterId}")
+    public ResponseEntity<CampaignInfoDTO> getCampaignInfo(@PathVariable String characterId){
+        log.info("campaigninfo/{characterId} with id: {}", characterId);
+        CampaignInfoDTO campaignInfoDTO = playerCharacterService.getCampaignInfoByCharacterId(characterId);
+        if(campaignInfoDTO == null){
+            log.info("campaignInfoDTO is NULL");
+            return new ResponseEntity<>(campaignInfoDTO, HttpStatus.OK);
+        }
+        log.info("Sending campaignInfoDTO {}", campaignInfoDTO);
+        return new ResponseEntity<>(campaignInfoDTO, HttpStatus.ACCEPTED);
     }
     @PostMapping("/{characterId}/stats")
     public void updateCharacterStats(@PathVariable Long characterId, @RequestBody StatsDTO updatedStats) {

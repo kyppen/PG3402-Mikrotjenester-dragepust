@@ -42,6 +42,10 @@ spring:
           uri: lb://ItemsService
           predicates:
             - Path=/items/**
+        - id: user_service
+          uri: lb://userService
+          predicates:
+            - Path=/users/**
       globalcors:
         cors-configurations:
           '[/**]':

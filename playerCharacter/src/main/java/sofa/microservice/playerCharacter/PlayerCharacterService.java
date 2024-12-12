@@ -5,12 +5,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import sofa.microservice.playerCharacter.DTO.CampaignInfoDTO;
 import sofa.microservice.playerCharacter.DTO.ClassDTO;
 import sofa.microservice.playerCharacter.DTO.StatsDTO;
 import sofa.microservice.playerCharacter.entity.PlayerCharacter;
@@ -28,6 +26,8 @@ public class PlayerCharacterService {
 
     @Value("${servicenames.itemservice}")
     String itemservice;
+    @Value("${servicenames.campaignservice}")
+    String campaignservice;
 
     //Creates a character and returns the character ID to add itemset
     public Long createPlayerCharacter(PlayerCharacter character) {
@@ -37,16 +37,29 @@ public class PlayerCharacterService {
         System.out.println("CHARACTER ID MAYBE? " + id);
         return id;
     }
-    public boolean deletePlayerCharacter(String CharacterId){
+    public boolean deletePlayerCharacter(String characterId){
         log.info("Service Delete");
-        if(playerCharacterRepository.existsById(Long.parseLong(CharacterId))){
+        if(playerCharacterRepository.existsById(Long.parseLong(characterId))){
             log.info("Character to delete exists");
             log.info("Deleting character Items");
+            if(sendDeleteCharacterItemsRequest(characterId)){
+                log.info("Items have been removed");
+            }else{
+                log.warn("There was an issue with the response from itemservice");
+            }
+            if(sendDeleteCharacterCampaignRequest(characterId)){
+                log.info("campaignCharacter has been removed");
+            }else{
+                log.warn("There was an issue with the response from campaignservice");
+            }
 
         }else{
             log.info("Character does not exist");
         }
         return true;
+    }
+    public CampaignInfoDTO getCampaignInfoByCharacterId(String characterId){
+        return sendCampaignIdRequest(characterId);
     }
     public List<PlayerCharacter> getAllCharacters() {
         return playerCharacterRepository.findAll();
@@ -67,20 +80,54 @@ public class PlayerCharacterService {
         System.out.println(response.getBody());
         System.out.println("Added Items to character " + characterId + "itemSet" + itemSetId);
     }
-    public void sendDeleteItemRequest(String characterId){
+    public boolean sendDeleteCharacterItemsRequest(String characterId) {
         String url = String.format("http://%s:8082/items/character/delete/%s", itemservice, characterId);
-        log.info("ItemService url: {}" , url);
+        log.info("ItemService url: {}", url);
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
         HttpEntity<String> request = new HttpEntity<>(headers);
         // hvofor er det ikke noe deleteForEntity her som i alle de andre methodene? restTemplate.delete(url);
         ResponseEntity<Boolean> response = restTemplate.exchange(url, HttpMethod.DELETE, null, Boolean.class);
         if (response.getStatusCode().is2xxSuccessful()) {
-            log.info("DELETE ITEMS: Response: " + response.getBody());
+            log.info("Items has been removed from character" + response.getBody());
+            return true;
         } else {
-            log.info("DELETE ITEMS FAILED Failed to delete character items. Status: " + response.getStatusCode());
+            log.info("Error in response " + response.getStatusCode());
+            return false;
         }
-
+    }
+    public CampaignInfoDTO sendCampaignIdRequest(String characterId){
+        String url = String.format("http://%s:8085/campaign/character/%s", campaignservice, characterId);
+        log.info("campaignservice id url: {}", url);
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/json");
+        ResponseEntity<CampaignInfoDTO> response = restTemplate.getForEntity(url, CampaignInfoDTO.class);
+        // Print the response status code
+        if(response.getStatusCode().isSameCodeAs(HttpStatusCode.valueOf(200))){
+            log.info("character is not in a campaign");
+            return null;
+        }
+        if(response.getStatusCode().isSameCodeAs(HttpStatusCode.valueOf(202))){
+            log.info("character is in a campaign");
+            return response.getBody();
+        }
+        return null;
+    }
+    public boolean sendDeleteCharacterCampaignRequest(String characterId){
+        String url = String.format("http://%s:8085/campaign/character/delete/%s", campaignservice, characterId);
+        log.info("CampagignService url: {}" , url);
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/json");
+        HttpEntity<String> request = new HttpEntity<>(headers);
+        // hvofor er det ikke noe deleteForEntity her som i alle de andre methodene? restTemplate.delete(url);
+        ResponseEntity<Boolean> response = restTemplate.exchange(url, HttpMethod.DELETE, null, Boolean.class);
+        if (response.getStatusCode().is2xxSuccessful()) {
+            log.info("Character removed from campaign " + response.getBody());
+            return true;
+        } else {
+            log.info("Something when wrong in campaign response: " + response.getStatusCode());
+            return false;
+        }
     }
     public void addStats(PlayerCharacter playerCharacter) {
         ClassInfo classInfoService = new ClassInfo();

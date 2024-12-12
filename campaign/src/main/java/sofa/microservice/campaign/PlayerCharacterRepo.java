@@ -9,6 +9,6 @@ import java.util.List;
 @Repository
 public interface PlayerCharacterRepo extends JpaRepository<PlayerCharacter, Long> {
     List<PlayerCharacter> findAllByCampaignId(String campaignId);
-    PlayerCharacter findAllByCharacterId(String characterId);
+    PlayerCharacter findByCharacterId(String characterId);
     boolean existsByCharacterId(String characterId);
 }

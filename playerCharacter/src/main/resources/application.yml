@@ -3,6 +3,7 @@ server:
 
 servicenames:
   itemservice: localhost
+  campaignservice: localhost
 
 spring:
   application:

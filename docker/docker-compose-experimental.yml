@@ -118,7 +118,19 @@ services:
       - rabbitmq
     networks:
       - dragepust_network
-
+  userservice:
+    build:
+      context: ../user
+      dockerfile: Dockerfile
+    ports:
+      - '8084:8084'
+    environment:
+      SPRING_PROFILES_ACTIVE: "docker"
+    depends_on:
+      - consul
+      - rabbitmq
+    networks:
+      - dragepust_network
 networks:
   dragepust_network:
     driver: bridge

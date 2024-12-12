@@ -16,12 +16,12 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String campaignId;
-    private String playerCharacterId;
+    private String characterId;
     private String message;
 
-    public Message(String campaignId, String playerCharacterId, String message) {
+    public Message(String campaignId, String characterId, String message) {
         this.campaignId = campaignId;
-        this.playerCharacterId = playerCharacterId;
+        this.characterId = characterId;
         this.message = message;
     }
 }

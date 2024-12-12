@@ -3,6 +3,7 @@ package sofa.microservice.campaign;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.http.parser.HttpParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class CampaignController {
+
     private final CampaignService campaignService;
     @PostMapping("/create")
     public ResponseEntity<Campaign> createCampaign(@RequestBody CampaignDTO campaignDTO) {
@@ -49,6 +51,24 @@ public class CampaignController {
         log.info("Add Character: {}", addCharacterToCampaignDTO);
         PlayerCharacter playerCharacter = new PlayerCharacter(addCharacterToCampaignDTO);
         campaignService.addCharacter(playerCharacter);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @GetMapping("/character/{characterId}")
+    public ResponseEntity<CampaignInfoDTO> getCampaignIdOfCharacter(@PathVariable String characterId){
+        log.info("getCampaignIdOfCharacter characterId: {}" , characterId);
+        CampaignInfoDTO campaignInfoDTO = campaignService.getCampaignIdOfCharacter(characterId);
+        if(campaignInfoDTO == null){
+            log.info("campaignInfoDTO null, character not in campaign");
+            return new ResponseEntity<>(campaignInfoDTO, HttpStatus.OK);
+        }else{
+            log.info("campaignInfoDTO not null: {}, character in campaign", campaignInfoDTO);
+            return new ResponseEntity<>(campaignInfoDTO, HttpStatus.ACCEPTED);
+        }
+    }
+    @DeleteMapping("/character/delete/{characterId}")
+    public ResponseEntity<HttpStatus> removeCharacter(@PathVariable String characterId){
+        log.info("removing character from campaign");
+        campaignService.removeCharacter(characterId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
     @GetMapping("/character/all")

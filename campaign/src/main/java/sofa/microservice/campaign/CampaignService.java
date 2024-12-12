@@ -3,6 +3,7 @@ package sofa.microservice.campaign;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.client.RestTemplate;
+import sofa.microservice.campaign.DTO.CampaignInfoDTO;
 import sofa.microservice.campaign.DTO.CharacterInfoDTO;
 import sofa.microservice.campaign.DTO.MessageDTO;
 import sofa.microservice.campaign.entity.Campaign;
@@ -26,8 +28,11 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CampaignService {
+
+    @Value("${servicenames.playercharacterservice}")
+    private String playercharacterservice;
 
     private final CampaignRepo campaignRepo;
     private final PlayerCharacterRepo playerCharacterRepo;
@@ -54,7 +59,7 @@ public class CampaignService {
     public void addCharacter(PlayerCharacter playerCharacterToAdd){
         if(playerCharacterRepo.existsByCharacterId(playerCharacterToAdd.getCharacterId())){
             log.info("Character with id {} already exists, we should update instead", playerCharacterToAdd.getCharacterId());
-            PlayerCharacter playerCharacter = playerCharacterRepo.findAllByCharacterId(playerCharacterToAdd.getCharacterId());
+            PlayerCharacter playerCharacter = playerCharacterRepo.findByCharacterId(playerCharacterToAdd.getCharacterId());
             playerCharacter.setCharacterId(playerCharacterToAdd.getCharacterId());
             playerCharacter.setCampaignId(playerCharacterToAdd.getCampaignId());
             playerCharacterRepo.save(playerCharacter);
@@ -63,9 +68,42 @@ public class CampaignService {
             playerCharacterRepo.save(playerCharacterToAdd);
         }
     }
+    public void removeCharacter(String characterId){
+        if(playerCharacterRepo.existsByCharacterId(characterId)){
+            log.info("Delete: character exists attempting to delete: characterId: {}", characterId);
+            PlayerCharacter playerCharacter = playerCharacterRepo.findByCharacterId(characterId);
+            playerCharacterRepo.deleteById(playerCharacter.getId());
+        }
+    }
+    public CampaignInfoDTO getCampaignIdOfCharacter(String characterId){
+        log.info("GetCampaignIdOfCharacter {}", characterId);
+        if(playerCharacterRepo.existsByCharacterId(characterId)){
+            log.info("Character exists in a campaign");
+            PlayerCharacter playerCharacter = playerCharacterRepo.findByCharacterId(characterId);
+            if(campaignRepo.existsById(Long.parseLong(playerCharacter.getCampaignId()))){
+                Campaign campaign = campaignRepo.findById(Long.parseLong(playerCharacter.getCampaignId())).orElseThrow();
+                CampaignInfoDTO campaignInfoDTO = new CampaignInfoDTO();
+                campaignInfoDTO.setCampaignName(campaign.getCampaignName());
+                campaignInfoDTO.setCampaignDescription(campaign.getCampaignDescription());
+                campaignInfoDTO.setCampaignId(String.format("%d",campaign.getId()));
+                return campaignInfoDTO;
+            }
+        }
+        log.info("character with characterId {} has no campaign", characterId);
+        return null;
+    }
     public void addMessage(Message message){
         log.info("saved message");
         messageRepo.save(message);
+    }
+    public void removeMessages(String characterId){
+        if(playerCharacterRepo.existsByCharacterId(characterId)){
+            log.info("MESSAGE DELETE: Character exists in the campaign {}", characterId);
+            List<Message> Messages = messageRepo.findAllByCharacterId(characterId);
+            for(Message message : Messages){
+                log.info("PLACEHOLDER TESTING IF MORE A CHARACTER CAN BE in multiple campaigns");
+            }
+        }
     }
     public List<PlayerCharacter> GetAllCharacters(){
         log.info("GetAllCharacters");
@@ -81,7 +119,8 @@ public class CampaignService {
 
         for(PlayerCharacter playerCharacter : ListOfCharacterIds){
             log.info("amount of character in campaign {}", ListOfCharacterIds.size());
-            String url = String.format("http://%s:8081/character/%s", "playercharacterservice" , playerCharacter.getCharacterId());
+            log.info("service: {}", playercharacterservice);
+            String url = String.format("http://%s:8081/character/%s", playercharacterservice, playerCharacter.getCharacterId());
             HttpHeaders headers = new HttpHeaders();
             headers.set("Content-Type", "application/json");
             CharacterInfoDTO response = restTemplate.getForObject(url, CharacterInfoDTO.class);

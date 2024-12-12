@@ -3,6 +3,7 @@ server:
 
 servicenames:
   itemservice: itemservice
+  campaignservice: campaignservice
 
 spring:
   application:

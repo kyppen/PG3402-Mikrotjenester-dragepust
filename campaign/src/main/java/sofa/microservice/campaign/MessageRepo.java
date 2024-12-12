@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface MessageRepo extends JpaRepository<Message, Long> {
     List<Message> findAllByCampaignId(String campaignId);
+    List<Message> findAllByCharacterId(String characterId);
 }
