@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin (origins = "http://localhost:5173")
 @RestController
-@RequestMapping("/api/stats")
+@RequestMapping("/stats")
 @Slf4j
 @RequiredArgsConstructor
 public class StatsController {
