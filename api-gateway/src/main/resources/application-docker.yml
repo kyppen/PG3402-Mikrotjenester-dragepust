@@ -46,7 +46,7 @@ spring:
           uri: lb://StatsService
           predicates:
             - Path=/stats/**
-        - id: user_service
+        - id: stats_service
           uri: lb://UserService
           predicates:
             - Path=/users/**
@@ -61,6 +61,7 @@ spring:
               - "GET"
               - "POST"
               - "PUT"
+              - "DELETE"
               - "OPTIONS"
             allow-credentials: true
   ## MULIG VI TRENGER COORS HER Se bogdan

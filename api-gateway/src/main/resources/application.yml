@@ -57,6 +57,7 @@ spring:
               - "GET"
               - "POST"
               - "PUT"
+              - "DELETE"
               - "OPTIONS"
             allow-credentials: true
   ## MULIG VI TRENGER COORS HER Se bogdan

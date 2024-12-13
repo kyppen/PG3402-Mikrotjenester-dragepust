@@ -68,8 +68,23 @@ const CharacterMenu: React.FC = () => {
     };
 
     const handleCharacterDelete = async (characterId: string) => {
-        e.preventDefault()
         console.log("DELETE?");
+        console.log(characterId);
+        try {
+            const response = await fetch(`http://localhost:8087/character/delete/${characterId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },}
+            );
+            if(!response.ok) {
+                throw new Error("IDK");
+            }
+
+        }catch (err){
+            setError(err instanceof Error ? err.message: 'An unknown error occured');
+            console.error("Error adding to campaign", err);
+        }
        };
 
     const handleCampaignSubmit = async (e: React.FormEvent, characterId: string) => {

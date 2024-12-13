@@ -1,7 +1,28 @@
 version: '3.8'
 
-
 services:
+  consul:
+    image: hashicorp/consul:1.19.2
+    container_name: consul
+    ports:
+      - "8500:8500/udp"
+      - "8500:8500"   # Consul HTTP API
+    command: 'agent -dev -node=microExam -client=0.0.0.0 -log-level=ERROR'
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8500/v1/status/leader" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - dragepust_network
+  consul-importer:
+    build:
+      context: ../consul-importer
+      dockerfile: Dockerfile
+    depends_on:
+      - consul
+    networks:
+      - dragepust_network
   rabbitmq:
     image: rabbitmq:3-management
     container_name: rabbitmq
@@ -13,20 +34,6 @@ services:
       RABBITMQ_DEFAULT_PASS: guest
     networks:
       - dragepust_network
-    healthcheck:
-      test: [ "CMD", "rabbitmq-diagnostics", "-q", "ping" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-  consul:
-    image: hashicorp/consul:1.19.2
-    container_name: consul
-    ports:
-      - "8500:8500/udp"
-      - "8500:8500"   # Consul HTTP API
-    command: 'agent -dev -node=microExam -client=0.0.0.0 -log-level=ERROR'
-    networks:
-      - dragepust_network
   dicerollerservice:
     build:
       context: ../diceroller
@@ -36,8 +43,10 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: "docker"
     depends_on:
-      - consul
-      - rabbitmq
+      consul:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
     networks:
       - dragepust_network
   messengerservice:
@@ -49,8 +58,10 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: "docker"
     depends_on:
-      - consul
-      - rabbitmq
+      consul:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
     networks:
       - dragepust_network
   playercharacterservice:
@@ -62,8 +73,10 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: "docker"
     depends_on:
-      - consul
-      - rabbitmq
+      consul:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
     networks:
       - dragepust_network
   itemservice:
@@ -75,8 +88,10 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: "docker"
     depends_on:
-      - consul
-      - rabbitmq
+      consul:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
     networks:
       - dragepust_network
   campaignservice:
@@ -88,8 +103,10 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: "docker"
     depends_on:
-      - consul
-      - rabbitmq
+      consul:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
     networks:
       - dragepust_network
   apigateway:
@@ -101,8 +118,10 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: "docker"
     depends_on:
-      - consul
-      - rabbitmq
+      consul:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
     networks:
       - dragepust_network
   statsservice:
@@ -114,8 +133,10 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: "docker"
     depends_on:
-      - consul
-      - rabbitmq
+      consul:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
     networks:
       - dragepust_network
   userservice:
@@ -127,8 +148,10 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: "docker"
     depends_on:
-      - consul
-      - rabbitmq
+      consul:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
     networks:
       - dragepust_network
 networks:

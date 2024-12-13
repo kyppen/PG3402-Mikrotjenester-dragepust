@@ -45,10 +45,10 @@ public class PlayerCharacterController {
         return new ResponseEntity<>(true, HttpStatus.CREATED);
     }
     @DeleteMapping("/delete/{characterId}")
-    public ResponseEntity<Boolean> deleteCharacter(@PathVariable String characterId){
+    public ResponseEntity<HttpStatus> deleteCharacter(@PathVariable String characterId){
         log.info("Delete request on characterId: {}", characterId);
         playerCharacterService.deletePlayerCharacter(characterId);
-        return new ResponseEntity<>(true, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
     @GetMapping("/all")
     public ResponseEntity<List<PlayerCharacter>> getCharacters(){
