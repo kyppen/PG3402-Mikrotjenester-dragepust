@@ -4,6 +4,9 @@ package org.api.stats;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.api.stats.DTO.CharacterStatsDTO;
+import org.api.stats.DTO.HpUpdateDTO;
+import org.api.stats.idk.MagicUpdateRequest;
+import org.api.stats.idk.WillpowerUpdateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,8 +34,9 @@ public class StatsController {
     }
 
     @PostMapping("/update/hp")
-    public ResponseEntity<HttpStatus> updateHp(@RequestBody HpUpdateRequest request) {
-        statsService.updateHp(request.getCharacterId(), request.getHpChange());
+    public ResponseEntity<HttpStatus> updateHp(@RequestBody HpUpdateDTO hpUpdateDTO) {
+        log.info("updateHp: {}", hpUpdateDTO);
+        statsService.updateHp(hpUpdateDTO);
         return ResponseEntity.ok().build();
     }
 

@@ -1,4 +1,4 @@
-package org.api.stats;
+package org.api.stats.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,7 +10,8 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 
-public class HpUpdateRequest {
+public class HpUpdateDTO {
     private Long characterId;
-    private int hpChange;
+    private int value;
+    private String type;
 }

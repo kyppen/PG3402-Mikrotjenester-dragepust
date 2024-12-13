@@ -12,4 +12,5 @@ import lombok.ToString;
 public class StatsDTO {
     private String type;
     private int value;
+    private Long characterId;
 }

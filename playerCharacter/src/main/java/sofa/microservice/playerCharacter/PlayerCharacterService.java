@@ -144,11 +144,12 @@ public class PlayerCharacterService {
         playerCharacter.setBaseHP(classDTO.getBaseHP());
         playerCharacterRepository.save(playerCharacter);
     }
-    public void updateStats(Long characterId, StatsDTO updatedStats) {
+    public void updateStats(Long characterId, StatsDTO statsDTO) {
         PlayerCharacter character = playerCharacterRepository.findById(characterId).orElseThrow(() -> new RuntimeException("Character not found"));
-        character.setBaseHP(updatedStats.getHpChange());
-        character.setBaseWillpower(updatedStats.getWillpowerChange());
-        character.setBaseMagic(updatedStats.getMagicChange());
+        character.setBaseHP(statsDTO.getHpChange());
+        character.setBaseWillpower(statsDTO.getWillpowerChange());
+        character.setBaseMagic(statsDTO.getMagicChange());
+        log.info("Added Stats: {} to character: {}" ,statsDTO, character);
         playerCharacterRepository.save(character);
     }
     public boolean linkUserToCharacter(String characterId) {

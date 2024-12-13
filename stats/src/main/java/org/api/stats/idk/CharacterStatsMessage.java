@@ -1,4 +1,4 @@
-package org.api.stats;
+package org.api.stats.idk;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

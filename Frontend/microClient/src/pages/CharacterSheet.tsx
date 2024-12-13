@@ -108,12 +108,15 @@ const CharacterSheet: React.FC = () => {
         const fetchCampaignInfo = async () => {
             try {
                 const response = await fetch(`http://localhost:8087/character/campaigninfo/${characterId}`);
-                if (!response.ok) throw new Error('Failed to fetch campaign info');
-                const data: Campaign = await response.json();
-                setCampaign(data);
+                if (!response.ok) {
+                    //throw new Error('Failed to fetch campaign info');
+                    console.log("Character is not in a campaign")
+                }else{
+                    const data: Campaign = await response.json();
+                    setCampaign(data);
+                }
 
             } catch (err) {
-                console.error(err);
                 setError(err instanceof Error ? err.message : 'An unknown error occurred');
             }
         };
@@ -132,11 +135,11 @@ const CharacterSheet: React.FC = () => {
     }, [characterId]);
 
     const updateHp = async (hpChange: number) => {
-        console.log(`Send health on: http://localhost:8087/stats/${characterId}/hp`);
-        await fetch(`http://localhost:8089/api/stats/${characterId}/hp/${5}`, {
-            method: 'PUT',
+        console.log(`Send health on: http://localhost:8087/stats/update/hp`);
+        await fetch(`http://localhost:8087/stats/update/hp`, {
+            method: 'POST',
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ value: hpChange }),
+            body: JSON.stringify({ value: hpChange, characterId: characterId }),
         });
         console.log(`Health sent: ${hpChange}`)
     };

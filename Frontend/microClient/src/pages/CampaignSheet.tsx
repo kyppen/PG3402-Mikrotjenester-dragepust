@@ -116,9 +116,8 @@ const CampaignSheet: React.FC = () => {
             }
 
             // Parse the backend's response
-            const savedMessage = await response.json();
+            //const savedMessage = await response.json();
 
-            // Update the chat messages state with the saved message from the backend
             //setChatMessages((prevMessages) => [...prevMessages, savedMessage]);
             setNewMessage(""); // Clear the input field after successful sending
         } catch (err) {
