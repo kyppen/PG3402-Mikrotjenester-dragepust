@@ -39,7 +39,7 @@ public class MessengerService {
         String characterName = "DEFAULT";
         Integer result = 69;
         try{
-            characterName = GetCharacterInfo("1");
+            characterName = GetCharacterInfo(messageDTO.getCharacterId());
         }catch (Exception e){
             log.error("Failed to get character name for roll");
         }

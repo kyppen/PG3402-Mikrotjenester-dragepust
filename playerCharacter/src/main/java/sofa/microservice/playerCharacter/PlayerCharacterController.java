@@ -78,10 +78,10 @@ public class PlayerCharacterController {
         CampaignInfoDTO campaignInfoDTO = playerCharacterService.getCampaignInfoByCharacterId(characterId);
         if(campaignInfoDTO == null){
             log.info("campaignInfoDTO is NULL");
-            return new ResponseEntity<>(campaignInfoDTO, HttpStatus.OK);
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
         log.info("Sending campaignInfoDTO {}", campaignInfoDTO);
-        return new ResponseEntity<>(campaignInfoDTO, HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(campaignInfoDTO, HttpStatus.OK);
     }
     @PostMapping("/{characterId}/stats")
     public void updateCharacterStats(@PathVariable Long characterId, @RequestBody StatsDTO updatedStats) {

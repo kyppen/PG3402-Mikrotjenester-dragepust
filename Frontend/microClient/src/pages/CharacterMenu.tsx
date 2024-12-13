@@ -48,13 +48,16 @@ const CharacterMenu: React.FC = () => {
                 setError(err.message);
                 console.error('Error fetching characters:', err);
             });
-    }, []);
 
+    }, []);
     const handleNewCharacter = () => {
         navigate('/new-character');
     };
     const switchToCampaignMenu = () => {
         navigate('/campaign-menu');
+    }
+    const deleteCharacterRefresh = (characterId: string) => {
+        handleCharacterDelete(characterId);
     }
     const handleCampaignIdChange = (characterId: string, value: string) => {
         setCampaignIds((prev) => ({
@@ -85,6 +88,8 @@ const CharacterMenu: React.FC = () => {
             setError(err instanceof Error ? err.message: 'An unknown error occured');
             console.error("Error adding to campaign", err);
         }
+        //Botched solution to show character was deleted
+        window.location.reload();
        };
 
     const handleCampaignSubmit = async (e: React.FormEvent, characterId: string) => {
