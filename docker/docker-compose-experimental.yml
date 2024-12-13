@@ -49,6 +49,7 @@ services:
         condition: service_started
     networks:
       - dragepust_network
+
   messengerservice:
     build:
       context: ../messenger

@@ -20,7 +20,8 @@ const CreateUser: React.FC = () => {
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
-
+        console.log(username);
+        console.log(password);
         try {
             const response = await fetch("http://localhost:8087/users/create", {
                 method: "POST",
@@ -29,7 +30,8 @@ const CreateUser: React.FC = () => {
                 },
                 body: JSON.stringify({ username, password }),
             });
-
+                console.log(username);
+                console.log(password);
             if (!response.ok) {
                 throw new Error("Invalid username or password");
             }

@@ -20,11 +20,13 @@ const CreateCharacter: React.FC = () => {
     const [species, setSpecies] = useState('');
     const [profession, setProfession] = useState('');
     const [itemSetId, setItemSetId] = useState('');
+    const [userId, setUserId] = useState('');
     const [error, setError] = useState<string | null>(null);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         const newCharacter = {
+            userId,
             characterName,
             species,
             profession,

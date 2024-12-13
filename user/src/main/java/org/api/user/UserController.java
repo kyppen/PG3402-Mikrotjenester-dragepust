@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+//@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/users")
-@CrossOrigin(origins = "http://localhost:5173")
 public class UserController {
 
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
@@ -15,9 +15,11 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/create")
-    public User createUser(@RequestBody User user) {
-        log.info("Creating user {}", user);
-        return userService.saveUser(user);
+    public User createUser(@RequestBody UserDTO userDTO) {
+        log.info("Creating user {}", userDTO);
+        User user = userService.saveUser(userDTO);
+        log.info("UserId: {}", user.getId());
+        return user;
 
     }
 }

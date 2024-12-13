@@ -17,8 +17,11 @@ public class UserService {
     @Value("${servicenames.userservice}")
     String userServiceName;
 
-    public User saveUser(User user) {
-    System.out.println(user);
+    public User saveUser(UserDTO userDTO) {
+        log.info("UserDTO {}", userDTO);
+        User user = new User();
+        user.setUsername(userDTO.getUsername());
+        user.setPassword(userDTO.getPassword());
         return userRepo.save(user);
     }
     public void sendUserIdToCharacterService(String userId) {
