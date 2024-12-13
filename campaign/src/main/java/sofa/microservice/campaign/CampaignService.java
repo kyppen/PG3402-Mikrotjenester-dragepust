@@ -2,6 +2,7 @@ package sofa.microservice.campaign;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +43,20 @@ public class CampaignService {
     public void createCampaign(Campaign campaign){
         log.info("Saving campaign {}", campaign);
         campaignRepo.save(campaign);
+    }
+    @Transactional
+    public void deleteCampaign(String campaignId){
+        if(campaignRepo.existsById(Long.parseLong(campaignId))){
+            log.info("campaign exists by id {}", campaignId);
+            List<Message> messages = messageRepo.findAllByCampaignId(campaignId);
+            List<PlayerCharacter> characters = playerCharacterRepo.findAllByCampaignId(campaignId);
+            log.info("Deleting {} Characters" , characters.size());
+            log.info("Deleting {} Messages" , messages.size());
+            messageRepo.deleteAllByCampaignId(campaignId);
+            campaignRepo.deleteById(Long.parseLong(campaignId));
+            playerCharacterRepo.deleteByCampaignId(campaignId);
+            log.info("Campaign Deleted");
+        }
     }
     public List<Campaign> getAllCampaigns(){
         return campaignRepo.findAll();
@@ -130,7 +145,7 @@ public class CampaignService {
         log.info("Got all chracters returning");
         return characterInfoList;
     }
-    public List<Message> GetAllMessages(String campaignId){
+    public List<Message> getAllMessages(String campaignId){
         return messageRepo.findAllByCampaignId(campaignId);
     }
     @RabbitListener(queues = "campaign_messages")

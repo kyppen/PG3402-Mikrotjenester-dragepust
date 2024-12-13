@@ -91,30 +91,6 @@ const CampaignSheet: React.FC = () => {
     }, [campaignId]);
 
 
-
-    /*
-    useEffect(() => {
-        const socket = new WebSocket(`ws://localhost:8085/campaign/chat/${campaignId}`);
-
-        socket.onopen = () => {
-            console.log("WebSocket connection established");
-        };
-
-        socket.onmessage = (event) => {
-            console.log("Received message:", event.data);
-        };
-
-        socket.onmessage = (event) => {
-            const newMessage = JSON.parse(event.data);
-            setChatMessages((prevMessages) => [...prevMessages, newMessage]);
-        };
-
-        socket.onerror = (err) => console.error('WebSocket error:', err);
-
-        return () => socket.close(); // Cleanup on unmount
-    }, [campaignId]);
-
-     */
     const handleCharacterClick = (characterId: string) => {
         navigate(`/character/${characterId}`);
     };

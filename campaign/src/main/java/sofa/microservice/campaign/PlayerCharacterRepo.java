@@ -10,5 +10,6 @@ import java.util.List;
 public interface PlayerCharacterRepo extends JpaRepository<PlayerCharacter, Long> {
     List<PlayerCharacter> findAllByCampaignId(String campaignId);
     PlayerCharacter findByCharacterId(String characterId);
+    void deleteByCampaignId(String campaignId);
     boolean existsByCharacterId(String characterId);
 }

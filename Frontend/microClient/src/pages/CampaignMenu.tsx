@@ -34,6 +34,29 @@ const CampaignMenu: React.FC = () => {
             });
     }, []);
 
+    const handleCampaignDelete = async (campaignId: string) => {
+        console.log("DELETE?");
+        console.log(campaignId);
+        try {
+            const response = await fetch(`http://localhost:8087/campaign/delete/${campaignId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },}
+            );
+            if(!response.ok) {
+                throw new Error("IDK");
+            }
+
+        }catch (err){
+            setError(err instanceof Error ? err.message: 'An unknown error occured');
+            console.error("Error deleting campaign", err);
+        }
+        //Botched solution to show character was deleted
+        window.location.reload();
+    };
+
+
     const handleNewCampaign = () => {
         navigate('/new-campaign');
     }
@@ -72,7 +95,7 @@ const CampaignMenu: React.FC = () => {
                                 alignItems: 'center',
                                 padding: 2,
                             }}
-                            onClick={() => handleCampaignClick(campaign.id)}
+
                         >
                             {/* Delete Button */}
                             <Box
@@ -88,6 +111,7 @@ const CampaignMenu: React.FC = () => {
                                     onClick={() => {
                                         if (window.confirm("Are you sure you want to delete this character?")) {
                                             // Handle delete logic here
+                                            handleCampaignDelete(campaign.id)
                                         }}}
                                 >
                                     <HighlightOffIcon />
@@ -98,6 +122,7 @@ const CampaignMenu: React.FC = () => {
                                 image="./src/assets/campaign.png"
                                 alt="Campaign landscape image"
                                 sx={{ width: '100%', height: 150, borderRadius: 1 }}
+                                onClick={() => handleCampaignClick(campaign.id)}
                             />
                             <CardContent sx={{ textAlign: 'center' }}>
                                 <Typography variant="h6" gutterBottom>

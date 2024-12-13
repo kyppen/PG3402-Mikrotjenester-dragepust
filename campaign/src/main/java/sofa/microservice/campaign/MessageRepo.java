@@ -11,4 +11,5 @@ import java.util.List;
 public interface MessageRepo extends JpaRepository<Message, Long> {
     List<Message> findAllByCampaignId(String campaignId);
     List<Message> findAllByCharacterId(String characterId);
+    void deleteAllByCampaignId(String campaignId);
 }

@@ -29,11 +29,16 @@ public class CampaignController {
         campaignService.createCampaign(campaign);
         return new ResponseEntity<>(campaign, HttpStatus.CREATED);
     }
+    @DeleteMapping("/delete/{campaignId}")
+    public ResponseEntity<HttpStatus> deleteCampaign(@PathVariable String campaignId){
+        log.info("Delete request on campaignId: {}", campaignId);
+        campaignService.deleteCampaign(campaignId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
     @GetMapping("/all")
     public ResponseEntity<List<Campaign>> allCampaigns(){
         return new ResponseEntity<>(campaignService.getAllCampaigns(), HttpStatus.OK);
     }
-
     @GetMapping("/campaign/{campaignId}")
     public Campaign getCampaign(@PathVariable String campaignId){
         Campaign campaign = campaignService.getCampaign(campaignId);
@@ -75,7 +80,7 @@ public class CampaignController {
     public ResponseEntity<List<PlayerCharacter>> AllCharacters(){
         return new ResponseEntity<>(campaignService.GetAllCharacters(), HttpStatus.OK);
     }
-    @GetMapping("/characters/{campaignID}")
+    @GetMapping("/characters/{campaignId}")
     public ResponseEntity<List<PlayerCharacter>> CharacterInACampaign(@RequestBody CampaignIdDTO campaignIdDTO){
         return new ResponseEntity<>(campaignService.GetAllCharactersInCampaign(campaignIdDTO.getCampaignId()), HttpStatus.OK);
     }
@@ -85,8 +90,7 @@ public class CampaignController {
     }
     @GetMapping("/chat/{campaignId}")
     public ResponseEntity<List<Message>> CampaignMessageLog(@PathVariable String campaignId){
-        //log.info("SOMETHING ");
-        return new ResponseEntity<>(campaignService.GetAllMessages(campaignId), HttpStatus.OK);
+        return new ResponseEntity<>(campaignService.getAllMessages(campaignId), HttpStatus.OK);
     }
 
     //NEED TO ADD CHECK IF CAMPAIGN EXISTS BEFORE ADDING, FINE FOR TESTING

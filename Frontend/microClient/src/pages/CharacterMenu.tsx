@@ -56,9 +56,6 @@ const CharacterMenu: React.FC = () => {
     const switchToCampaignMenu = () => {
         navigate('/campaign-menu');
     }
-    const deleteCharacterRefresh = (characterId: string) => {
-        handleCharacterDelete(characterId);
-    }
     const handleCampaignIdChange = (characterId: string, value: string) => {
         setCampaignIds((prev) => ({
             ...prev,
@@ -86,7 +83,7 @@ const CharacterMenu: React.FC = () => {
 
         }catch (err){
             setError(err instanceof Error ? err.message: 'An unknown error occured');
-            console.error("Error adding to campaign", err);
+            console.error("Error deleting character", err);
         }
         //Botched solution to show character was deleted
         window.location.reload();
