@@ -15,6 +15,7 @@ import sofa.microservice.playerCharacter.entity.PlayerCharacter;
 import sofa.microservice.playerCharacter.util.ClassInfo;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -147,5 +148,17 @@ public class PlayerCharacterService {
         character.setBaseWillpower(updatedStats.getWillpowerChange());
         character.setBaseMagic(updatedStats.getMagicChange());
         playerCharacterRepository.save(character);
+    }
+    public boolean linkUserToCharacter(String characterId) {
+        Optional<PlayerCharacter> characterOpt = playerCharacterRepository.findById(Long.valueOf(characterId));
+        if (characterOpt.isPresent()) {
+            PlayerCharacter character = characterOpt.get();
+            character.setUserId("1");
+            playerCharacterRepository.save(character);
+            return true;
+        } else {
+            log.error("Character with ID {} not found", characterId);
+            return false;
+        }
     }
 }

@@ -1,4 +1,6 @@
 import React, { useState} from 'react';
+import {useNavigate} from "react-router-dom";
+import { Box, Button, Paper, TextField, Typography} from "@mui/material";
 
 
 
@@ -10,67 +12,99 @@ export interface User {
 }
 
 const CreateUser: React.FC = () => {
-    const [user, setUser] = useState<User>({ username: "", password: "" });
+    const [username, setUsername] = useState<string>("");
+    const [password, setPassword] = useState<string>("");
     const [error, setError] = useState<string | null>(null);
+    const navigate = useNavigate();
 
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setUser({ ...user, [e.target.name]: e.target.value });
-    };
-
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log(user);
+        setError(null);
+
         try {
-            const response = await fetch("http://localhost:8084/api/users", {
+            const response = await fetch("http://localhost:8087/users/create", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(user),
+                body: JSON.stringify({ username, password }),
             });
 
             if (!response.ok) {
-                throw new Error("Failed to create user");
+                throw new Error("Invalid username or password");
             }
 
-            const result = await response.json();
-            console.log("User created:", result);
-
+            navigate("/character-menu");
         } catch (err) {
-            setError(err instanceof Error ? err.message : "An unknown error occurred");
-            console.error("Error creating user:", err);
+            setError(err instanceof Error ? err.message : "An unexpected error occurred");
         }
     };
 
     return (
-        <div>
-            <h2>Create User</h2>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Username:</label>
-                    <input
-                        type="text"
-                        name="username"
-                        value={user.username}
-                        onChange={handleChange}
-                        required
+        <Box
+            sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100vh',
+                backgroundColor: 'rgba(163,64,64,0)',
+            }}
+        >
+            <Paper
+                elevation={3}
+                sx={{
+                    padding: 4,
+                    width: 400,
+                    textAlign: 'center',
+                }}
+            >
+                <Typography
+                    variant="h4"
+                    component="h1"
+                    gutterBottom
+                    sx={{ marginBottom: 3 }}
+                >
+                    Login
+                </Typography>
+                <form onSubmit={handleLogin}>
+                    <TextField
+                        label="Username"
+                        variant="outlined"
+                        fullWidth
+                        margin="normal"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
                     />
-                </div>
-                <div>
-                    <label>Password:</label>
-                    <input
+                    <TextField
+                        label="Password"
                         type="password"
-                        name="password"
-                        value={user.password}
-                        onChange={handleChange}
-                        required
+                        variant="outlined"
+                        fullWidth
+                        margin="normal"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
                     />
-                </div>
-                <button type="submit">Create User</button>
-            </form>
-            {error && <p style={{ color: "red" }}>{error}</p>}
-        </div>
+                    {error && (
+                        <Typography
+                            color="error"
+                            variant="body2"
+                            sx={{ marginTop: 1, marginBottom: 2 }}
+                        >
+                            {error}
+                        </Typography>
+                    )}
+                    <Button
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        fullWidth
+                        sx={{ marginTop: 2 }}
+                    >
+                        Login
+                    </Button>
+                </form>
+            </Paper>
+        </Box>
     );
 };
  //tog er moro

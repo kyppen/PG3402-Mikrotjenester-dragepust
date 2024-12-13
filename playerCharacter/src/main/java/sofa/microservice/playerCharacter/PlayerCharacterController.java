@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import sofa.microservice.playerCharacter.DTO.CampaignInfoDTO;
 import sofa.microservice.playerCharacter.DTO.PlayerCharacterDTO;
 import sofa.microservice.playerCharacter.DTO.StatsDTO;
+import sofa.microservice.playerCharacter.DTO.UserIDDTO;
 import sofa.microservice.playerCharacter.entity.PlayerCharacter;
 import sofa.microservice.playerCharacter.util.ClassInfo;
 
@@ -85,5 +86,21 @@ public class PlayerCharacterController {
     @PostMapping("/{characterId}/stats")
     public void updateCharacterStats(@PathVariable Long characterId, @RequestBody StatsDTO updatedStats) {
         playerCharacterService.updateStats(characterId, updatedStats);
+    }
+    @PostMapping("/link-user")
+    public ResponseEntity<Void> linkUserToCharacter(@RequestBody UserIDDTO useridDTO) {
+        log.info("Linking user to character: {}", useridDTO);
+
+        boolean linked = playerCharacterService.linkUserToCharacter(
+                useridDTO.getUserId()
+        );
+
+        if (linked) {
+            log.info("Successfully linked user {}", useridDTO.getUserId());
+            return ResponseEntity.ok().build();
+        } else {
+            log.warn("Failed to link user {}", useridDTO.getUserId());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }

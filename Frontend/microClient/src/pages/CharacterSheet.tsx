@@ -20,6 +20,11 @@ import {
     MenuItem, TextField,
 } from '@mui/material';
 
+interface Campaign {
+    campaignId: string;
+    campaignName: string;
+    campaignDescription: string;
+}
 interface Character {
     id: string;
     characterName: string;
@@ -73,9 +78,12 @@ const CharacterSheet: React.FC = () => {
     const [items, setItems] = useState<Item[]>([]);
     const [skills, setSkills] = useState<string[]>([]);
     const [spells, setSpells] = useState<string[]>([]);
-    const [hpChange, setHpChange] = useState<number>(0); // New state for HP change
+    const [hpChange, setHpChange] = useState<number>(0);
     const [magicChange, setMagicChange] = useState<number>(0);
     const [willpowerChange, setWillpowerChange] = useState<number>(0);
+    const [rollAmount, setRollAmount] = useState<number>(0);
+    const [rollLog, setRollLog] = useState<string[]>([]);
+    const [campaign, setCampaign] = useState<Campaign | null>(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -87,11 +95,30 @@ const CharacterSheet: React.FC = () => {
                 setCharacter(data);
                 setSpells(data.magic || []); // Assuming "magic" is the key for spells
                 setSkills(data.skills || []);
+
+
             } catch (err) {
                 setError(err instanceof Error ? err.message : 'An unknown error occurred');
             }
         };
         fetchCharacter();
+    }, [characterId]);
+
+    useEffect(() => {
+        const fetchCampaignInfo = async () => {
+            try {
+                const response = await fetch(`http://localhost:8087/character/campaigninfo/${characterId}`);
+                if (!response.ok) throw new Error('Failed to fetch campaign info');
+                const data: Campaign = await response.json();
+                setCampaign(data);
+
+            } catch (err) {
+                console.error(err);
+                setError(err instanceof Error ? err.message : 'An unknown error occurred');
+            }
+        };
+
+        if (characterId) fetchCampaignInfo();
     }, [characterId]);
 
     useEffect(() => {
@@ -105,7 +132,7 @@ const CharacterSheet: React.FC = () => {
     }, [characterId]);
 
     const updateHp = async (hpChange: number) => {
-        console.log(`Send health on: http://localhost:8089/api/stats/${characterId}/hp`);
+        console.log(`Send health on: http://localhost:8087/stats/${characterId}/hp`);
         await fetch(`http://localhost:8089/api/stats/${characterId}/hp/${5}`, {
             method: 'PUT',
             headers: { "Content-Type": "application/json" },
@@ -115,7 +142,7 @@ const CharacterSheet: React.FC = () => {
     };
 
     const updateMagic = async (magicChange: number) => {
-        await fetch(`http://localhost:8089/api/stats/${characterId}/magic`, {
+        await fetch(`http://localhost:8089/stats/${characterId}/magic`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ value: magicChange }),
@@ -123,7 +150,7 @@ const CharacterSheet: React.FC = () => {
     };
 
     const updateWillpower = async (willpowerChange: number) => {
-        await fetch(`http://localhost:8089/api/stats/${characterId}/willpower`, {
+        await fetch(`http://localhost:8089/stats/${characterId}/willpower`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ value: willpowerChange }),
@@ -134,6 +161,26 @@ const CharacterSheet: React.FC = () => {
     const handleAttributeChange = (index: number, newAttribute: string) => {
         const updatedRows = rows.map((row, i) => i === index ? { ...row, attribute: newAttribute } : row);
         setRows(updatedRows);
+    };
+    const handleRoll = async () => {
+        try {
+            const payload = {
+                characterId: character?.id || '',
+                campaignId: campaign?.campaignId || '',
+                action: 'roll',
+            };
+            const response = await fetch('http://localhost:8087/messages/roll', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            });
+            if (!response.ok) throw new Error('Failed to send roll');
+            const result = await response.json(); // Assuming the roll result is returned as JSON
+            const rollMessage = `Roll result: ${result.rollValue}`; // Customize as needed
+            setRollLog((prevLog) => [rollMessage, ...prevLog]); // Add to log
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     if (error) return <Typography variant="body1" align="center" color="error">{error}</Typography>;
@@ -152,6 +199,7 @@ const CharacterSheet: React.FC = () => {
                 padding: 2,
             }}
         >
+
             <Card
                 sx={{
                     width: '100%',
@@ -169,6 +217,41 @@ const CharacterSheet: React.FC = () => {
                     >
                         Character Sheet
                     </Typography>
+                    {/* Campaign Info Section */}
+                    {campaign && (
+                        <Box sx={{ mt: 2, p: 2, backgroundColor: '#f4f1e0', borderRadius: 2 }}>
+                            <Typography variant="h6" sx={{ color: '#8b6c42' }}>
+                                Campaign Information
+                            </Typography>
+                            <Typography variant="body1">
+                                <strong>Name:</strong> {campaign.campaignName}
+                            </Typography>
+                            <Typography variant="body1">
+                                <strong>Description:</strong> {campaign.campaignDescription}
+                            </Typography>
+                            <Typography variant="body1">
+                                <strong>ID:</strong> {campaign.campaignId}
+                            </Typography>
+                        </Box>
+                    )}
+                    {/* Roll Section */}
+                    <Box sx={{ width: '100%', mb: 2, textAlign: 'center' }}>
+                        <TextField
+                            label="Roll Amount"
+                            type="number"
+                            value={rollAmount}
+                            onChange={(e) => setRollAmount(Number(e.target.value))}
+                            sx={{ mr: 2 }}
+                        />
+                        <Button
+                            variant="contained"
+                            color="secondary"
+                            onClick={handleRoll}
+                        >
+                            Roll
+                        </Button>
+                    </Box>
+
                     {/* New Section for Stat Updates */}
                     <Box sx={{ my: 3 }}>
                         <Typography variant="h6" sx={{ mb: 1 }}>Update Stats</Typography>
@@ -369,6 +452,43 @@ const CharacterSheet: React.FC = () => {
                     </Button>
                 </CardContent>
             </Card>
+            {/* Roll Log Overlay */}
+            <Paper
+                elevation={3}
+                sx={{
+                    position: 'fixed',
+                    bottom: 16,
+                    right: 16,
+                    width: 300,
+                    maxHeight: 200,
+                    overflowY: 'auto',
+                    padding: 2,
+                    backgroundColor: '#bc9b59',
+                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                }}
+            >
+                <Typography variant="h6" sx={{ mb: 1, textAlign: 'center' }}>
+                    Roll Log
+                </Typography>
+                {rollLog.length > 0 ? (
+                    rollLog.map((log, index) => (
+                        <Typography
+                            key={index}
+                            variant="body2"
+                            sx={{
+                                marginBottom: 0.5,
+                                color: '#8b6c42',
+                            }}
+                        >
+                            {log}
+                        </Typography>
+                    ))
+                ) : (
+                    <Typography variant="body2" sx={{ textAlign: 'center', color: '#8b6c42' }}>
+                        No rolls yet.
+                    </Typography>
+                )}
+            </Paper>
         </Container>
     );
 };

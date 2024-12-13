@@ -46,7 +46,7 @@ spring:
           uri: lb://StatsService
           predicates:
             - Path=/stats/**
-        - id: stats_service
+        - id: user_service
           uri: lb://UserService
           predicates:
             - Path=/users/**
