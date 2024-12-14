@@ -23,7 +23,13 @@ services:
     command: 'agent -dev -node=microExam -client=0.0.0.0 -log-level=ERROR'
     networks:
       - dragepust_network
-
+  itempostgres:
+    image: postgres
+    container_name: itempostgres
+    environment:
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - '5432:5432'
 networks:
   dragepust_network:
     driver: bridge

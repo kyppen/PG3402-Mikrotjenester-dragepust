@@ -35,12 +35,40 @@ services:
       RABBITMQ_DEFAULT_PASS: guest
     networks:
       - dragepust_network
+  itempostgres:
+    image: postgres
+    container_name: itempostgres
+    environment:
+      POSTGRES_PASSWORD: postgres
+    networks:
+      - dragepust_network
+  characterpostgres:
+    image: postgres
+    container_name: characterpostgres
+    environment:
+      POSTGRES_PASSWORD: postgres
+    networks:
+      - dragepust_network
+  campaignpostgres:
+    image: postgres
+    container_name: campaignpostgres
+    environment:
+      POSTGRES_PASSWORD: postgres
+    networks:
+      - dragepust_network
+  userpostgres:
+    image: postgres
+    container_name: userpostgres
+    environment:
+      POSTGRES_PASSWORD: postgres
+    networks:
+      - dragepust_network
   dicerollerservice:
     build:
       context: ../diceroller
       dockerfile: Dockerfile
     ports:
-      - '8086:8086'
+      - '0:8086'
     environment:
       SPRING_PROFILES_ACTIVE: "docker"
     depends_on:
@@ -56,7 +84,7 @@ services:
       context: ../messenger
       dockerfile: Dockerfile
     ports:
-      - '8083:8083'
+      - '0:8083' #Binds to a random avaliable port, if we have replicas they cant be on the same port
     environment:
       SPRING_PROFILES_ACTIVE: "docker"
     depends_on:
@@ -66,12 +94,14 @@ services:
         condition: service_started
     networks:
       - dragepust_network
+    #deploy:
+      #replicas: 3 #sets up 3 replicas
   playercharacterservice:
     build:
       context: ../playerCharacter
       dockerfile: Dockerfile
     ports:
-      - '8081:8081'
+      - '0:8081'
     environment:
       SPRING_PROFILES_ACTIVE: "docker"
     depends_on:

@@ -21,6 +21,16 @@ spring:
         prefer-ip-address: true
         register: true
         enabled: true
+  datasource:
+    url: jdbc:postgresql://localhost:5401/postgres
+    username: postgres
+    password: postgres
+    POSTGRES_DB: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
   rabbitmq:
     host: localhost
     port: 5672
