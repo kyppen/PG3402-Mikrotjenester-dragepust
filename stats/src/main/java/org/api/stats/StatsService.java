@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.api.stats.DTO.CharacterStatsDTO;
-import org.api.stats.DTO.HpUpdateDTO;
+import org.api.stats.DTO.StatUpdateRequestDTO;
 import org.api.stats.DTO.StatsDTO;
 import org.api.stats.idk.CharacterStatsMessage;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -40,7 +40,7 @@ public class StatsService {
         try{
             String stringDTO = new ObjectMapper().writeValueAsString(statsDTO);
             rabbitTemplate.convertAndSend("stats-queue", stringDTO);
-            log.info("statsDTO added to stats-queue");
+            log.info("RabbitMQ StatsDTO string sent to  stats-queue");
         }catch (Exception e){
             log.error("Failed to convert StatsDTO to String");
         }
@@ -48,25 +48,27 @@ public class StatsService {
     }
 
     //funker
-    public void updateHp(HpUpdateDTO hpUpdateDTO) {
+    public void updateHp(StatUpdateRequestDTO statUpdateRequestDTO) {
         CharacterStatsDTO characterStatsDTO = new CharacterStatsDTO();
-        characterStatsDTO.setHp(hpUpdateDTO.getValue());
-        StatsDTO statsDTO = new StatsDTO("hp", hpUpdateDTO.getValue(), hpUpdateDTO.getCharacterId());
+        characterStatsDTO.setHp(statUpdateRequestDTO.getValue());
+        StatsDTO statsDTO = new StatsDTO("hp", statUpdateRequestDTO.getValue(), statUpdateRequestDTO.getCharacterId());
         sendRabbitMessage(statsDTO);
     }
 
 
-    public void updateMagic(Long characterId, int magicChange) {
-        CharacterStatsDTO stats = new CharacterStatsDTO();
-        stats.setMagic(magicChange);
-        updateStats(characterId, stats);
+    public void updateMagic(StatUpdateRequestDTO statUpdateRequestDTO) {
+        CharacterStatsDTO characterStatsDTO = new CharacterStatsDTO();
+        characterStatsDTO.setMagic(statUpdateRequestDTO.getValue());
+        StatsDTO statsDTO = new StatsDTO("magic", statUpdateRequestDTO.getValue(), statUpdateRequestDTO.getCharacterId());
+        sendRabbitMessage(statsDTO);
     }
 
 
-    public void updateWillpower(Long characterId, int willpowerChange) {
-        CharacterStatsDTO stats = new CharacterStatsDTO();
-        stats.setWillpower(willpowerChange);
-        updateStats(characterId, stats);
+    public void updateWillpower(StatUpdateRequestDTO statUpdateRequestDTO) {
+        CharacterStatsDTO characterStatsDTO = new CharacterStatsDTO();
+        characterStatsDTO.setWillpower(statUpdateRequestDTO.getValue());
+        StatsDTO statsDTO = new StatsDTO("will", statUpdateRequestDTO.getValue(), statUpdateRequestDTO.getCharacterId());
+        sendRabbitMessage(statsDTO);
     }
 
 

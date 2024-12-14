@@ -10,8 +10,7 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 
-public class HpUpdateDTO {
+public class StatUpdateRequestDTO {
     private Long characterId;
     private int value;
-    private String type;
 }

@@ -135,7 +135,7 @@ const CharacterSheet: React.FC = () => {
     }, [characterId]);
 
     const updateHp = async (hpChange: number) => {
-        console.log(`Send health on: http://localhost:8087/stats/update/hp`);
+        console.log("http://localhost:8087/stats/update/hp")
         await fetch(`http://localhost:8087/stats/update/hp`, {
             method: 'POST',
             headers: { "Content-Type": "application/json" },
@@ -145,19 +145,25 @@ const CharacterSheet: React.FC = () => {
     };
 
     const updateMagic = async (magicChange: number) => {
-        await fetch(`http://localhost:8089/stats/${characterId}/magic`, {
-            method: "PUT",
+        console.log("UpdateMagic magicChange: " + magicChange);
+        console.log("http://localhost:8087/stats/update/magic")
+        await fetch(`http://localhost:8087/stats/update/magic`, {
+            method: 'POST',
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ value: magicChange }),
+            body: JSON.stringify({ value: magicChange, characterId: characterId }),
         });
+        console.log(`Magic sent: ${magicChange}`)
     };
 
     const updateWillpower = async (willpowerChange: number) => {
-        await fetch(`http://localhost:8089/stats/${characterId}/willpower`, {
-            method: "PUT",
+        console.log("UpdateWill: " + willpowerChange);
+        console.log("http://localhost:8087/stats/update/willpower")
+        await fetch(`http://localhost:8087/stats/update/willpower`, {
+            method: 'POST',
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ value: willpowerChange }),
+            body: JSON.stringify({ value: willpowerChange, characterId: characterId }),
         });
+        console.log(`willpower sent: ${willpowerChange}`)
     };
 
 

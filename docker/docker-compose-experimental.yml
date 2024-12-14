@@ -24,7 +24,8 @@ services:
     networks:
       - dragepust_network
   rabbitmq:
-    image: rabbitmq:3-management
+    #rabbitmq:3-management
+    image: rabbitmq:management
     container_name: rabbitmq
     ports:
       - "15672:15672" # RabbitMQ Management UI

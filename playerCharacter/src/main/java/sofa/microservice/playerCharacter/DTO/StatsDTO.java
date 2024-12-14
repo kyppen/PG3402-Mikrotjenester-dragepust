@@ -8,7 +8,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class StatsDTO {
-    private int willpowerChange;
-    private int hpChange;
-    private int magicChange;
+    private String type;
+    private int value;
+    private Long characterId;
 }

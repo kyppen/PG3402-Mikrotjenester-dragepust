@@ -31,4 +31,8 @@ public class PlayerCharacter {
 
     @ElementCollection
     private List<String> magic;
+
+    public String characterStatsString(){
+        return "magic: " + this.baseMagic +" hp: " + this.baseHP + " willpower: " + this.baseWillpower;
+    }
 }

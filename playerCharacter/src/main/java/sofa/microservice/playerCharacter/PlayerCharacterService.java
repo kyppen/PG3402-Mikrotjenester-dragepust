@@ -1,8 +1,11 @@
 package sofa.microservice.playerCharacter;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.http.*;
@@ -107,11 +110,11 @@ public class PlayerCharacterService {
         ResponseEntity<CampaignInfoDTO> response = restTemplate.getForEntity(url, CampaignInfoDTO.class);
         // Print the response status code
         if(response.getStatusCode().isSameCodeAs(HttpStatusCode.valueOf(200))){
-            log.info("character is not in a campaign");
+            //log.info("character is not in a campaign");
             return null;
         }
         if(response.getStatusCode().isSameCodeAs(HttpStatusCode.valueOf(202))){
-            log.info("character is in a campaign");
+            //log.info("character is in a campaign");
             return response.getBody();
         }
         return null;
@@ -146,12 +149,13 @@ public class PlayerCharacterService {
     }
     public void updateStats(Long characterId, StatsDTO statsDTO) {
         PlayerCharacter character = playerCharacterRepository.findById(characterId).orElseThrow(() -> new RuntimeException("Character not found"));
-        character.setBaseHP(statsDTO.getHpChange());
-        character.setBaseWillpower(statsDTO.getWillpowerChange());
-        character.setBaseMagic(statsDTO.getMagicChange());
+        //character.setBaseHP(statsDTO.getHpChange());
+        //character.setBaseWillpower(statsDTO.getWillpowerChange());
+        //character.setBaseMagic(statsDTO.getMagicChange());
         log.info("Added Stats: {} to character: {}" ,statsDTO, character);
         playerCharacterRepository.save(character);
     }
+
     public boolean linkUserToCharacter(String characterId) {
         Optional<PlayerCharacter> characterOpt = playerCharacterRepository.findById(Long.valueOf(characterId));
         if (characterOpt.isPresent()) {
@@ -162,6 +166,45 @@ public class PlayerCharacterService {
         } else {
             log.error("Character with ID {} not found", characterId);
             return false;
+        }
+    }
+    @RabbitListener(queues = "stats-queue")
+    @Transactional
+    public void recieveStatUpdate(String stringStats){
+        try{
+            log.info("RabbitMQ string from stats-queue recieved: {}" , stringStats);
+            StatsDTO statsDTO = new ObjectMapper().readValue(stringStats, StatsDTO.class);
+            if(playerCharacterRepository.existsById(statsDTO.getCharacterId())){
+                log.info("Stats Update: character exists");
+                PlayerCharacter playerCharacter = playerCharacterRepository.findById(statsDTO.getCharacterId()).orElseThrow();
+                if(statsDTO.getType().equals("hp")){
+                    log.info("Stats Update type: hp");
+                    int updateHP = playerCharacter.getBaseHP() + statsDTO.getValue();
+                    log.info("previous hp : {} value change: {} new hp: {}", playerCharacter.getBaseHP(), statsDTO.getValue(), updateHP);
+                    playerCharacter.setBaseHP(updateHP);
+                    playerCharacterRepository.save(playerCharacter);
+                    log.info("Stats Update for hp completed?");
+                }else if(statsDTO.getType().equals("magic")){
+                    log.info("Stats Update type: mana");
+                    int updateMana = playerCharacter.getBaseMagic() + statsDTO.getValue();
+                    log.info("previous magic : {} value change: {} new magic: {}", playerCharacter.getBaseMagic(), statsDTO.getValue(), updateMana);
+                    playerCharacter.setBaseMagic(updateMana);
+                    playerCharacterRepository.save(playerCharacter);
+                }else if(statsDTO.getType().equals("will")) {
+                    log.info("Stats Update type: will");
+                    int updateWill = playerCharacter.getBaseWillpower() + statsDTO.getValue();
+                    log.info("previous will : {} value change: {} new will: {}", playerCharacter.getBaseWillpower(), statsDTO.getValue(), updateWill);
+                    playerCharacter.setBaseWillpower(updateWill);
+                    playerCharacterRepository.save(playerCharacter);
+                    log.info("Stats Update for willpower completed?");
+                }
+                log.info(playerCharacter.toString());
+                log.info(playerCharacter.characterStatsString());
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+            log.error("Try statement failed");
         }
     }
 }

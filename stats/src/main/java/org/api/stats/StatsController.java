@@ -4,7 +4,7 @@ package org.api.stats;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.api.stats.DTO.CharacterStatsDTO;
-import org.api.stats.DTO.HpUpdateDTO;
+import org.api.stats.DTO.StatUpdateRequestDTO;
 import org.api.stats.idk.MagicUpdateRequest;
 import org.api.stats.idk.WillpowerUpdateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,21 +34,23 @@ public class StatsController {
     }
 
     @PostMapping("/update/hp")
-    public ResponseEntity<HttpStatus> updateHp(@RequestBody HpUpdateDTO hpUpdateDTO) {
-        log.info("updateHp: {}", hpUpdateDTO);
-        statsService.updateHp(hpUpdateDTO);
+    public ResponseEntity<HttpStatus> updateHp(@RequestBody StatUpdateRequestDTO statUpdateRequestDTO) {
+        log.info("updateHp: {}",statUpdateRequestDTO);
+        statsService.updateHp(statUpdateRequestDTO);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/update/magic")
-    public ResponseEntity<Void> updateMagic(@RequestBody MagicUpdateRequest request) {
-        statsService.updateMagic(request.getCharacterId(), request.getMagicChange());
+    public ResponseEntity<Void> updateMagic(@RequestBody StatUpdateRequestDTO statUpdateRequestDTO) {
+        log.info("updateMagic: {}",statUpdateRequestDTO);
+        statsService.updateMagic(statUpdateRequestDTO);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/update/willpower")
-    public ResponseEntity<Void> updateWillpower(@RequestBody WillpowerUpdateRequest request) {
-        statsService.updateWillpower(request.getCharacterId(), request.getWillpowerChange());
+    public ResponseEntity<Void> updateWillpower(@RequestBody StatUpdateRequestDTO statUpdateRequestDTO) {
+        log.info("updateWillpower: {}",statUpdateRequestDTO);
+        statsService.updateWillpower(statUpdateRequestDTO);
         return ResponseEntity.ok().build();
     }
 

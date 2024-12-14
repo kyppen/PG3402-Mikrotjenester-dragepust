@@ -1,16 +1,12 @@
 server:
-  port : 8081
-
-servicenames:
-  itemservice: localhost
-  campaignservice: localhost
+  port: 8089
 
 spring:
   application:
-    name: playerCharacterService
+    name: StatsService
   cloud:
     consul:
-      host: localhost
+      host: consul
       port: 8500
       discovery:
         # Each new instance of the service will have unique uuid
@@ -22,11 +18,10 @@ spring:
         register: true
         enabled: true
   rabbitmq:
-    host: localhost
+    host: rabbitmq
     port: 5672
     username: guest
     password: guest
-
 management:
   endpoints:
     web:

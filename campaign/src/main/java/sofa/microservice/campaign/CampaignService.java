@@ -148,6 +148,7 @@ public class CampaignService {
     public List<Message> getAllMessages(String campaignId){
         return messageRepo.findAllByCampaignId(campaignId);
     }
+
     @RabbitListener(queues = "campaign_messages")
     public void receiveMessage(String stringMessage){
         try{

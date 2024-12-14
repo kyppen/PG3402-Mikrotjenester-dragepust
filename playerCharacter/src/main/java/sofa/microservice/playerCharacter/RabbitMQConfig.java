@@ -1,4 +1,4 @@
-package org.api.stats;
+package sofa.microservice.playerCharacter;
 
 
 import org.springframework.amqp.core.Queue;
