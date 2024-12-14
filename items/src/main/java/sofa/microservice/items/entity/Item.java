@@ -10,6 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
+@Table(name = "ITEMS")
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -17,6 +17,7 @@ spring:
         prefer-ip-address: true
         register: true
         enabled: true
+
 management:
   endpoints:
     web:
