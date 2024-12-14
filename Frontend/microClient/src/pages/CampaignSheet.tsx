@@ -124,6 +124,20 @@ const CampaignSheet: React.FC = () => {
             console.error("Error sending message:", err);
         }
     };
+    const getCharacterImage = (species: string): string => {
+        const speciesImages: { [key: string]: string } = {
+            alv: './src/assets/elf1.jpg',
+            menneske: './src/assets/human1.jpg',
+            dverg: './src/assets/dwarf1.jpg',
+
+        };
+        return speciesImages[species.toLowerCase()] || './src/assets/elf.png'; // Default image fallback
+    };
+    const getCookie = (name: string): string | null => {
+        const match = document.cookie.match(new RegExp(`(^| )${name}=([^;]+)`));
+        return match ? match[2] : null;
+    };console.log(getCookie("userName"));
+    const userName = getCookie("userName");
     return (
         <Container maxWidth="lg" sx={{ textAlign: 'center', mt: 10, display: 'flex' }}>
             <Container maxWidth="sm">
@@ -133,6 +147,10 @@ const CampaignSheet: React.FC = () => {
                 <Typography variant="h4" gutterBottom>
                     {campaign?.campaignDescription}
                 </Typography>
+                <Typography variant="h4" gutterBottom color="text.secondary">
+                    Hello, {userName}
+                </Typography>
+
 
                 {/* Header Fields */}
                 <Grid container spacing={2}>
@@ -140,19 +158,25 @@ const CampaignSheet: React.FC = () => {
                         <Grid item xs={12} sm={6} md={4} lg={3} key={character.id}>
                             <Card
                                 sx={{
+                                    position: 'relative', // Required to position the button absolutely
                                     cursor: 'pointer',
                                     display: 'flex',
                                     flexDirection: 'column',
                                     alignItems: 'center',
-                                    padding: 2
+                                    padding: 2,
+                                    '&:hover': {
+                                        transform: 'scale(1.05)',
+                                        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                                    },
+                                    transition: 'transform 0.3s, box-shadow 0.3s',
                                 }}
                                 onClick={() => handleCharacterClick(character.id)}
                             >
-                                <Divider sx={{ my: 2, borderBottomWidth: '2px', borderColor: '#d2b48c' }} />
+
                                 <CardMedia
                                     component="img"
-                                    image="/src/assets/elf.png"
-                                    alt="Character Image"
+                                    image={getCharacterImage(character.species)}
+                                    alt={`${character.species} Character Image`}
                                     sx={{ width: '100%', height: 150, borderRadius: 1 }}
                                 />
                                 <CardContent sx={{ textAlign: 'center' }}>
@@ -173,12 +197,17 @@ const CampaignSheet: React.FC = () => {
             </Container>
 
             {/* Chat Log */}
-            <Container maxWidth="sm" sx={{ ml: 4, display: 'flex', flexDirection: 'column', height: '600px', border: '1px solid #ccc', borderRadius: '8px', padding: 2 }}>
+            <Container maxWidth="sm" sx={{ ml: 4, display: 'flex', flexDirection: 'column', height: '600px', border: '1px solid #ccc', borderRadius: '8px', padding: 2, backgroundColor: '#E0C9A6' }}>
                 <Typography variant="h5" gutterBottom>Chat Log</Typography>
                 <div style={{ flexGrow: 1, overflowY: 'auto', marginBottom: '16px', padding: '8px', backgroundColor: '#f9f9f9', borderRadius: '4px' }}>
-                    {chatMessages.map((message) => (
-                        <Typography key={message.id} variant="body1" sx={{ mb: 1 }}>
-                            {message.message}
+                    {chatMessages.map((message, index) => (
+                        <Typography key={message.id} variant="body1" sx={{
+                            mb: 1,
+                            backgroundColor: index % 2 === 0 ? '#e8eaf6' : '#fff',
+                            padding: 1,
+                            borderRadius: 1,
+                        }}>
+                            <strong>{userName}:</strong> {message.message}
                         </Typography>
                     ))}
                 </div>

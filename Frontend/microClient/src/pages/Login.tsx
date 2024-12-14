@@ -17,6 +17,11 @@ const CreateUser: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
 
+    const setCookie = (name: string, value: string, days: number) => {
+        const expires = new Date();
+        expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
+        document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+    };
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
@@ -35,7 +40,12 @@ const CreateUser: React.FC = () => {
             if (!response.ok) {
                 throw new Error("Invalid username or password");
             }
+            const result = await response.json();
+            console.log("User created:", result);
 
+            // Save userId and username as cookies
+            setCookie("userId", result.id, 7); // Save for 7 days
+            setCookie("userName", result.username, 7);
             navigate("/character-menu");
         } catch (err) {
             setError(err instanceof Error ? err.message : "An unexpected error occurred");
