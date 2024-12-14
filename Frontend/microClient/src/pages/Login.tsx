@@ -28,7 +28,7 @@ const CreateUser: React.FC = () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ username, password }),
+                body: JSON.stringify({ username: username, password: password }),
             });
                 console.log(username);
                 console.log(password);

@@ -5,11 +5,10 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserDTO {
     private String username;
     private String password;
 
-    public UserDTO(String userId) {
-    }
 }

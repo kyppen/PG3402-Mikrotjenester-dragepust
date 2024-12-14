@@ -1,8 +1,10 @@
 package org.api.user;
 
+import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,11 +17,11 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/create")
-    public User createUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<User> createUser(@RequestBody UserDTO userDTO) {
         log.info("Creating user {}", userDTO);
         User user = userService.saveUser(userDTO);
         log.info("UserId: {}", user.getId());
-        return user;
+        return new ResponseEntity<>(user, HttpStatus.OK);
 
     }
 }

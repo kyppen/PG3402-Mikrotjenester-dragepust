@@ -24,11 +24,5 @@ public class UserService {
         user.setPassword(userDTO.getPassword());
         return userRepo.save(user);
     }
-    public void sendUserIdToCharacterService(String userId) {
-        RestTemplate restTemplate = new RestTemplate();
-        String characterServiceUrl = "http://localhost:8087/character/link-user";
 
-        UserDTO dto = new UserDTO(userId);
-        restTemplate.postForEntity(characterServiceUrl, dto, Void.class);
-    }
 }
