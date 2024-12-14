@@ -81,6 +81,7 @@ const CampaignSheet: React.FC = () => {
                 if (!response.ok) throw new Error('Failed to fetch chat messages');
                 const data = await response.json();
                 setChatMessages(data);
+                console.log(data);
             } catch (err) {
                 console.error('Error fetching chat messages:', err);
             }

@@ -171,14 +171,14 @@ const CharacterSheet: React.FC = () => {
         const updatedRows = rows.map((row, i) => i === index ? { ...row, attribute: newAttribute } : row);
         setRows(updatedRows);
     };
-    const handleRoll = async () => {
+    /*const handleRoll = async () => {
         try {
             const payload = {
                 characterId: character?.id || '',
                 campaignId: campaign?.campaignId || '',
                 action: 'roll',
             };
-            const response = await fetch('http://localhost:8087/messages/roll', {
+            const response = await fetch(`http://localhost:8087/dice/roll/${rollAmount}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),
@@ -186,6 +186,20 @@ const CharacterSheet: React.FC = () => {
             if (!response.ok) throw new Error('Failed to send roll');
             const result = await response.json(); // Assuming the roll result is returned as JSON
             const rollMessage = `Roll result: ${result.rollValue}`; // Customize as needed
+            setRollLog((prevLog) => [rollMessage, ...prevLog]); // Add to log
+        } catch (err) {
+            console.error(err);
+        }
+    }; */
+    const handleRoll = async () => {
+        try {
+            const response = await fetch(`http://localhost:8087/dice/roll/${rollAmount}`, {
+                method: 'GET', // Adjusted to match the backend
+            });
+            if (!response.ok) throw new Error('Failed to send roll');
+
+            const result = await response.text(); // Backend sends an integer result
+            const rollMessage = `Roll result: ${result}`; // Using the returned integer directly
             setRollLog((prevLog) => [rollMessage, ...prevLog]); // Add to log
         } catch (err) {
             console.error(err);

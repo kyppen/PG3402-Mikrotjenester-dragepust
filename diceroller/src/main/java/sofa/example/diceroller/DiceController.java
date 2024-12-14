@@ -13,7 +13,7 @@ import sofa.example.diceroller.DTO.MessageDTO;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@CrossOrigin (origins = "http://localhost:5173")
+//@CrossOrigin (origins = "http://localhost:5173")
 @RequestMapping("/dice")
 public class DiceController {
     private final DiceService diceService;
