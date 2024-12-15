@@ -142,6 +142,8 @@ const CharacterSheet: React.FC = () => {
             body: JSON.stringify({ value: hpChange, characterId: characterId }),
         });
         console.log(`Health sent: ${hpChange}`)
+        //Terrible
+        window.location.reload();
     };
 
     const updateMagic = async (magicChange: number) => {
@@ -153,6 +155,8 @@ const CharacterSheet: React.FC = () => {
             body: JSON.stringify({ value: magicChange, characterId: characterId }),
         });
         console.log(`Magic sent: ${magicChange}`)
+        //Terrible
+        window.location.reload();
     };
 
     const updateWillpower = async (willpowerChange: number) => {
@@ -164,6 +168,8 @@ const CharacterSheet: React.FC = () => {
             body: JSON.stringify({ value: willpowerChange, characterId: characterId }),
         });
         console.log(`willpower sent: ${willpowerChange}`)
+        //Terrible
+        window.location.reload();
     };
 
 
