@@ -17,7 +17,7 @@ import {
     TableBody,
     Paper,
     Select,
-    MenuItem, TextField,
+    MenuItem, TextField, CardMedia,
 } from '@mui/material';
 
 interface Campaign {
@@ -200,12 +200,23 @@ const CharacterSheet: React.FC = () => {
 
             const result = await response.text(); // Backend sends an integer result
             const rollMessage = `Roll result: ${result}`; // Using the returned integer directly
-            setRollLog((prevLog) => [rollMessage, ...prevLog]); // Add to log
+            setRollLog((prevLog) => {
+                const updatedLog = [rollMessage, ...prevLog];
+                return updatedLog.slice(0, 5); // Keep only the last 5 logs
+            });
         } catch (err) {
             console.error(err);
         }
     };
+    const getCharacterImage = (species: string): string => {
+        const speciesImages: { [key: string]: string } = {
+            alv: '../src/assets/elf1.jpg',
+            menneske: '../src/assets/human1.jpg',
+            dverg: '../src/assets/dwarf1.jpg',
 
+        };
+        return speciesImages[species.toLowerCase()] || './src/assets/elf.png'; // Default image fallback
+    };
     if (error) return <Typography variant="body1" align="center" color="error">{error}</Typography>;
     if (!character) return <Typography variant="body1" align="center">Loading character...</Typography>;
 
@@ -240,110 +251,187 @@ const CharacterSheet: React.FC = () => {
                     >
                         Character Sheet
                     </Typography>
-                    {/* Campaign Info Section */}
-                    {campaign && (
-                        <Box sx={{ mt: 2, p: 2, backgroundColor: '#f4f1e0', borderRadius: 2 }}>
-                            <Typography variant="h6" sx={{ color: '#8b6c42' }}>
-                                Campaign Information
+                    {/* Campaign Info */}
+                    <Box
+                        sx={{
+                            position: 'absolute', // Absolute positioning to place it in the upper-left
+                            top: 16,
+                            left: 16,
+                            backgroundColor: '#f4f1e0',
+                            borderRadius: 2,
+                            boxShadow: 3,
+                            p: 2,
+                            maxWidth: 300, // Limit the width to avoid overflow
+                        }}
+                    >
+                        {campaign ? (
+                            <>
+                                <Typography
+                                    variant="h6"
+                                    sx={{
+                                        color: '#8b6c42',
+                                        fontFamily: 'Cinzel, serif',
+                                        mb: 1,
+                                    }}
+                                >
+                                    Campaign Information
+                                </Typography>
+                                <Typography variant="body1">
+                                    <strong>Name:</strong> {campaign.campaignName}
+                                </Typography>
+                                <Typography variant="body1">
+                                    <strong>Description:</strong> {campaign.campaignDescription}
+                                </Typography>
+                                <Typography variant="body1">
+                                    <strong>Campaign ID:</strong> {campaign.campaignId}
+                                </Typography>
+                            </>
+                        ) : (
+                            <Typography
+                                variant="body1"
+                                sx={{
+                                    color: '#8b6c42',
+                                    fontStyle: 'italic',
+                                }}
+                            >
+                                This character is not currently in a campaign.
                             </Typography>
-                            <Typography variant="body1">
-                                <strong>Name:</strong> {campaign.campaignName}
-                            </Typography>
-                            <Typography variant="body1">
-                                <strong>Description:</strong> {campaign.campaignDescription}
-                            </Typography>
-                            <Typography variant="body1">
-                                <strong>ID:</strong> {campaign.campaignId}
-                            </Typography>
-                        </Box>
-                    )}
-                    {/* Roll Section */}
-                    <Box sx={{ width: '100%', mb: 2, textAlign: 'center' }}>
-                        <TextField
-                            label="Roll Amount"
-                            type="number"
-                            value={rollAmount}
-                            onChange={(e) => setRollAmount(Number(e.target.value))}
-                            sx={{ mr: 2 }}
-                        />
-                        <Button
-                            variant="contained"
-                            color="secondary"
-                            onClick={handleRoll}
-                        >
-                            Roll
-                        </Button>
+                        )}
                     </Box>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            my: 3,
+                        }}
+                    >
+                        {/* Left Section: Buttons and Inputs */}
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                width: '50%',
+                                maxWidth: 300,
+                            }}
+                        >
+                            {/* Roll Section */}
+                            <Box sx={{ mb: 3 }}>
+                                <TextField
+                                    label="Roll Amount"
+                                    type="number"
+                                    value={rollAmount}
+                                    onChange={(e) => setRollAmount(Number(e.target.value))}
+                                    sx={{ width: '100%', mb: 1 }}
+                                />
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    fullWidth
+                                    onClick={handleRoll}
+                                >
+                                    Roll
+                                </Button>
+                            </Box>
 
-                    {/* New Section for Stat Updates */}
-                    <Box sx={{ my: 3 }}>
-                        <Typography variant="h6" sx={{ mb: 1 }}>Update Stats</Typography>
-                        <Grid container spacing={2}>
-                            <Grid item xs={6}>
+                            {/* Update Stats Section */}
+                            <Typography
+                                variant="h6"
+                                sx={{
+                                    mb: 2,
+                                    fontWeight: 'bold',
+                                    fontFamily: 'Cinzel, serif',
+                                }}
+                            >
+                                Update Stats
+                            </Typography>
+
+                            <Box sx={{ mb: 2 }}>
                                 <TextField
                                     label="HP Change"
                                     type="number"
                                     value={hpChange}
                                     onChange={(e) => setHpChange(Number(e.target.value))}
-
+                                    sx={{ width: '100%', mb: 1 }}
                                 />
-                            </Grid>
-                            <Grid item xs={6}>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    fullWidth
+                                    onClick={() => updateHp(hpChange)}
+                                >
+                                    Apply HP
+                                </Button>
+                            </Box>
+
+                            <Box sx={{ mb: 2 }}>
                                 <TextField
                                     label="Magic Change"
                                     type="number"
                                     value={magicChange}
                                     onChange={(e) => setMagicChange(Number(e.target.value))}
-
+                                    sx={{ width: '100%', mb: 1 }}
                                 />
-                            </Grid>
-                            <Grid item xs={6}>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    fullWidth
+                                    onClick={() => updateMagic(magicChange)}
+                                >
+                                    Apply Magic
+                                </Button>
+                            </Box>
+
+                            <Box>
                                 <TextField
                                     label="Willpower Change"
                                     type="number"
                                     value={willpowerChange}
                                     onChange={(e) => setWillpowerChange(Number(e.target.value))}
-
+                                    sx={{ width: '100%', mb: 1 }}
                                 />
-                            </Grid>
-                        </Grid>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            sx={{ mt: 2 }}
-                            onClick={() => updateHp(hpChange)}
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    fullWidth
+                                    onClick={() => updateWillpower(willpowerChange)}
+                                >
+                                    Apply Willpower
+                                </Button>
+                            </Box>
+                        </Box>
+
+                        {/* Right Section: Image */}
+                        <Box
+                            sx={{
+                                width: '50%',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                borderColor: 'primary.main',
+                                border: '12px solid',
+                            }}
                         >
-                            Apply HP
-                        </Button>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            sx={{ mt: 2 }}
-                            onClick={() => updateMagic(magicChange)}
-                        >
-                            Apply Magic
-                        </Button>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            sx={{ mt: 2 }}
-                            onClick={() => updateWillpower(willpowerChange)}
-                        >
-                            Apply Willpower
-                        </Button>
+                            <CardMedia
+                                component="img"
+                                image={getCharacterImage(character.species)}
+                                alt={`${character.species} Character Image`}
+                                sx={{ width: '100%', height: '100%', borderRadius: 1, objectFit: 'contain' }}
+                            />
+                        </Box>
                     </Box>
 
                     <Grid container spacing={2} sx={{ mb: 3 }}>
                         <Grid item xs={12} md={4}>
-                            <Typography variant="subtitle1">Name</Typography>
+                            <Typography variant="subtitle1" fontWeight="bold">Name</Typography>
                             <Typography variant="body1">{character.characterName}</Typography>
                         </Grid>
                         <Grid item xs={12} md={4}>
-                            <Typography variant="subtitle1">Species</Typography>
+                            <Typography variant="subtitle1" fontWeight="bold">Species</Typography>
                             <Typography variant="body1">{character.species}</Typography>
                         </Grid>
                         <Grid item xs={12} md={4}>
-                            <Typography variant="subtitle1">Profession</Typography>
+                            <Typography variant="subtitle1" fontWeight="bold">Profession</Typography>
                             <Typography variant="body1">{character.profession || 'Unknown'}</Typography>
                         </Grid>
 
@@ -352,18 +440,18 @@ const CharacterSheet: React.FC = () => {
                     <Divider sx={{ my: 2, borderBottomWidth: '2px', borderColor: '#d2b48c' }} />
                     <Grid container spacing={2} sx={{ mb: 3 }}>
                         <Grid item xs={12} md={4}>
-                            <Typography variant="subtitle1">Health:</Typography>
+                            <Typography variant="subtitle1" fontWeight="bold">Health:</Typography>
                             <Typography variant="body1">{character.baseHP || 'Unknown'}</Typography>
                         </Grid>
                         <Grid item xs={12} md={4}>
-                            <Typography variant="subtitle1">Willpower:</Typography>
+                            <Typography variant="subtitle1" fontWeight="bold">Willpower:</Typography>
                             <Typography variant="body1">{character.baseWillpower || 'Unknown'}</Typography>
                         </Grid>
                         <Grid item xs={12} md={4}>
-                            <Typography variant="subtitle1">Mana:</Typography>
+                            <Typography variant="subtitle1" fontWeight="bold">Mana:</Typography>
                             <Typography variant="body1">{character.baseMagic || 'Unknown'}</Typography>
                         </Grid>
-                        <Button />
+
                     </Grid>
 
                     {/* Attributes Table */}
@@ -415,52 +503,96 @@ const CharacterSheet: React.FC = () => {
                             </Table>
                         </TableContainer>
                     </Box>
-                    {/* Spells Section */}
-                    <Box sx={{ mb: 3 }}>
-                        <Typography variant="h6" sx={{ fontFamily: 'Cinzel, serif' }}>Spells</Typography>
-                        {spells.length > 0 ? (
-                            <ul style={{ paddingLeft: '20px', listStyle: 'circle', color: '#8b6c42' }}>
-                                {spells.map((spell, index) => (
-                                    <li key={index} style={{ marginBottom: '8px' }}>
-                                        <Typography variant="body1">{spell}</Typography>
-                                    </li>
-                                ))}
-                            </ul>
-                        ) : (
-                            <Typography variant="body2">No spells listed.</Typography>
-                        )}
-                    </Box>
+                    <Box
+                        sx={{
+                            display: 'grid',
+                            gridTemplateColumns: '1fr 1fr', // Two equal columns
+                            gap: 4, // Spacing between columns
+                        }}
+                    >
+                        {/* Left Column: Equipment */}
+                        <Box>
+                            <Typography
+                                variant="h6"
+                                sx={{
+                                    fontFamily: 'Cinzel, serif',
+                                    color: '#8b6c42',
+                                    mb: 2,
+                                    fontWeight: 'bold',
+                                }}
+                            >
+                                Equipment
+                            </Typography>
+                            {items.length > 0 ? (
+                                <ul style={{ paddingLeft: '20px', listStyle: 'square', color: '#8b6c42' }}>
+                                    {items.map((item) => (
+                                        <li key={item.id} style={{ marginBottom: '8px' }}>
+                                            <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                                                {item.itemName}
+                                            </Typography>
+                                            <Typography variant="body2">{item.itemDescription}</Typography>
+                                        </li>
+                                    ))}
+                                </ul>
+                            ) : (
+                                <Typography variant="body2">No equipment listed.</Typography>
+                            )}
+                        </Box>
 
-                    {/* Skills Section */}
-                    <Box sx={{ mb: 3 }}>
-                        <Typography variant="h6" sx={{ fontFamily: 'Cinzel, serif' }}>Skills</Typography>
-                        {skills.length > 0 ? (
-                            <ul style={{ paddingLeft: '20px', listStyle: 'disc', color: '#8b6c42' }}>
-                                {skills.map((skill, index) => (
-                                    <li key={index} style={{ marginBottom: '8px' }}>
-                                        <Typography variant="body1">{skill}</Typography>
-                                    </li>
-                                ))}
-                            </ul>
-                        ) : (
-                            <Typography variant="body2">No skills listed.</Typography>
-                        )}
-                    </Box>
-                    {/* Equipment Section */}
-                    <Box sx={{ mb: 3 }}>
-                        <Typography variant="h6" sx={{ fontFamily: 'Cinzel, serif' }}>Equipment</Typography>
-                        {items.length > 0 ? (
-                            <ul style={{ paddingLeft: '20px', listStyle: 'square', color: '#8b6c42' }}>
-                                {items.map((item) => (
-                                    <li key={item.id} style={{ marginBottom: '8px' }}>
-                                        <Typography variant="body1" sx={{ fontWeight: 'bold' }}>{item.itemName}</Typography>
-                                        <Typography variant="body2">{item.itemDescription}</Typography>
-                                    </li>
-                                ))}
-                            </ul>
-                        ) : (
-                            <Typography variant="body2">No equipment listed.</Typography>
-                        )}
+                        {/* Right Column: Skills and Spells */}
+                        <Box>
+                            {/* Skills Section */}
+                            <Box sx={{ mb: 3 }}>
+                                <Typography
+                                    variant="h6"
+                                    sx={{
+                                        fontFamily: 'Cinzel, serif',
+                                        color: '#8b6c42',
+                                        mb: 2,
+                                        fontWeight: 'bold',
+                                    }}
+                                >
+                                    Skills
+                                </Typography>
+                                {skills.length > 0 ? (
+                                    <ul style={{ paddingLeft: '20px', listStyle: 'disc', color: '#8b6c42' }}>
+                                        {skills.map((skill, index) => (
+                                            <li key={index} style={{ marginBottom: '8px', fontWeight: 'bold' }}>
+                                                <Typography variant="body1">{skill}</Typography>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                ) : (
+                                    <Typography variant="body2">No skills listed.</Typography>
+                                )}
+                            </Box>
+
+                            {/* Spells Section */}
+                            <Box>
+                                <Typography
+                                    variant="h6"
+                                    sx={{
+                                        fontFamily: 'Cinzel, serif',
+                                        color: '#8b6c42',
+                                        mb: 2,
+                                        fontWeight: 'bold',
+                                    }}
+                                >
+                                    Spells
+                                </Typography>
+                                {spells.length > 0 ? (
+                                    <ul style={{ paddingLeft: '20px', listStyle: 'circle', color: '#8b6c42' }}>
+                                        {spells.map((spell, index) => (
+                                            <li key={index} style={{ marginBottom: '8px' }}>
+                                                <Typography variant="body1">{spell}</Typography>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                ) : (
+                                    <Typography variant="body2">No spells listed.</Typography>
+                                )}
+                            </Box>
+                        </Box>
                     </Box>
 
                     <Divider sx={{ my: 2, borderBottomWidth: '2px', borderColor: '#d2b48c' }} />
@@ -500,7 +632,7 @@ const CharacterSheet: React.FC = () => {
                             variant="body2"
                             sx={{
                                 marginBottom: 0.5,
-                                color: '#8b6c42',
+                                color: '#19140d',
                             }}
                         >
                             {log}

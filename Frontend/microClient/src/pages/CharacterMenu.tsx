@@ -123,7 +123,7 @@ const CharacterMenu: React.FC = () => {
             dverg: './src/assets/dwarf1.jpg',
 
         };
-        return speciesImages[species.toLowerCase()] || './src/assets/elf.png'; // Default image fallback
+        return speciesImages[species.toLowerCase()] || '../src/assets/elf.png'; // Default image fallback
     };
 
 

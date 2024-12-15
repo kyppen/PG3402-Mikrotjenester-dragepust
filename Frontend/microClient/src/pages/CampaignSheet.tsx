@@ -127,12 +127,12 @@ const CampaignSheet: React.FC = () => {
     };
     const getCharacterImage = (species: string): string => {
         const speciesImages: { [key: string]: string } = {
-            alv: './src/assets/elf1.jpg',
-            menneske: './src/assets/human1.jpg',
-            dverg: './src/assets/dwarf1.jpg',
+            alv: '../src/assets/elf1.jpg',
+            menneske: '../src/assets/human1.jpg',
+            dverg: '../src/assets/dwarf1.jpg',
 
         };
-        return speciesImages[species.toLowerCase()] || './src/assets/elf.png'; // Default image fallback
+        return speciesImages[species.toLowerCase()] || '../src/assets/elf.png'; // Default image fallback
     };
     const getCookie = (name: string): string | null => {
         const match = document.cookie.match(new RegExp(`(^| )${name}=([^;]+)`));

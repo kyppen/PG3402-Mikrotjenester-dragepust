@@ -31,7 +31,9 @@ body {
 h1, h2, p {
   color: #333333;
 }
-
+li {
+  list-style-type: none;
+}
 button {
   background-color: #4CAF50;
   color: white;
