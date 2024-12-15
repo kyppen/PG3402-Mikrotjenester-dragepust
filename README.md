@@ -1,5 +1,22 @@
+
 # PG3402-Mikrotjenester-dragepust
 
 
-docker compose -f .\docker-compose-stages.yml up --build
-docker compose -f .\docker-compose-stages.yml up --build
+
+Running Dragepust character sheet and campaign sheet
+
+
+Build and run
+```
+docker compose -f .\docker-compose.yml up --build
+```
+
+Launching without building (Requires that the proi)
+```
+docker compose -f .\docker-compose.yml up
+```
+
+Removes ALL docker images and volumes
+```
+docker system prune -a --volumes
+```
