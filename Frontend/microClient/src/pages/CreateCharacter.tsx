@@ -20,7 +20,7 @@ const CreateCharacter: React.FC = () => {
     const [species, setSpecies] = useState('');
     const [profession, setProfession] = useState('');
     const [itemSetId, setItemSetId] = useState('');
-    const [userId, setUserId] = useState('');
+
     const [error, setError] = useState<string | null>(null);
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -31,6 +31,7 @@ const CreateCharacter: React.FC = () => {
             species,
             profession,
             itemSetId,
+
         };
 
         try {
@@ -50,6 +51,11 @@ const CreateCharacter: React.FC = () => {
             console.error('Error creating character:', err);
         }
     };
+    const getCookie = (name: string): string | null => {
+        const match = document.cookie.match(new RegExp(`(^| )${name}=([^;]+)`));
+        return match ? match[2] : null;
+    };console.log(getCookie("userId"));
+    const userId = getCookie("userId");
 
     return (
         <Container maxWidth="sm" sx={{ mt: 4 }}>

@@ -15,9 +15,8 @@ const CampaignMenu: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        // Fetch characters from the backend API
-        // Change "1" to a userId from login
-        fetch('http://localhost:8087/campaign/' + "1")
+        // Fetch campaigns from the backend API
+        fetch(`http://localhost:8087/campaign/${userId}`)
             .then((response) => {
                 if (!response.ok) {
                     throw new Error('Failed to fetch characters');
@@ -66,7 +65,11 @@ const CampaignMenu: React.FC = () => {
     const handleCampaignClick = (campaignId: string) => {
         navigate(`/campaign/${campaignId}`);
     };
-
+    const getCookie = (name: string): string | null => {
+        const match = document.cookie.match(new RegExp(`(^| )${name}=([^;]+)`));
+        return match ? match[2] : null;
+    };console.log(getCookie("userId"));
+    const userId = getCookie("userId");
     return (
         <Container maxWidth="md">
             <Typography variant="h5" align="center" gutterBottom>

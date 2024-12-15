@@ -33,7 +33,7 @@ const CharacterMenu: React.FC = () => {
     useEffect(() => {
         // Fetch characters from the backend API
         // THIS NEEDS TO GET BY USERID ONCE IMPLEMENTED
-        fetch('http://localhost:8087/character/all')
+        fetch(`http://localhost:8087/character/all/${userId}`)
             .then((response) => {
                 if (!response.ok) {
                     throw new Error('Failed to fetch characters');
@@ -125,7 +125,11 @@ const CharacterMenu: React.FC = () => {
         };
         return speciesImages[species.toLowerCase()] || '../src/assets/elf.png'; // Default image fallback
     };
-
+    const getCookie = (name: string): string | null => {
+        const match = document.cookie.match(new RegExp(`(^| )${name}=([^;]+)`));
+        return match ? match[2] : null;
+    };console.log(getCookie("userId"));
+    const userId = getCookie("userId");
 
 
     return (
