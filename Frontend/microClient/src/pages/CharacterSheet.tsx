@@ -300,10 +300,33 @@ const CharacterSheet: React.FC = () => {
                                 flexDirection: 'column',
                                 width: '50%',
                                 maxWidth: 300,
+                                ml:10
                             }}
                         >
                             {/* Roll Section */}
-                            <Box sx={{ mb: 3 }}>
+
+
+                            {/* Update Stats Section */}
+                            <Typography
+                                variant="h6"
+                                sx={{
+                                    mb: 2,
+                                    fontWeight: 'bold',
+                                    fontFamily: 'Cinzel, serif',
+                                }}
+                            >
+                               Roll and Update Stats
+                            </Typography>
+
+                            {/* 2x2 Grid for Buttons */}
+                            <Box
+                                sx={{
+                                    display: 'grid',
+                                    gridTemplateColumns: '1fr 1fr',
+                                    gap: 2, // Space between grid items
+                                }}
+                            >
+                                <Box sx={{ mb: 3 }}>
                                 <TextField
                                     label="Roll Amount"
                                     type="number"
@@ -320,90 +343,81 @@ const CharacterSheet: React.FC = () => {
                                     Roll
                                 </Button>
                             </Box>
+                                <Box>
+                                    <TextField
+                                        label="HP Change"
+                                        type="number"
+                                        value={hpChange}
+                                        onChange={(e) => setHpChange(Number(e.target.value))}
+                                        sx={{ width: '100%', mb: 1 }}
+                                    />
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        fullWidth
+                                        onClick={() => updateHp(hpChange)}
+                                    >
+                                        Apply HP
+                                    </Button>
+                                </Box>
 
-                            {/* Update Stats Section */}
-                            <Typography
-                                variant="h6"
-                                sx={{
-                                    mb: 2,
-                                    fontWeight: 'bold',
-                                    fontFamily: 'Cinzel, serif',
-                                }}
-                            >
-                                Update Stats
-                            </Typography>
+                                <Box>
+                                    <TextField
+                                        label="Magic Change"
+                                        type="number"
+                                        value={magicChange}
+                                        onChange={(e) => setMagicChange(Number(e.target.value))}
+                                        sx={{ width: '100%', mb: 1 }}
+                                    />
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        fullWidth
+                                        onClick={() => updateMagic(magicChange)}
+                                    >
+                                        Apply Magic
+                                    </Button>
+                                </Box>
 
-                            <Box sx={{ mb: 2 }}>
-                                <TextField
-                                    label="HP Change"
-                                    type="number"
-                                    value={hpChange}
-                                    onChange={(e) => setHpChange(Number(e.target.value))}
-                                    sx={{ width: '100%', mb: 1 }}
-                                />
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    fullWidth
-                                    onClick={() => updateHp(hpChange)}
-                                >
-                                    Apply HP
-                                </Button>
-                            </Box>
-
-                            <Box sx={{ mb: 2 }}>
-                                <TextField
-                                    label="Magic Change"
-                                    type="number"
-                                    value={magicChange}
-                                    onChange={(e) => setMagicChange(Number(e.target.value))}
-                                    sx={{ width: '100%', mb: 1 }}
-                                />
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    fullWidth
-                                    onClick={() => updateMagic(magicChange)}
-                                >
-                                    Apply Magic
-                                </Button>
-                            </Box>
-
-                            <Box>
-                                <TextField
-                                    label="Willpower Change"
-                                    type="number"
-                                    value={willpowerChange}
-                                    onChange={(e) => setWillpowerChange(Number(e.target.value))}
-                                    sx={{ width: '100%', mb: 1 }}
-                                />
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    fullWidth
-                                    onClick={() => updateWillpower(willpowerChange)}
-                                >
-                                    Apply Willpower
-                                </Button>
+                                <Box>
+                                    <TextField
+                                        label="Willpower Change"
+                                        type="number"
+                                        value={willpowerChange}
+                                        onChange={(e) => setWillpowerChange(Number(e.target.value))}
+                                        sx={{ width: '100%', mb: 1 }}
+                                    />
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        fullWidth
+                                        onClick={() => updateWillpower(willpowerChange)}
+                                    >
+                                        Apply Willpower
+                                    </Button>
+                                </Box>
                             </Box>
                         </Box>
 
                         {/* Right Section: Image */}
                         <Box
                             sx={{
-                                width: '50%',
+                                width: '25%',
+                                height: '30%',
                                 display: 'flex',
                                 justifyContent: 'center',
                                 alignItems: 'center',
-                                borderColor: 'primary.main',
-                                border: '12px solid',
+                                borderColor: 'black',
+                                borderStyle: 'solid',
+                                mr: 8,
+
                             }}
                         >
                             <CardMedia
                                 component="img"
                                 image={getCharacterImage(character.species)}
                                 alt={`${character.species} Character Image`}
-                                sx={{ width: '100%', height: '100%', borderRadius: 1, objectFit: 'contain' }}
+                                sx={{ width: '100%', height: '50%', borderRadius: 1, objectFit: 'contain' }}
                             />
                         </Box>
                     </Box>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import {Button, Container, Grid, Card, CardContent, Typography,TextField, CardMedia, Divider} from "@mui/material";
+import {Button, Container, Grid, Card, CardContent, Typography,TextField, CardMedia} from "@mui/material";
 
 
 interface Campaign {
@@ -111,7 +111,7 @@ const CampaignSheet: React.FC = () => {
                 },
                 body: JSON.stringify(newMessageObj),
             });
-
+            window.location.reload();
             if (!response.ok) {
                 throw new Error(`Failed to send message. Status: ${response.status}`);
             }
@@ -139,27 +139,55 @@ const CampaignSheet: React.FC = () => {
         return match ? match[2] : null;
     };console.log(getCookie("userName"));
     const userName = getCookie("userName");
+    const handleRoll = async () => {
+        try {
+            const payload = {
+                characterId: characters[0].id || '',
+                campaignId: campaign?.id || '',
+                action: 'roll',
+            };
+            const response = await fetch('http://localhost:8087/messages/roll', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            });
+            window.location.reload();
+            if (!response.ok) throw new Error('Failed to send roll');
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     return (
-        <Container maxWidth="lg" sx={{ textAlign: 'center', mt: 10, display: 'flex' }}>
-            <Container maxWidth="sm">
-                <Typography variant="h4" gutterBottom>
-                    {campaign?.campaignName}
+        <Container maxWidth="lg" sx={{ mt: 10, display: 'flex', justifyContent: 'space-between' }}>
+            {/* Info Box */}
+            <Container
+                maxWidth="sm"
+                sx={{
+                    flex: 1,
+                    mr: 2,
+                    padding: 2,
+                    backgroundColor: '#E0C9A6',
+                    borderRadius: '8px',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+                }}
+            >
+                <Typography variant="h4" gutterBottom fontWeight="bold">
+                     Campaign name: {campaign?.campaignName || 'No Campaign Available'}
                 </Typography>
-                <Typography variant="h4" gutterBottom>
-                    {campaign?.campaignDescription}
+                <Typography variant="body1" gutterBottom color="text.secondary" fontWeight="bold">
+                    {campaign?.campaignDescription || 'Join a campaign to see details here.'}
                 </Typography>
-                <Typography variant="h4" gutterBottom color="text.secondary">
-                    Hello, {userName}
+                <Typography variant="h5" gutterBottom>
+                    User: {userName}
                 </Typography>
 
-
-                {/* Header Fields */}
+                {/* Character Grid */}
                 <Grid container spacing={2}>
                     {characters.map((character) => (
-                        <Grid item xs={12} sm={6} md={4} lg={3} key={character.id}>
+                        <Grid item xs={12} sm={6} md={4} key={character.id}>
                             <Card
                                 sx={{
-                                    position: 'relative', // Required to position the button absolutely
                                     cursor: 'pointer',
                                     display: 'flex',
                                     flexDirection: 'column',
@@ -171,14 +199,14 @@ const CampaignSheet: React.FC = () => {
                                     },
                                     transition: 'transform 0.3s, box-shadow 0.3s',
                                 }}
-                                onClick={() => handleCharacterClick(character.id)}
-                            >
 
+                            >
                                 <CardMedia
                                     component="img"
                                     image={getCharacterImage(character.species)}
                                     alt={`${character.species} Character Image`}
                                     sx={{ width: '100%', height: 150, borderRadius: 1 }}
+                                    onClick={() => handleCharacterClick(character.id)}
                                 />
                                 <CardContent sx={{ textAlign: 'center' }}>
                                     <Typography variant="h6" gutterBottom>
@@ -190,6 +218,14 @@ const CampaignSheet: React.FC = () => {
                                     <Typography color="textSecondary">
                                         {character.species}
                                     </Typography>
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        sx={{ mt: 2 }}
+                                        onClick={() => handleRoll()}
+                                    >
+                                        Roll
+                                    </Button>
                                 </CardContent>
                             </Card>
                         </Grid>
@@ -197,17 +233,46 @@ const CampaignSheet: React.FC = () => {
                 </Grid>
             </Container>
 
-            {/* Chat Log */}
-            <Container maxWidth="sm" sx={{ ml: 4, display: 'flex', flexDirection: 'column', height: '600px', border: '1px solid #ccc', borderRadius: '8px', padding: 2, backgroundColor: '#E0C9A6' }}>
-                <Typography variant="h5" gutterBottom>Chat Log</Typography>
-                <div style={{ flexGrow: 1, overflowY: 'auto', marginBottom: '16px', padding: '8px', backgroundColor: '#f9f9f9', borderRadius: '4px' }}>
+            {/* Chat Box */}
+            <Container
+                maxWidth="sm"
+                sx={{
+                    flex: 1,
+                    ml: 2,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    height: '600px',
+                    border: '1px solid #ccc',
+                    borderRadius: '8px',
+                    padding: 2,
+                    backgroundColor: '#E0C9A6',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+                }}
+            >
+                <Typography variant="h5" gutterBottom>
+                    Chat Log
+                </Typography>
+                <div
+                    style={{
+                        flexGrow: 1,
+                        overflowY: 'auto',
+                        marginBottom: '16px',
+                        padding: '8px',
+                        backgroundColor: '#f9f9f9',
+                        borderRadius: '4px'
+                    }}
+                >
                     {chatMessages.map((message, index) => (
-                        <Typography key={message.id} variant="body1" sx={{
-                            mb: 1,
-                            backgroundColor: index % 2 === 0 ? '#e8eaf6' : '#fff',
-                            padding: 1,
-                            borderRadius: 1,
-                        }}>
+                        <Typography
+                            key={message.id}
+                            variant="body1"
+                            sx={{
+                                mb: 1,
+                                backgroundColor: index % 2 === 0 ? '#e8eaf6' : '#fff',
+                                padding: 1,
+                                borderRadius: 1,
+                            }}
+                        >
                             <strong>{userName}:</strong> {message.message}
                         </Typography>
                     ))}
@@ -220,9 +285,12 @@ const CampaignSheet: React.FC = () => {
                     onChange={(e) => setNewMessage(e.target.value)}
                     sx={{ marginBottom: 1 }}
                 />
-                <Button variant="contained" color="primary" onClick={handleSendMessage}>Send</Button>
+                <Button variant="contained" color="primary" onClick={handleSendMessage}>
+                    Send
+                </Button>
             </Container>
         </Container>
+
     );
 };
 
