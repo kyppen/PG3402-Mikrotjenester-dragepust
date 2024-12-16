@@ -11,7 +11,7 @@ Build and run
 docker compose -f .\docker-compose.yml up --build
 ```
 
-Launching without building (Requires that the proi)
+Launching without building
 ```
 docker compose -f .\docker-compose.yml up
 ```
