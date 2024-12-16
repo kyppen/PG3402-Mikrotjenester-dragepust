@@ -131,8 +131,30 @@ const CharacterMenu: React.FC = () => {
     };console.log(getCookie("userId"));
     const userId = getCookie("userId");
 
+    function removeCookie(name: string) {
+        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
+    }
+    const handleLogout = () => {
+
+        removeCookie('userName');
+        removeCookie('userId');
+
+        navigate('/');
+    };
 
     return (
+     <Container maxWidth="lg" sx={{ mt: 10, display: 'flex', flexDirection: 'column' }}>
+            {/* Logout Button */}
+            <Box sx={{ textAlign: 'right', mb: 2 }}>
+                <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={handleLogout}
+                    sx={{ fontWeight: 'bold', borderRadius: 1 }}
+                >
+                    Log Out
+                </Button>
+            </Box>
         <Container maxWidth="md">
             <Typography variant="h5" align="center" gutterBottom>
                 Your Characters
@@ -226,6 +248,7 @@ const CharacterMenu: React.FC = () => {
                 ))}
             </Grid>
         </Container>
+     </Container>
     );
 };
 //Båt er
