@@ -40,27 +40,38 @@ If any issues occurs, this command removes ALL docker images and volumes which m
 ```
 docker system prune -a --volumes
 ```
-## How to run locally (if docker fails)
+## How to run backend locally (full containerization fails)
 Run rabbit and consul
 ```
 cd docker
-docker compose -f .\docker-compose-local.yml up --build
+docker compose -f .\docker-compose-local.yml up
 ```
 Start each service individually
+Service that needs to be started locally
+* api-gateway
+* campaign
+* diceroller
+* items
+* messenger
+* playerCharacter
+* stats
+* user
+
+
 ## Example use case
 **1: Build and run system:**
 ```
 Cd docker 
 
-docker compose -f .\docker-compose.yml up --build 
+docker compose -f .\docker-compose.yml up
 ```
 **2: Build and run frontend**
 ```
-    Cd Frontend/microClient 
+Cd Frontend/microClient 
 
-    Npm install 
+Npm install 
 
-    Npm run dev 
+Npm run dev 
 ```
 **3: Open consul and RabbitMQ in browser**
 
@@ -129,18 +140,17 @@ docker compose -f .\docker-compose.yml up --build
   between my favourite characters (Done)
 
 
-* As a user I can interact with their existing character, adding items, health etc., so that I
+* As a user I can interact with their existing character, adding itemset, health etc., so that I
   can keep updating the character (Done)
 
 ### User Stories from Eksamen
 In addition, we added the following user stories based on feedback from the arbeidskrav:
 
-
 * As a user I can create a campaign using the campaign generator, so that I can play with
   keep track of my players(Done)
 
-
 * As a user I can join an existing campaign, so that I can play with my party(Done)
+
 
 Architecture diagram from arbeidskrav
 ![Arbeidskrav Arkitektur](Docs/ArbeidskravArkitektur.PNG)
@@ -169,4 +179,5 @@ Candidate 11 worked on:
 * Item service
 * Messenger Service
 * Dice roller service
-* Setting up Backend configuration (Docker, Consul, RabbitMQ, Postgres) 
+* api-gateway
+* Setting up Backend configuration (Docker, Consul, RabbitMQ, Postgres, load balancing, consul-importer) 
