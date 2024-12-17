@@ -79,6 +79,10 @@ public class CampaignController {
     }
     @GetMapping("/characters/{campaignId}")
     public ResponseEntity<List<PlayerCharacter>> CharacterInACampaign(@RequestBody CampaignIdDTO campaignIdDTO){
+        List<PlayerCharacter> playerCharacters = campaignService.GetAllCharactersInCampaign(campaignIdDTO.getCampaignId());
+        for(int i = 0; i < playerCharacters.size(); i ++){
+            log.info(playerCharacters.get(i).toString());
+        }
         return new ResponseEntity<>(campaignService.GetAllCharactersInCampaign(campaignIdDTO.getCampaignId()), HttpStatus.OK);
     }
     @GetMapping("/characterinfo/{campaignId}")

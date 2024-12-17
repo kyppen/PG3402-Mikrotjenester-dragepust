@@ -56,7 +56,7 @@ const CampaignSheet: React.FC = () => {
                 return;
             }
             try{
-                console.log("idk");
+                //console.log("idk");
                 console.log(campaignId)
                 console.log(`http://localhost:8087/campaign/campaign/${campaignId}`);
                 const response = await fetch(`http://localhost:8087/campaign/campaign/${encodeURIComponent(campaignId)}`);
@@ -80,12 +80,12 @@ const CampaignSheet: React.FC = () => {
                 if (!response.ok) throw new Error('Failed to fetch chat messages');
                 const data = await response.json();
                 setChatMessages(data);
-                console.log(data);
+                //console.log(data);
             } catch (err) {
-                console.error('Error fetching chat messages:', err);
+                //console.error('Error fetching chat messages:', err);
             }
         };
-        const interval = setInterval(fetchChatMessages, 2000);
+        const interval = setInterval(fetchChatMessages, 1000);
         fetchChatMessages();
         return () => clearInterval(interval);
     }, [campaignId]);
@@ -131,12 +131,13 @@ const CampaignSheet: React.FC = () => {
     const getCookie = (name: string): string | null => {
         const match = document.cookie.match(new RegExp(`(^| )${name}=([^;]+)`));
         return match ? match[2] : null;
-    };console.log(getCookie("userName"));
+    };//console.log(getCookie("userName"));
     const userName = getCookie("userName");
-    const handleRoll = async () => {
+
+    const handleRoll = async (id: string) => {
         try {
             const payload = {
-                characterId: characters[0].id || '',
+                characterId: id || '',
                 campaignId: campaign?.id || '',
                 action: 'roll',
             };
@@ -215,7 +216,7 @@ const CampaignSheet: React.FC = () => {
                                         variant="contained"
                                         color="primary"
                                         sx={{ mt: 2 }}
-                                        onClick={() => handleRoll()}
+                                        onClick={() => handleRoll(character.id)}
                                     >
                                         Roll
                                     </Button>
