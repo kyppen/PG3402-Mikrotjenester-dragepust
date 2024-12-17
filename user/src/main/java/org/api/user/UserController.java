@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 //@CrossOrigin(origins = "http://localhost:5173")
@@ -27,10 +28,12 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
     @PostMapping("/login")
-    public ResponseEntity<User> findByUsername(@RequestParam String username){
-        System.out.println("/Logged in " + username);
-        User user = userService.findByUsername(username);
-        return ResponseEntity.ok(user);
+    public ResponseEntity<User> loginUser(@RequestBody UserDTO userDTO) {
+        Optional<User> user = userService.findByUsername(userDTO.getUsername());
+        if (user.isEmpty() || !user.get().getPassword().equals(userDTO.getPassword())) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        return new ResponseEntity<>(user.get(), HttpStatus.OK);
     }
 }
 

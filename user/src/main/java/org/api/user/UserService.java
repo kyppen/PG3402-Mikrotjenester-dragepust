@@ -8,6 +8,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Optional;
+
 @Slf4j
 @ConfigurationProperties(prefix = "servicenames")
 @Service
@@ -24,8 +26,8 @@ public class UserService {
         user.setPassword(userDTO.getPassword());
         return userRepo.save(user);
     }
-
-    public User findByUsername(String username) {
-        return (User) userRepo.findByUsername(username);
+    public Optional<User> findByUsername(String username) {
+        return userRepo.findByUsername(username);
     }
+
 }
