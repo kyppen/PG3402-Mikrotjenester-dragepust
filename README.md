@@ -115,7 +115,7 @@ Npm run dev
 
 **9: Go back to character menu**
 
-   * Character can be added to campaigns via the “Campaign ID” field 
+   * Character can be added to campaigns via the “Campaign ID” field (CampaignID is the bottom value on a created campaign)
 
    * Once a character is added to a campaign it should appear when accessing the campaign 
 
@@ -125,7 +125,7 @@ Npm run dev
 
    * Owner of the campaign can roll dice for the character 
 
-   * Character rolls are treated the same way as messages 
+   * Character rolls are treated the same way as messages (Asynchronously)
 
 **11: Campaign and characters can be deleted**
 
