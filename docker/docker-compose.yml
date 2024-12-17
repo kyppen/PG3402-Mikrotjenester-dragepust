@@ -8,11 +8,6 @@ services:
       - "8500:8500/udp"
       - "8500:8500"   # Consul HTTP API
     command: 'agent -dev -node=microExam -client=0.0.0.0 -log-level=ERROR'
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8500/v1/status/leader" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
     networks:
       - dragepust_network
   consul-importer:
