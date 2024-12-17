@@ -33,7 +33,6 @@ const CampaignSheet: React.FC = () => {
 
     useEffect(() => {
         // Fetch characters from the backend API
-        //fetches characters in a certain
         fetch(`http://localhost:8087/campaign/characterinfo/${campaignId}`)
             .then((response) => {
                 if (!response.ok) {
@@ -101,7 +100,7 @@ const CampaignSheet: React.FC = () => {
         try {
             const newMessageObj = {
                 campaignId: campaignId || "",
-                message: newMessage.trim(), // Trim the message to remove extra spaces
+                message: newMessage.trim(),
             };
 
             const response = await fetch(`http://localhost:8087/messages/message`, {
@@ -116,11 +115,7 @@ const CampaignSheet: React.FC = () => {
                 throw new Error(`Failed to send message. Status: ${response.status}`);
             }
 
-            // Parse the backend's response
-            //const savedMessage = await response.json();
-
-            //setChatMessages((prevMessages) => [...prevMessages, savedMessage]);
-            setNewMessage(""); // Clear the input field after successful sending
+            setNewMessage("");
         } catch (err) {
             console.error("Error sending message:", err);
         }

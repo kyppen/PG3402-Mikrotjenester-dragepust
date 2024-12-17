@@ -31,8 +31,7 @@ const CharacterMenu: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        // Fetch characters from the backend API
-        // THIS NEEDS TO GET BY USERID ONCE IMPLEMENTED
+
         fetch(`http://localhost:8087/character/all/${userId}`)
             .then((response) => {
                 if (!response.ok) {
@@ -85,7 +84,7 @@ const CharacterMenu: React.FC = () => {
             setError(err instanceof Error ? err.message: 'An unknown error occured');
             console.error("Error deleting character", err);
         }
-        //Botched solution to show character was deleted
+
         window.location.reload();
        };
 
@@ -99,7 +98,7 @@ const CharacterMenu: React.FC = () => {
         console.log("campaignId" + addCharacterToCampaign.campaignId);
 
         try{
-            console.log("WTF")
+            console.log("Add to campaign");
             const response = await fetch('http://localhost:8087/campaign/character/add', {
                 method: 'PUT',
                 headers: {
@@ -110,7 +109,7 @@ const CharacterMenu: React.FC = () => {
             if(!response.ok){
                 throw new Error('Failed to add to campaign')
             }
-            //navigate('/character-menu')
+
         }catch (err){
             setError(err instanceof Error ? err.message: 'An unknown error occured');
             console.error("Error adding to campaign", err);
@@ -202,8 +201,8 @@ const CharacterMenu: React.FC = () => {
                                     onClick={() => {
                                         if (window.confirm("Are you sure you want to delete this character?")) {
                                             handleCharacterDelete(character.id)
-                                            // Handle delete logic here
-                                        }}} // Function to handle delete
+
+                                        }}}
                                 >
                                     <HighlightOffIcon />
                                 </IconButton>
@@ -234,7 +233,7 @@ const CharacterMenu: React.FC = () => {
                                     <TextField
                                         color="primary"
                                         label="Campaign ID"
-                                        value={campaignIds[character.id] || ''} // Use the campaignId specific to the character
+                                        value={campaignIds[character.id] || ''}
                                         onChange={(e) => handleCampaignIdChange(character.id, e.target.value)}
                                         required
                                     />
@@ -251,5 +250,5 @@ const CharacterMenu: React.FC = () => {
      </Container>
     );
 };
-//Båt er
+
 export default CharacterMenu;

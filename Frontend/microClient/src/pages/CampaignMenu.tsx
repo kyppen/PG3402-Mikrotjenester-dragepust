@@ -25,7 +25,7 @@ const CampaignMenu: React.FC = () => {
             })
             .then((data) => {
                 setCampaigns(data);
-                localStorage.setItem('characters', JSON.stringify(data)); // Cache data in localStorage
+                localStorage.setItem('characters', JSON.stringify(data));
             })
             .catch((err) => {
                 setError(err.message);
@@ -51,7 +51,7 @@ const CampaignMenu: React.FC = () => {
             setError(err instanceof Error ? err.message: 'An unknown error occured');
             console.error("Error deleting campaign", err);
         }
-        //Botched solution to show character was deleted
+
         window.location.reload();
     };
 
@@ -113,7 +113,7 @@ const CampaignMenu: React.FC = () => {
                                     color="error"
                                     onClick={() => {
                                         if (window.confirm("Are you sure you want to delete this character?")) {
-                                            // Handle delete logic here
+
                                             handleCampaignDelete(campaign.id)
                                         }}}
                                 >

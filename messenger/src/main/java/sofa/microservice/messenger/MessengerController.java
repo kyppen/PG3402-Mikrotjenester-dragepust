@@ -22,7 +22,7 @@ public class MessengerController {
 
     @PostMapping("/roll")
     public ResponseEntity<Integer> sendMessageToQueue(@RequestBody MessageDTO messageDTO) {
-        log.info("WTF");
+
         messengerService.sendMessageRoll(messageDTO);
         return new ResponseEntity<>(2, HttpStatus.CREATED);
     }

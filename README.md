@@ -61,9 +61,9 @@ docker compose -f .\docker-compose.yml up –build
 
 * RabbitMQ at localhost:15672 
 
-* Username: guest 
+  * Username: guest 
 
-*  Password: quest 
+  *  Password: quest 
 
 **4: Open frontend at localhost:5173**
 
