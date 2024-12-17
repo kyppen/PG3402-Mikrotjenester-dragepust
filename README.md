@@ -30,3 +30,7 @@ between my favourite characters
 * As a user I can interact with their existing character, adding items, health etc., so that I
 can keep updating the character
 
+![Arbeidskrav Arkitektur](Docs/ArbeidskravArkitektur.PNG)
+![Eksamen Arkitektur](Docs/EksamenArkitektur.PNG)
+
+
