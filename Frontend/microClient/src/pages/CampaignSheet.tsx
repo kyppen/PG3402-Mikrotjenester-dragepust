@@ -110,7 +110,6 @@ const CampaignSheet: React.FC = () => {
                 },
                 body: JSON.stringify(newMessageObj),
             });
-            window.location.reload();
             if (!response.ok) {
                 throw new Error(`Failed to send message. Status: ${response.status}`);
             }
@@ -146,7 +145,6 @@ const CampaignSheet: React.FC = () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),
             });
-            window.location.reload();
             if (!response.ok) throw new Error('Failed to send roll');
         } catch (err) {
             console.error(err);
