@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import {Button, Container, Grid, Card, CardContent, Typography,TextField, CardMedia} from "@mui/material";
+import {Button, Container, Grid, Card, CardContent, Typography, TextField, CardMedia, Divider} from "@mui/material";
 
 
 interface Campaign {
@@ -231,6 +231,16 @@ const CampaignSheet: React.FC = () => {
                         </Grid>
                     ))}
                 </Grid>
+                <Divider sx={{ my: 2, borderBottomWidth: '2px', borderColor: '#d2b48c' }} />
+                <Button
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                    sx={{ mt: 3 }}
+                    onClick={() => navigate('/campaign-menu')}
+                >
+                    Back to Menu
+                </Button>
             </Container>
 
             {/* Chat Box */}
