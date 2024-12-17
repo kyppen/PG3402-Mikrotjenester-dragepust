@@ -14,7 +14,7 @@ Functionality:
 * Create a campaign
 * Join an existing campaign
 * Interact with an existing campaign
-* Roll dice for characters and campaigns
+* Roll dice for character in character-sheet and campaign-sheet
 
 
 
