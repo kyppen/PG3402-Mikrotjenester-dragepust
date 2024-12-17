@@ -18,7 +18,7 @@ Functionality:
 
 
 
-## How to run
+## How to run via docker
 For Frontend
 ```
 cd Frontend/microClient
@@ -28,24 +28,31 @@ npm run dev
 Build and run in Backend
 ```
 cd docker
-docker compose -f .\docker-compose.yml up --build
-```
-
-Launching without building
-```
 docker compose -f .\docker-compose.yml up
 ```
 
-Removes ALL docker images and volumes
+Forces docker to rebuild images even if they exist 
+```
+docker compose -f .\docker-compose.yml up --build
+```
+
+If any issues occurs, this command removes ALL docker images and volumes which might help
 ```
 docker system prune -a --volumes
 ```
-### Example use case
+## How to run locally (if docker fails)
+Run rabbit and consul
+```
+cd docker
+docker compose -f .\docker-compose-local.yml up --build
+```
+Start each service individually
+## Example use case
 **1: Build and run system:**
 ```
 Cd docker 
 
-docker compose -f .\docker-compose.yml up –build 
+docker compose -f .\docker-compose.yml up --build 
 ```
 **2: Build and run frontend**
 ```
