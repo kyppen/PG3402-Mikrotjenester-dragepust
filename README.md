@@ -41,6 +41,75 @@ Removes ALL docker images and volumes
 docker system prune -a --volumes
 ```
 ### Example use case
+**1: Build and run system:**
+```
+Cd docker 
+
+docker compose -f .\docker-compose.yml up –build 
+```
+**2: Build and run frontend**
+```
+    Cd Frontend/microClient 
+
+    Npm install 
+
+    Npm run dev 
+```
+**3: Open consul and RabbitMQ in browser**
+
+* Consul at localhost:8500 
+
+* RabbitMQ at localhost:15672 
+
+* Username: guest 
+
+*  Password: quest 
+
+**4: Open frontend at localhost:5173**
+
+* Create an account or login 
+
+**5: Create a Character**
+
+   * Name 
+
+   * Species 
+
+   * Profession 
+
+   * Equipment 
+
+**6: Enter click on character**
+
+   * Update hp, willpower and mana (asynchronously (Refresh page) 
+
+   * Roll dice directly with diceroller service (Synchronously) 
+
+**7: Click “back to menu” -> click “Campaign menu” -> click “Create new campaign”**
+
+   * Campaign Name 
+
+   * Campaign Description 
+
+**8: Click on campaign (Which currently has no players)**
+
+   * Messages in chat are sent asynchronously via rabbitmq with a delay to simulate load, this request is load balanced via 3 replicas of campaign service. localhost:15672 
+
+**9: Go back to character menu**
+
+   * Character can be added to campaigns via the “Campaign ID” field 
+
+   * Once a character is added to a campaign it should appear when accessing the campaign 
+
+**10: Go to the campaign of the added character**
+
+   * Owner of the campaign can access the character 
+
+   * Owner of the campaign can roll dice for the character 
+
+   * Character rolls are treated the same way as messages 
+
+**11: Campaign and characters can be deleted**
 
 
 ### User Stories from Arbeidskrav:
