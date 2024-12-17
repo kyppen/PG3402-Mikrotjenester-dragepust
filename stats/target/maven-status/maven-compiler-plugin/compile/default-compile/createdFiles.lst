@@ -1,9 +1,4 @@
 org\api\stats\DTO\CharacterStatsDTO.class
 org\api\stats\DTO\StatsDTO.class
-org\api\stats\StatChangeRequest.class
-org\api\stats\DTO\HpUpdateDTO.class
-org\api\stats\idk\CharacterStatsMessage.class
+org\api\stats\DTO\StatUpdateRequestDTO.class
 org\api\stats\RabbitMQConfig.class
-org\api\stats\idk\MagicUpdateRequest.class
-org\api\stats\idk\WillpowerUpdateRequest.class
-org\api\stats\idk\StatUpdateRequest.class

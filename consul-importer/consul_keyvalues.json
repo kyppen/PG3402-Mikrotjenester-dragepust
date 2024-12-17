@@ -3,6 +3,11 @@
   {
     "key": "rabbitUser",
     "flags": 0,
-    "value": "QUs0NyBDQVNFIEhBUkRFTkVEIDY2MSBTQ0FSIFBBVFRFUk4gRkFDVE9SWSBORVcgU1RBVFJBQ0s="
+    "value": "Z3Vlc3Q="
+  },
+  {
+    "key": "rabbitpassword",
+    "flags": 0,
+    "value": "Z3Vlc3Q="
   }
 ]

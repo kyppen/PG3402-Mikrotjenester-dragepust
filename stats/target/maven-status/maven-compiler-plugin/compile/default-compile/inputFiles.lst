@@ -1,13 +1,8 @@
 C:\Users\Kyppen\IdeaProjects\PG3402-Mikrotjenester-dragepust\stats\src\main\java\org\api\stats\CharacterStats.java
 C:\Users\Kyppen\IdeaProjects\PG3402-Mikrotjenester-dragepust\stats\src\main\java\org\api\stats\DTO\CharacterStatsDTO.java
-C:\Users\Kyppen\IdeaProjects\PG3402-Mikrotjenester-dragepust\stats\src\main\java\org\api\stats\DTO\HpUpdateDTO.java
 C:\Users\Kyppen\IdeaProjects\PG3402-Mikrotjenester-dragepust\stats\src\main\java\org\api\stats\DTO\StatsDTO.java
-C:\Users\Kyppen\IdeaProjects\PG3402-Mikrotjenester-dragepust\stats\src\main\java\org\api\stats\idk\CharacterStatsMessage.java
-C:\Users\Kyppen\IdeaProjects\PG3402-Mikrotjenester-dragepust\stats\src\main\java\org\api\stats\idk\MagicUpdateRequest.java
-C:\Users\Kyppen\IdeaProjects\PG3402-Mikrotjenester-dragepust\stats\src\main\java\org\api\stats\idk\StatUpdateRequest.java
-C:\Users\Kyppen\IdeaProjects\PG3402-Mikrotjenester-dragepust\stats\src\main\java\org\api\stats\idk\WillpowerUpdateRequest.java
+C:\Users\Kyppen\IdeaProjects\PG3402-Mikrotjenester-dragepust\stats\src\main\java\org\api\stats\DTO\StatUpdateRequestDTO.java
 C:\Users\Kyppen\IdeaProjects\PG3402-Mikrotjenester-dragepust\stats\src\main\java\org\api\stats\RabbitMQConfig.java
-C:\Users\Kyppen\IdeaProjects\PG3402-Mikrotjenester-dragepust\stats\src\main\java\org\api\stats\StatChangeRequest.java
 C:\Users\Kyppen\IdeaProjects\PG3402-Mikrotjenester-dragepust\stats\src\main\java\org\api\stats\StatsApplication.java
 C:\Users\Kyppen\IdeaProjects\PG3402-Mikrotjenester-dragepust\stats\src\main\java\org\api\stats\StatsController.java
 C:\Users\Kyppen\IdeaProjects\PG3402-Mikrotjenester-dragepust\stats\src\main\java\org\api\stats\StatsService.java

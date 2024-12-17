@@ -79,7 +79,7 @@ services:
       context: ../messenger
       dockerfile: Dockerfile
     ports:
-      - '0:8083' #Binds to a random avaliable port, if we have replicas they cant be on the same port
+      - '0:8083' #Binds to a random available port, if we have replicas they cant be on the same port
     environment:
       SPRING_PROFILES_ACTIVE: "docker"
     depends_on:

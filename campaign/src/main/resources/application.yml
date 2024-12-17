@@ -1,6 +1,7 @@
 server:
   port: 8085
 
+#to contact other docker containernames
 servicenames:
   playercharacterservice: localhost
 
@@ -9,7 +10,7 @@ spring:
     name: campaignService
   cloud:
     consul:
-      host: consul
+      host: localhost
       port: 8500
       discovery:
         # Each new instance of the service will have unique uuid
@@ -20,7 +21,7 @@ spring:
         register: true
         enabled: true
   rabbitmq:
-    host: rabbitmq
+    host: localhost
     port: 5672
     username: guest
     password: guest

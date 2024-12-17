@@ -19,6 +19,7 @@ public class MessengerService {
     private final RabbitTemplate rabbitTemplate;
     private final RestTemplate restTemplate = new RestTemplate();
 
+    //names of services this services needs to contact, container names
     @Value("${servicenames.dicerollerservice}")
     String diceRollerServiceName;
     @Value("${servicenames.playercharacterservice}")
