@@ -40,6 +40,8 @@ Removes ALL docker images and volumes
 ```
 docker system prune -a --volumes
 ```
+### Example use case
+
 
 ### User Stories from Arbeidskrav:
 
@@ -70,7 +72,7 @@ Final architecture diagram
 ![Eksamen Arkitektur](Docs/EksamenArkitektur.PNG)
 
 
-### Example use case
+
 
 
 ### On Teamwork
@@ -91,4 +93,4 @@ Candidate 11 worked on:
 * Item service
 * Messenger Service
 * Dice roller service
-* Setting up Backend configuration (Docker, Consul, RabbitMQ, etc.) 
+* Setting up Backend configuration (Docker, Consul, RabbitMQ, Postgres) 
