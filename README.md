@@ -111,7 +111,7 @@ Npm run dev
 
 **8: Click on campaign (Which currently has no players)**
 
-   * Messages in chat are sent asynchronously via rabbitmq with a delay to simulate load, this request is load balanced via 3 replicas of campaign service. localhost:15672 
+   * Messages in chat are sent asynchronously via rabbitmq with a delay to simulate load, this request is load balanced via 3 replicas of campaign service.
 
 **9: Go back to character menu**
 
