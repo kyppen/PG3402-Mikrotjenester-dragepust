@@ -54,4 +54,4 @@ Architecture diagram from arbeidskrav
 Final architecture diagram
 ![Eksamen Arkitektur](Docs/EksamenArkitektur.PNG)
 
-
+### On Teamwork
