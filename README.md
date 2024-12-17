@@ -40,7 +40,7 @@ If any issues occurs, this command removes ALL docker images and volumes which m
 ```
 docker system prune -a --volumes
 ```
-## How to run backend locally (full containerization fails)
+## How to run backend locally (if full containerization fails)
 Run rabbit and consul
 ```
 cd docker
