@@ -1,8 +1,6 @@
 server:
   port: 8084
 
-servicenames:
-  userservice: localhost
 
 spring:
   application:

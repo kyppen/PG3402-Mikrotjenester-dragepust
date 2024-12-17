@@ -3,18 +3,12 @@ package sofa.microservice.campaign;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.client.RestTemplate;
 import sofa.microservice.campaign.DTO.CampaignInfoDTO;
 import sofa.microservice.campaign.DTO.CharacterInfoDTO;
@@ -25,7 +19,6 @@ import sofa.microservice.campaign.entity.PlayerCharacter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -150,7 +143,10 @@ public class CampaignService {
     }
 
     @RabbitListener(queues = "campaign_messages")
-    public void receiveMessage(String stringMessage){
+    public void receiveMessage(String stringMessage) throws InterruptedException {
+        log.info("processing saving message");
+        Thread.sleep(10000);
+        log.info("Saving message");
         try{
             System.out.println("String message: "+ stringMessage);
             MessageDTO messageDTO = new ObjectMapper().readValue(stringMessage, MessageDTO.class);

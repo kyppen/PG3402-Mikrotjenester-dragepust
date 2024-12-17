@@ -4,20 +4,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import sofa.microservice.messenger.DTO.CharacterNameDTO;
-import sofa.microservice.messenger.DTO.ConsoleMessageDTO;
 import sofa.microservice.messenger.DTO.MessageDTO;
 
-import javax.print.DocFlavor;
 
 @Service
 @Slf4j
-//@ConfigurationProperties(prefix = "servicenames")
 public class MessengerService {
 
     private final RabbitTemplate rabbitTemplate;

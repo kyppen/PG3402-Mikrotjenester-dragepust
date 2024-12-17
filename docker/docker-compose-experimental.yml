@@ -131,7 +131,7 @@ services:
       context: ../campaign
       dockerfile: Dockerfile
     ports:
-      - '8085:8085'
+      - '0:8085'
     environment:
       SPRING_PROFILES_ACTIVE: "docker"
     depends_on:
@@ -141,6 +141,8 @@ services:
         condition: service_started
     networks:
       - dragepust_network
+    deploy:
+      replicas: 3 #sets up 3 replicas
   apigateway:
     build:
       context: ../api-gateway

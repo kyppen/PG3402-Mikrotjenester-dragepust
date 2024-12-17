@@ -149,9 +149,6 @@ public class PlayerCharacterService {
     }
     public void updateStats(Long characterId, StatsDTO statsDTO) {
         PlayerCharacter character = playerCharacterRepository.findById(characterId).orElseThrow(() -> new RuntimeException("Character not found"));
-        //character.setBaseHP(statsDTO.getHpChange());
-        //character.setBaseWillpower(statsDTO.getWillpowerChange());
-        //character.setBaseMagic(statsDTO.getMagicChange());
         log.info("Added Stats: {} to character: {}" ,statsDTO, character);
         playerCharacterRepository.save(character);
     }

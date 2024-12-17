@@ -4,13 +4,11 @@ package sofa.microservice.items;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import sofa.microservice.items.ItemSetDTO.ItemSet;
 import sofa.microservice.items.entity.Item;
 import sofa.microservice.items.util.JsonToItemSet;
 
-import java.beans.Transient;
 import java.util.ArrayList;
 import java.util.List;
 

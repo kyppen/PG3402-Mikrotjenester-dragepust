@@ -16,7 +16,6 @@ import sofa.microservice.playerCharacter.util.ClassInfo;
 import java.util.List;
 
 @Slf4j
-//@CrossOrigin (origins = "http://localhost:5173")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/character")

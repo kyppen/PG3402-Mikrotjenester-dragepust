@@ -85,7 +85,7 @@ const CampaignSheet: React.FC = () => {
                 console.error('Error fetching chat messages:', err);
             }
         };
-        const interval = setInterval(fetchChatMessages, 20000);
+        const interval = setInterval(fetchChatMessages, 2000);
         fetchChatMessages();
         return () => clearInterval(interval);
     }, [campaignId]);

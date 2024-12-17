@@ -1,7 +1,28 @@
 version: '3.8'
 
-
 services:
+  consul:
+    image: hashicorp/consul:1.19.2
+    container_name: consul
+    ports:
+      - "8500:8500/udp"
+      - "8500:8500"   # Consul HTTP API
+    command: 'agent -dev -node=microExam -client=0.0.0.0 -log-level=ERROR'
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8500/v1/status/leader" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - dragepust_network
+  consul-importer:
+    build:
+      context: ../consul-importer
+      dockerfile: Dockerfile
+    depends_on:
+      - consul
+    networks:
+      - dragepust_network
   rabbitmq:
     #rabbitmq:3-management
     image: rabbitmq:management
@@ -14,22 +35,159 @@ services:
       RABBITMQ_DEFAULT_PASS: guest
     networks:
       - dragepust_network
-  consul:
-    image: hashicorp/consul:1.19.2
-    container_name: consul
-    ports:
-      - "8500:8500/udp"
-      - "8500:8500"   # Consul HTTP API
-    command: 'agent -dev -node=microExam -client=0.0.0.0 -log-level=ERROR'
-    networks:
-      - dragepust_network
   itempostgres:
     image: postgres
     container_name: itempostgres
     environment:
       POSTGRES_PASSWORD: postgres
+    networks:
+      - dragepust_network
+  characterpostgres:
+    image: postgres
+    container_name: characterpostgres
+    environment:
+      POSTGRES_PASSWORD: postgres
+    networks:
+      - dragepust_network
+  campaignpostgres:
+    image: postgres
+    container_name: campaignpostgres
+    environment:
+      POSTGRES_PASSWORD: postgres
+    networks:
+      - dragepust_network
+  userpostgres:
+    image: postgres
+    container_name: userpostgres
+    environment:
+      POSTGRES_PASSWORD: postgres
+    networks:
+      - dragepust_network
+  dicerollerservice:
+    build:
+      context: ../diceroller
+      dockerfile: Dockerfile
     ports:
-      - '5432:5432'
+      - '0:8086'
+    environment:
+      SPRING_PROFILES_ACTIVE: "docker"
+    depends_on:
+      consul:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
+    networks:
+      - dragepust_network
+
+  messengerservice:
+    build:
+      context: ../messenger
+      dockerfile: Dockerfile
+    ports:
+      - '0:8083' #Binds to a random avaliable port, if we have replicas they cant be on the same port
+    environment:
+      SPRING_PROFILES_ACTIVE: "docker"
+    depends_on:
+      consul:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
+    networks:
+      - dragepust_network
+      #deploy:
+      #replicas: 3 #sets up 3 replicas
+  playercharacterservice:
+    build:
+      context: ../playerCharacter
+      dockerfile: Dockerfile
+    ports:
+      - '0:8081'
+    environment:
+      SPRING_PROFILES_ACTIVE: "docker"
+    depends_on:
+      consul:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
+    networks:
+      - dragepust_network
+  itemservice:
+    build:
+      context: ../items
+      dockerfile: Dockerfile
+    ports:
+      - '8082:8082'
+    environment:
+      SPRING_PROFILES_ACTIVE: "docker"
+    depends_on:
+      consul:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
+    networks:
+      - dragepust_network
+  campaignservice:
+    build:
+      context: ../campaign
+      dockerfile: Dockerfile
+    ports:
+      - '0:8085'
+    environment:
+      SPRING_PROFILES_ACTIVE: "docker"
+    depends_on:
+      consul:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
+    networks:
+      - dragepust_network
+    deploy:
+      replicas: 3 #sets up 3 replicas
+  apigateway:
+    build:
+      context: ../api-gateway
+      dockerfile: Dockerfile
+    ports:
+      - '8087:8087'
+    environment:
+      SPRING_PROFILES_ACTIVE: "docker"
+    depends_on:
+      consul:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
+    networks:
+      - dragepust_network
+  statsservice:
+    build:
+      context: ../stats
+      dockerfile: Dockerfile
+    ports:
+      - '8089:8089'
+    environment:
+      SPRING_PROFILES_ACTIVE: "docker"
+    depends_on:
+      consul:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
+    networks:
+      - dragepust_network
+  userservice:
+    build:
+      context: ../user
+      dockerfile: Dockerfile
+    ports:
+      - '8084:8084'
+    environment:
+      SPRING_PROFILES_ACTIVE: "docker"
+    depends_on:
+      consul:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
+    networks:
+      - dragepust_network
 networks:
   dragepust_network:
     driver: bridge

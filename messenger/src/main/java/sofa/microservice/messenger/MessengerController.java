@@ -1,7 +1,6 @@
 package sofa.microservice.messenger;
 
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,8 +31,6 @@ public class MessengerController {
         MessageDTO messageDTO = new MessageDTO();
         messageDTO.setMessage(consoleMessageDTO.getMessage());
         messageDTO.setCampaignId(consoleMessageDTO.getCampaignId());
-        //very janky solution
-        //This allows console to type in chat
         messageDTO.setCharacterId("CONSOLE");
         messageDTO.setType("CONSOLE");
         messengerService.sendConsoleMessage(messageDTO);
