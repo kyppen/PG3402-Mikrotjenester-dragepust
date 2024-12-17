@@ -145,7 +145,7 @@ public class CampaignService {
     @RabbitListener(queues = "campaign_messages")
     public void receiveMessage(String stringMessage) throws InterruptedException {
         log.info("processing saving message");
-        Thread.sleep(10000);
+        Thread.sleep(2000);
         log.info("Saving message");
         try{
             System.out.println("String message: "+ stringMessage);
